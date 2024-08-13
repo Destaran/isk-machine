@@ -1,5 +1,5 @@
 import { GetMarketsRegionIdOrdersResponse } from "../hey-api";
-import { get } from "./API";
+import { get } from "./Axios";
 
 export type OrderType = "buy" | "sell" | "all";
 

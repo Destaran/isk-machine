@@ -1,4 +1,4 @@
-import { get } from "../API/API";
+import { get } from "./Axios";
 import {
   GetUniverseAsteroidBeltsAsteroidBeltIdResponse,
   GetUniverseCategoriesResponse,
