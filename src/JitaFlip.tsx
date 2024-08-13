@@ -1,49 +1,33 @@
+import { useCallback } from "react";
 import styled from "styled-components";
-import { ItemTypes } from "./ItemType/ItemTypes";
-import { useState } from "react";
-import { Orders } from "./Orders/Orders";
-import { ItemType } from "./types";
-import { useQueryClient } from "@tanstack/react-query";
 
 const Container = styled.div`
+  width: 30%;
   display: flex;
   flex-direction: column;
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-`;
-
-const TypesContainer = styled.div`
-  border: 1px solid black;
-  width: 350px;
-  height: 80vh;
-  overflow: scroll;
-`;
-
-const SearchBar = styled.input`
-  width: 100%;
-`;
-
 export function JitaFlip() {
-  const [item, setItem] = useState<ItemType | null>(null);
-  const queryClient = useQueryClient();
+  const handleFetchGameData = useCallback(() => {
+    console.log("Fetching EVE Game Data");
+  }, []);
 
-  function handleItemClick(item: ItemType) {
-    setItem(item);
-    queryClient.invalidateQueries();
-  }
+  const handleFetchJita = useCallback(() => {
+    console.log("Fetching Jita Data");
+  }, []);
+
+  const getItemsHandler = useCallback(() => {
+    console.log("Getting Items");
+  }, []);
 
   return (
     <Container>
       <h2>JitaFlip</h2>
-      <Wrapper>
-        <TypesContainer>
-          <SearchBar type="text" />
-          <ItemTypes handleClick={handleItemClick} />
-        </TypesContainer>
-        {item && <Orders item={item} />}
-      </Wrapper>
+      <button onClick={handleFetchGameData}>Fetch EVE game data</button>
+      <button onClick={handleFetchJita}>Fetch Jita data</button>
+      <p>info</p>
+      <input type="text" placeholder="min profit %" defaultValue={10} />
+      <button onClick={getItemsHandler}>Get Items</button>
     </Container>
   );
 }
