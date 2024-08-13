@@ -368,6 +368,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/object-schema/-/object-schema-2.1.4.tgz#9e69f8bb4031e11df79e03db09f9dbbae1740843"
   integrity sha512-BsWiH1yFGjXXS2yvrf5LyuoSIIbPrGUWob917o+BTKuZ7qJdxX8aJLRxs1fS9n6r7vESrq1OUqb68dANcFXuQQ==
 
+"@hey-api/client-axios@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@hey-api/client-axios/-/client-axios-0.2.3.tgz#1c8affeb8986496a4434381140ddc0dc15bc13e8"
+  integrity sha512-v1BoTozp8LQ9JawZF9atXdmaBdQEvoIf39pIYf/0WSdkZSv0rUJDVXxNWHnDDs+S1/6pOfbOhM/0VXD5YJqr8w==
+
 "@hey-api/client-fetch@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@hey-api/client-fetch/-/client-fetch-0.2.4.tgz#46a86a856877806ba6d71b9d2fed787bbfb1c967"
