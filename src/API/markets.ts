@@ -3,7 +3,7 @@ import {
   GetMarketsGroupsResponse,
   GetMarketsRegionIdOrdersResponse,
 } from "../hey-api";
-import { get } from "./Axios";
+import { get } from "./axios";
 
 export type OrderType = "buy" | "sell" | "all";
 

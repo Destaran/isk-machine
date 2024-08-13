@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getConstellation, getConstellations } from "../API/Universe";
+import { getConstellation, getConstellations } from "../API/universe";
 
 export function useConstellation(id: number) {
   return useQuery({

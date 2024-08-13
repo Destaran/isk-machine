@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getRegion, getRegions } from "../API/Universe";
+import { getRegion, getRegions } from "../API/universe";
 
 export function useRegion(id: number) {
   return useQuery({

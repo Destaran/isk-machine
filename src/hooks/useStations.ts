@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getStation } from "../API/Universe";
+import { getStation } from "../API/universe";
 
 export function useStation(id: number) {
   return useQuery({

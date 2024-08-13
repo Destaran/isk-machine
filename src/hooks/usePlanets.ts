@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getPlanet } from "../API/Universe";
+import { getPlanet } from "../API/universe";
 
 export function usePlanet(id: number) {
   return useQuery({

@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getGroup, getGroups } from "../API/Universe";
+import { getGroup, getGroups } from "../API/universe";
 
 export function useGroup(id: number) {
   return useQuery({

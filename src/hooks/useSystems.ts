@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getSystem, getSystems } from "../API/Universe";
+import { getSystem, getSystems } from "../API/universe";
 
 export function useSystem(id: number) {
   return useQuery({

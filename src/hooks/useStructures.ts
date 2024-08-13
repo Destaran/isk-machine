@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getStructure, getStructures } from "../API/Universe";
+import { getStructure, getStructures } from "../API/universe";
 
 export function useStructure(id: number) {
   return useQuery({

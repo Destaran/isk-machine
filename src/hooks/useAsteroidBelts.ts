@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getAsteroidBelt } from "../API/Universe";
+import { getAsteroidBelt } from "../API/universe";
 
 export function useAsteroidBelt(id: number) {
   return useQuery({

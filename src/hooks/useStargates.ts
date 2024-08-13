@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getStargate } from "../API/Universe";
+import { getStargate } from "../API/universe";
 
 export function useStargate(id: number) {
   return useQuery({

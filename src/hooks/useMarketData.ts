@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getMarketData, OrderType } from "../API/Markets";
+import { getMarketData, OrderType } from "../API/markets";
 
 export function useMarketData(
   regionId: number,

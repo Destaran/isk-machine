@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getStar } from "../API/Universe";
+import { getStar } from "../API/universe";
 
 export function useStar(id: number) {
   return useQuery({

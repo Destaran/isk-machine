@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getMarketGroup, getMarketGroups } from "../API/Markets";
+import { getMarketGroup, getMarketGroups } from "../API/markets";
 
 export function useMarketGroup(id: number) {
   return useQuery({

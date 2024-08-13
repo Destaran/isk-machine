@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getType, getTypes } from "../API/Universe";
+import { getType, getTypes } from "../API/universe";
 
 export function useType(id: number) {
   return useQuery({

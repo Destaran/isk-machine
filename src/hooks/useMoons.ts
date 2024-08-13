@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { getMoon } from "../API/Universe";
+import { getMoon } from "../API/universe";
 
 export function useMoon(id: number) {
   return useQuery({
