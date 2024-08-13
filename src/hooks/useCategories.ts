@@ -1,19 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import {
-  GetUniverseCategoriesResponse,
-  GetUniverseCategoriesCategoryIdResponse,
-} from "../hey-api";
-
-async function getCategories() {
-  return await get<GetUniverseCategoriesResponse>("/universe/categories");
-}
-
-async function getCategory(id: number) {
-  return await get<GetUniverseCategoriesCategoryIdResponse>(
-    `/universe/categories/${id}`
-  );
-}
+import { getCategory, getCategories } from "../API/Universe";
 
 export function useCategory(id: number) {
   return useQuery({

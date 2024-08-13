@@ -1,21 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import {
-  GetUniverseConstellationsConstellationIdResponse,
-  GetUniverseConstellationsResponse,
-} from "../hey-api";
-
-async function getConstellations() {
-  return await get<GetUniverseConstellationsResponse>(
-    "/universe/constellations"
-  );
-}
-
-async function getConstellation(id: number) {
-  return await get<GetUniverseConstellationsConstellationIdResponse>(
-    `/universe/constellations/${id}`
-  );
-}
+import { getConstellation, getConstellations } from "../API/Universe";
 
 export function useConstellation(id: number) {
   return useQuery({

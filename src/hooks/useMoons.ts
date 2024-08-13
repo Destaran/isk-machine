@@ -1,10 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import { GetUniverseMoonsMoonIdResponse } from "../hey-api";
-
-async function getMoon(id: number) {
-  return await get<GetUniverseMoonsMoonIdResponse>(`/universe/moons/${id}`);
-}
+import { getMoon } from "../API/Universe";
 
 export function useMoon(id: number) {
   return useQuery({

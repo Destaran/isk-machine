@@ -1,19 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import {
-  GetUniverseRegionsRegionIdResponse,
-  GetUniverseRegionsResponse,
-} from "../hey-api";
-
-async function getRegions() {
-  return await get<GetUniverseRegionsResponse>("/universe/regions");
-}
-
-async function getRegion(id: number) {
-  return await get<GetUniverseRegionsRegionIdResponse>(
-    `/universe/regions/${id}`
-  );
-}
+import { getRegion, getRegions } from "../API/Universe";
 
 export function useRegion(id: number) {
   return useQuery({

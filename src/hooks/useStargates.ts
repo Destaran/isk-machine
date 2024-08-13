@@ -1,12 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import { GetUniverseStargatesStargateIdResponse } from "../hey-api";
-
-async function getStargate(id: number) {
-  return await get<GetUniverseStargatesStargateIdResponse>(
-    `/universe/stargates/${id}`
-  );
-}
+import { getStargate } from "../API/Universe";
 
 export function useStargate(id: number) {
   return useQuery({

@@ -1,19 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import {
-  GetUniverseStructuresResponse,
-  GetUniverseStructuresStructureIdResponse,
-} from "../hey-api";
-
-async function getStructures() {
-  return await get<GetUniverseStructuresResponse>("/universe/structures");
-}
-
-async function getStructure(id: number) {
-  return await get<GetUniverseStructuresStructureIdResponse>(
-    `/universe/structures/${id}`
-  );
-}
+import { getStructure, getStructures } from "../API/Universe";
 
 export function useStructure(id: number) {
   return useQuery({

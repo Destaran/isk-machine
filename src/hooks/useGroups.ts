@@ -1,17 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import {
-  GetUniverseGroupsResponse,
-  GetUniverseGroupsGroupIdResponse,
-} from "../hey-api";
-
-async function getGroups() {
-  return await get<GetUniverseGroupsResponse>("/universe/groups");
-}
-
-async function getGroup(id: number) {
-  return await get<GetUniverseGroupsGroupIdResponse>(`/universe/groups/${id}`);
-}
+import { getGroup, getGroups } from "../API/Universe";
 
 export function useGroup(id: number) {
   return useQuery({

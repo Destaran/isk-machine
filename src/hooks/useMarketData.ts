@@ -1,25 +1,6 @@
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import { GetMarketsRegionIdOrdersResponse } from "../hey-api";
-
-export type OrderType = "buy" | "sell" | "all";
-
-async function getMarketData(
-  regionId: number,
-  typeId: number | null,
-  page: string,
-  orderType: OrderType
-) {
-  if (!regionId) {
-    throw new Error("Region id is required");
-  }
-  return await get<GetMarketsRegionIdOrdersResponse>(
-    `/markets/${regionId}/orders/?datasource=tranquility&order_type=${orderType}&page=${page}${
-      typeId ? `&type_id=${typeId}` : ""
-    }`
-  );
-}
+import { getMarketData, OrderType } from "../API/Markets";
 
 export function useMarketData(
   regionId: number,

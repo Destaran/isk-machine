@@ -1,19 +1,5 @@
-import { get } from "../API/API";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import {
-  GetMarketsGroupsMarketGroupIdResponse,
-  GetMarketsGroupsResponse,
-} from "../hey-api";
-
-async function getMarketGroup(id: number) {
-  return await get<GetMarketsGroupsMarketGroupIdResponse>(
-    `/markets/groups/${id}`
-  );
-}
-
-async function getMarketGroups() {
-  return await get<GetMarketsGroupsResponse>("/markets/groups");
-}
+import { getMarketGroup, getMarketGroups } from "../API/Universe";
 
 export function useMarketGroup(id: number) {
   return useQuery({

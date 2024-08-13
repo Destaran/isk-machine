@@ -1,17 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import {
-  GetUniverseTypesResponse,
-  GetUniverseTypesTypeIdResponse,
-} from "../hey-api";
-
-async function getTypes() {
-  return await get<GetUniverseTypesResponse>("/universe/types");
-}
-
-async function getType(id: number) {
-  return await get<GetUniverseTypesTypeIdResponse>(`/universe/types/${id}`);
-}
+import { getType, getTypes } from "../API/Universe";
 
 export function useType(id: number) {
   return useQuery({

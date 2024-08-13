@@ -1,19 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import {
-  GetUniverseSystemsResponse,
-  GetUniverseSystemsSystemIdResponse,
-} from "../hey-api";
-
-async function getSystems() {
-  return await get<GetUniverseSystemsResponse>("/universe/systems");
-}
-
-async function getSystem(id: number) {
-  return await get<GetUniverseSystemsSystemIdResponse>(
-    `/universe/systems/${id}`
-  );
-}
+import { getSystem, getSystems } from "../API/Universe";
 
 export function useSystem(id: number) {
   return useQuery({

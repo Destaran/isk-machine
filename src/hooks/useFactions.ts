@@ -1,10 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import { GetUniverseFactionsResponse } from "../hey-api";
-
-async function getFactions() {
-  return await get<GetUniverseFactionsResponse>("/universe/factions");
-}
+import { getFactions } from "../API/Universe";
 
 export function useAllFactions() {
   return useQuery({

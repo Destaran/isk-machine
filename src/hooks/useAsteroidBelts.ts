@@ -1,12 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { get } from "../API/API";
-import { GetUniverseAsteroidBeltsAsteroidBeltIdResponse } from "../hey-api";
-
-async function getAsteroidBelt(id: number) {
-  return await get<GetUniverseAsteroidBeltsAsteroidBeltIdResponse>(
-    `/universe/asteroid_belts/${id}`
-  );
-}
+import { getAsteroidBelt } from "../API/Universe";
 
 export function useAsteroidBelt(id: number) {
   return useQuery({
