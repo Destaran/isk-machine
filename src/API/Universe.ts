@@ -8,8 +8,6 @@ import {
   GetUniverseFactionsResponse,
   GetUniverseGroupsResponse,
   GetUniverseGroupsGroupIdResponse,
-  GetMarketsGroupsMarketGroupIdResponse,
-  GetMarketsGroupsResponse,
   GetUniverseMoonsMoonIdResponse,
   GetUniversePlanetsPlanetIdResponse,
   GetUniverseRegionsResponse,
@@ -62,16 +60,6 @@ export async function getGroups() {
 
 export async function getGroup(id: number) {
   return await get<GetUniverseGroupsGroupIdResponse>(`/universe/groups/${id}`);
-}
-
-export async function getMarketGroup(id: number) {
-  return await get<GetMarketsGroupsMarketGroupIdResponse>(
-    `/markets/groups/${id}`
-  );
-}
-
-export async function getMarketGroups() {
-  return await get<GetMarketsGroupsResponse>("/markets/groups");
 }
 
 export async function getMoon(id: number) {

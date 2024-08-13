@@ -1,4 +1,8 @@
-import { GetMarketsRegionIdOrdersResponse } from "../hey-api";
+import {
+  GetMarketsGroupsMarketGroupIdResponse,
+  GetMarketsGroupsResponse,
+  GetMarketsRegionIdOrdersResponse,
+} from "../hey-api";
 import { get } from "./Axios";
 
 export type OrderType = "buy" | "sell" | "all";
@@ -17,4 +21,14 @@ export async function getMarketData(
       typeId ? `&type_id=${typeId}` : ""
     }`
   );
+}
+
+export async function getMarketGroup(id: number) {
+  return await get<GetMarketsGroupsMarketGroupIdResponse>(
+    `/markets/groups/${id}`
+  );
+}
+
+export async function getMarketGroups() {
+  return await get<GetMarketsGroupsResponse>("/markets/groups");
 }
