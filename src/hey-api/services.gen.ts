@@ -4,7 +4,7 @@ import {
   createClient,
   createConfig,
   type Options,
-} from "@hey-api/client-fetch";
+} from "@hey-api/client-axios";
 import type {
   GetAlliancesData,
   GetAlliancesError,
@@ -620,9 +620,8 @@ import type {
   GetWarsWarIdKillmailsResponse,
 } from "./types.gen";
 
-export const client = createClient(
-  createConfig({ baseUrl: "https://esi.evetech.net/latest" })
-);
+export const client = createClient(createConfig());
+client.instance.interceptors.response.use((response) => response.data);
 
 /**
  * List all alliances
