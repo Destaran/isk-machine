@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { postUniverseNames, PostUniverseNamesData } from "../../hey-api";
+import { postUniverseNames } from "../../hey-api";
 
 export function useNames(ids: number[]) {
-  const options: PostUniverseNamesData = {
-    path: { ids },
+  const options = {
+    body: ids,
   };
 
   return useQuery({
