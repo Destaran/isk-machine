@@ -1,18 +1,18 @@
-import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getMarketData, OrderType } from "../API/markets";
+import {
+  getMarketsRegionIdOrders,
+  GetMarketsRegionIdOrdersData,
+} from "../hey-api";
+import { useCallback } from "react";
 
-export function useMarketData(
-  regionId: number,
-  typeId: number | null = null,
-  page: string = "1",
-  orderType: OrderType = "all"
-) {
-  const getCurrentRegion = useCallback(
-    async () => await getMarketData(regionId, typeId, page, orderType),
-    [orderType, page, regionId, typeId]
-  );
-
+export function useMarketData(regionId: number) {
+  const getCurrentRegion = useCallback(async () => {
+    const options: GetMarketsRegionIdOrdersData = {
+      path: { region_id: regionId },
+      query: { order_type: "all" },
+    };
+    return await getMarketsRegionIdOrders(options);
+  }, [regionId]);
   return useQuery({
     queryKey: ["market", regionId],
     queryFn: getCurrentRegion,

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getFactions } from "../API/universe";
+import { getUniverseFactions } from "../hey-api";
 
 export function useAllFactions() {
   return useQuery({
     queryKey: ["factions"],
-    queryFn: getFactions,
+    queryFn: getUniverseFactions,
   });
 }
