@@ -620,7 +620,11 @@ import type {
   GetWarsWarIdKillmailsResponse,
 } from "./types.gen";
 
-export const client = createClient(createConfig());
+export const client = createClient(
+  createConfig({
+    baseURL: "https://esi.evetech.net/latest",
+  })
+);
 client.instance.interceptors.response.use((response) => response.data);
 
 /**
