@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseSystemsSystemId,
   GetUniverseSystemsSystemIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useSystem(id: number) {
   const options: GetUniverseSystemsSystemIdData = {

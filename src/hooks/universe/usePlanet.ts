@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniversePlanetsPlanetId,
   GetUniversePlanetsPlanetIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function usePlanet(id: number) {
   const options: GetUniversePlanetsPlanetIdData = {

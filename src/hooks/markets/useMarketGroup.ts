@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getMarketsGroupsMarketGroupId,
   GetMarketsGroupsMarketGroupIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useMarketGroup(id: number) {
   const options: GetMarketsGroupsMarketGroupIdData = {

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseCategoriesCategoryId,
   GetUniverseCategoriesCategoryIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useCategory(id: number) {
   const options: GetUniverseCategoriesCategoryIdData = {

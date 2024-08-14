@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseGroupsGroupId,
   GetUniverseGroupsGroupIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useGroup(id: number) {
   const options: GetUniverseGroupsGroupIdData = {

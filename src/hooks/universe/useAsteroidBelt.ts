@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseAsteroidBeltsAsteroidBeltId,
   GetUniverseAsteroidBeltsAsteroidBeltIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useAsteroidBelt(id: number) {
   const options: GetUniverseAsteroidBeltsAsteroidBeltIdData = {

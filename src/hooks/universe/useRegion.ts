@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseRegionsRegionId,
   GetUniverseRegionsRegionIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useRegion(id: number) {
   const options: GetUniverseRegionsRegionIdData = {

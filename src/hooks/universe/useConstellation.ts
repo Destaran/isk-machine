@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseConstellationsConstellationId,
   GetUniverseConstellationsConstellationIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useConstellation(id: number) {
   const options: GetUniverseConstellationsConstellationIdData = {

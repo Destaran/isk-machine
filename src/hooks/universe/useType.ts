@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUniverseTypesTypeId, GetUniverseTypesTypeIdData } from "../hey-api";
+import {
+  getUniverseTypesTypeId,
+  GetUniverseTypesTypeIdData,
+} from "../../hey-api";
 
 export function useType(id: number) {
   const options: GetUniverseTypesTypeIdData = {

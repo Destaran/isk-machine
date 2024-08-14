@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseStructuresStructureId,
   GetUniverseStructuresStructureIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useStructure(id: number) {
   const options: GetUniverseStructuresStructureIdData = {

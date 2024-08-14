@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseStargatesStargateId,
   GetUniverseStargatesStargateIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useStargate(id: number) {
   const options: GetUniverseStargatesStargateIdData = {

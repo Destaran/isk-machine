@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUniverseMoonsMoonId, GetUniverseMoonsMoonIdData } from "../hey-api";
+import {
+  getUniverseMoonsMoonId,
+  GetUniverseMoonsMoonIdData,
+} from "../../hey-api";
 
 export function useMoon(id: number) {
   const options: GetUniverseMoonsMoonIdData = {

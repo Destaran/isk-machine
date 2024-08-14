@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getUniverseStationsStationId,
   GetUniverseStationsStationIdData,
-} from "../hey-api";
+} from "../../hey-api";
 
 export function useStation(id: number) {
   const options: GetUniverseStationsStationIdData = {
