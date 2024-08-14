@@ -20,6 +20,7 @@
     "styled-components": "^6.1.12"
   },
   "devDependencies": {
+    "@7nohe/openapi-react-query-codegen": "^1.6.0",
     "@eslint/js": "^9.8.0",
     "@hey-api/openapi-ts": "^0.52.5",
     "@types/react": "^18.3.3",
