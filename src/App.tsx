@@ -1,5 +1,5 @@
-import { JitaFlip } from "./JitaFlip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Market } from "./Market/Market";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <JitaFlip />
+      <Market />
     </QueryClientProvider>
   );
 }
