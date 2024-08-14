@@ -8,8 +8,6 @@ interface Props {
 }
 
 export function Navigation({ regionId }: Props) {
-  console.log(regionId);
-
   return (
     <Container>
       <Browse />
