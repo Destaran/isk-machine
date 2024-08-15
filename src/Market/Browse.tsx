@@ -1,32 +1,25 @@
 import styled from "styled-components";
-import { Group } from "./Group";
-import { useMarketAllGroups } from "../hooks/markets/useMarketAllGroups";
+import { useMarketGroups } from "../hooks/markets/useMarketGroups";
+import { MainGroup } from "./MainGroup";
 
 const Container = styled.div``;
 
 export function Browse() {
-  const groupsQuery = useMarketAllGroups();
+  const groupsQuery = useMarketGroups();
+  console.log(groupsQuery);
 
-  const {
-    data: groups,
-    isError: groupsError,
-    isLoading: groupsLoading,
-  } = groupsQuery;
+  const { data: groups, isLoading } = groupsQuery;
 
-  if (groupsLoading) {
+  if (groups === undefined || isLoading) {
     return null;
   }
 
-  if (groupsError || groups === null || !groups) {
-    return null;
-  }
-
-  const groupsArray = Object.values(groups);
+  const mainGroups = groups.filter((group) => !group?.parent_group_id);
 
   return (
     <Container>
-      {groupsArray.map((groupId) => (
-        <Group key={groupId} groupId={groupId} />
+      {mainGroups.map((group) => (
+        <MainGroup key={group?.market_group_id} group={group} groups={groups} />
       ))}
     </Container>
   );

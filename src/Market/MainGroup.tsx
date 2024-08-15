@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { GetMarketsGroupsMarketGroupIdResponse } from "../hey-api";
 import { useState } from "react";
-import { Item } from "./Item";
+import { Group } from "./Group";
 
 const Container = styled.div`
-  margin-left: 20px;
   &:hover {
     cursor: pointer;
   }
@@ -15,31 +14,23 @@ interface Props {
   groups: GetMarketsGroupsMarketGroupIdResponse[];
 }
 
-export function Group({ group, groups }: Props) {
-  const [showGroups, setShowGroups] = useState(false);
-  const [showItems, setShowItems] = useState(false);
+export function MainGroup({ group, groups }: Props) {
+  const [open, setOpen] = useState(false);
   const children = groups.filter(
     (g) => g.parent_group_id === group.market_group_id
   );
-  const lastChild = children.length === 0;
 
   function handleClick() {
-    if (lastChild) {
-      setShowItems(!showItems);
-      return;
-    }
-
-    setShowGroups(!showGroups);
+    setOpen(!open);
   }
 
   return (
     <Container>
-      <p onClick={handleClick}>{group.name}</p>
-      {showGroups &&
+      <h2 onClick={handleClick}>{group.name}</h2>
+      {open &&
         children.map((child) => (
           <Group key={child.market_group_id} group={child} groups={groups} />
         ))}
-      {showItems && group.types.map((type) => <Item key={type} id={type} />)}
     </Container>
   );
 }
