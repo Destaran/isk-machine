@@ -625,7 +625,6 @@ export const client = createClient(
     baseURL: "https://esi.evetech.net/latest",
   })
 );
-client.instance.interceptors.response.use((response) => response.data);
 
 /**
  * List all alliances
