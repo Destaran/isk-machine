@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Lists } from "./Lists";
 import { useState } from "react";
 import { Navigation } from "./Navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Container = styled.div`
   display: flex;
@@ -10,12 +11,20 @@ const Container = styled.div`
 `;
 
 export function Market() {
-  const [regionId] = useState(10000002);
+  const queryClient = useQueryClient();
+
+  const [regionId, setRegionId] = useState(10000002);
+  const [typeId, setTypeId] = useState<null | number>(null);
+
+  function handleTypeId(event: React.MouseEvent<HTMLDivElement>) {
+    queryClient.removeQueries({ queryKey: ["market", regionId] });
+    setTypeId(Number(event.currentTarget.id));
+  }
 
   return (
     <Container>
-      <Navigation regionId={regionId} />
-      <Lists />
+      <Navigation setTypeId={handleTypeId} />
+      <Lists regionId={regionId} typeId={typeId} />
     </Container>
   );
 }

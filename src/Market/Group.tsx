@@ -4,18 +4,23 @@ import { useState } from "react";
 import { Item } from "./Item";
 
 const Container = styled.div`
-  margin-left: 20px;
+  padding-left: 20px;
+  border-bottom: 1px solid black;
+`;
+
+const Wrapper = styled.div`
   &:hover {
-    cursor: pointer;
+    background-color: aliceblue;
   }
 `;
 
 interface Props {
   group: GetMarketsGroupsMarketGroupIdResponse;
   groups: GetMarketsGroupsMarketGroupIdResponse[];
+  setTypeId: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export function Group({ group, groups }: Props) {
+export function Group({ group, groups, setTypeId }: Props) {
   const [showGroups, setShowGroups] = useState(false);
   const [showItems, setShowItems] = useState(false);
   const children = groups.filter(
@@ -34,12 +39,22 @@ export function Group({ group, groups }: Props) {
 
   return (
     <Container>
-      <p onClick={handleClick}>{group.name}</p>
+      <Wrapper onClick={handleClick}>
+        <p>{group.name}</p>
+      </Wrapper>
       {showGroups &&
         children.map((child) => (
-          <Group key={child.market_group_id} group={child} groups={groups} />
+          <Group
+            key={child.market_group_id}
+            group={child}
+            groups={groups}
+            setTypeId={setTypeId}
+          />
         ))}
-      {showItems && group.types.map((type) => <Item key={type} id={type} />)}
+      {showItems &&
+        group.types.map((type) => (
+          <Item key={type} id={type} setTypeId={setTypeId} />
+        ))}
     </Container>
   );
 }

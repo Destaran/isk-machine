@@ -2,11 +2,16 @@ import styled from "styled-components";
 import { useMarketGroups } from "../hooks/markets/useMarketGroups";
 import { MainGroup } from "./MainGroup";
 
-const Container = styled.div``;
+const Container = styled.div`
+  overflow: scroll;
+`;
 
-export function Browse() {
+interface Props {
+  setTypeId: (event: React.MouseEvent<HTMLDivElement>) => void;
+}
+
+export function Browse({ setTypeId }: Props) {
   const groupsQuery = useMarketGroups();
-  console.log(groupsQuery);
 
   const { data: groups, isLoading } = groupsQuery;
 
@@ -19,7 +24,12 @@ export function Browse() {
   return (
     <Container>
       {mainGroups.map((group) => (
-        <MainGroup key={group?.market_group_id} group={group} groups={groups} />
+        <MainGroup
+          key={group?.market_group_id}
+          group={group}
+          groups={groups}
+          setTypeId={setTypeId}
+        />
       ))}
     </Container>
   );
