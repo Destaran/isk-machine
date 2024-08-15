@@ -4,19 +4,17 @@ import {
   GetMarketsRegionIdOrdersData,
 } from "../../hey-api";
 
-type OrderType = "all" | "buy" | "sell";
-
 interface UseMarketDataParams {
   regionId: number;
   typeId?: number;
-  orderType?: OrderType;
+  isBuy?: boolean;
 }
 
 export function useMarketData(params: UseMarketDataParams) {
-  const { regionId, orderType, typeId } = params;
+  const { regionId, typeId, isBuy } = params;
   const options: GetMarketsRegionIdOrdersData = {
     path: { region_id: regionId },
-    query: { order_type: orderType ?? "all" },
+    query: { order_type: isBuy ? "buy" : "sell", type_id: typeId },
   };
 
   if (typeId) {
@@ -24,7 +22,7 @@ export function useMarketData(params: UseMarketDataParams) {
   }
 
   return useQuery({
-    queryKey: ["market", regionId],
+    queryKey: ["market", regionId, isBuy],
     queryFn: () => getMarketsRegionIdOrders(options),
   });
 }
