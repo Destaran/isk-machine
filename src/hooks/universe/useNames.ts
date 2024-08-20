@@ -8,6 +8,7 @@ export function useNames(ids: number[]) {
 
   return useQuery({
     queryKey: ["names", ids],
+    staleTime: 1000 * 60 * 60 * 24,
     queryFn: () => postUniverseNames(options),
   });
 }
