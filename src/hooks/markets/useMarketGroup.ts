@@ -11,5 +11,6 @@ export function useMarketGroup(id: number) {
   return useQuery({
     queryKey: ["marketGroup", id],
     queryFn: () => getMarketsGroupsMarketGroupId(options),
+    select: (response) => response.data,
   });
 }
