@@ -1,20 +1,21 @@
 import styled from "styled-components";
 import { List } from "./List";
 import { Title } from "./Title";
+import { PostUniverseNamesResponse } from "../hey-api";
 
 const Container = styled.div``;
 
 interface Props {
   regionId: number;
-  typeId: number | null;
+  type: PostUniverseNamesResponse[number] | null;
 }
 
-export function Lists({ regionId, typeId }: Props) {
+export function Lists({ regionId, type }: Props) {
   return (
     <Container>
-      {typeId && <Title typeId={typeId} />}
-      <List regionId={regionId} typeId={typeId} />
-      <List regionId={regionId} typeId={typeId} isBuy />
+      {type && <Title name={type.name} />}
+      <List regionId={regionId} typeId={type?.id} />
+      <List regionId={regionId} typeId={type?.id} isBuy />
     </Container>
   );
 }

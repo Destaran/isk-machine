@@ -5,6 +5,7 @@ export function useMarketGroups() {
   const { data: response } = useQuery({
     queryKey: ["marketGroups"],
     queryFn: getMarketsGroups,
+    staleTime: Infinity,
   });
 
   const marketGroupIds = response?.data || [];
@@ -13,13 +14,15 @@ export function useMarketGroups() {
     queries: response?.data
       ? marketGroupIds.map((id) => ({
           queryKey: ["marketGroup", id],
+          staleTime: Infinity,
           queryFn: () =>
             getMarketsGroupsMarketGroupId({ path: { market_group_id: id } }),
         }))
       : [],
     combine: (responses) => ({
       data: responses.map((response) => response.data?.data),
-      isLoading: responses.some((response) => response.isLoading),
+      isPending: responses.some((response) => response.isPending),
+      isError: responses.some((response) => response.isError),
     }),
   });
 }

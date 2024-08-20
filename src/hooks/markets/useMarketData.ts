@@ -22,7 +22,8 @@ export function useMarketData(params: UseMarketDataParams) {
   }
 
   return useQuery({
-    queryKey: ["market", regionId, isBuy],
+    queryKey: ["market", regionId, typeId],
     queryFn: () => getMarketsRegionIdOrders(options),
+    select: (response) => response.data,
   });
 }

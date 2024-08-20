@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import { GetMarketsGroupsMarketGroupIdResponse } from "../hey-api";
+import {
+  GetMarketsGroupsMarketGroupIdResponse,
+  PostUniverseNamesResponse,
+} from "../hey-api";
 import { useState } from "react";
 import { Group } from "./Group";
 
@@ -20,7 +23,7 @@ const Wrapper = styled.div`
 interface Props {
   group: GetMarketsGroupsMarketGroupIdResponse;
   groups: GetMarketsGroupsMarketGroupIdResponse[];
-  setTypeId: (event: React.MouseEvent<HTMLDivElement>) => void;
+  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
 }
 
 export function MainGroup({ group, groups, setTypeId }: Props) {

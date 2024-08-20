@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useType } from "../hooks/universe/useType";
+import { PostUniverseNamesResponse } from "../hey-api";
 
 const Container = styled.div`
   padding-left: 20px;
@@ -9,23 +9,16 @@ const Container = styled.div`
 `;
 
 interface Props {
-  id: number;
-  setTypeId: (event: React.MouseEvent<HTMLDivElement>) => void;
+  type: PostUniverseNamesResponse[number];
+  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
 }
 
-export function Item({ id, setTypeId }: Props) {
-  const { data: response, isLoading } = useType(id);
-  const divId = id ? id.toString() : "";
-
-  if (isLoading || response === undefined) {
-    return null;
-  }
-
-  const item = response.data;
+export function Item({ type, setTypeId }: Props) {
+  const { id, name } = type;
 
   return (
-    <Container id={divId} onClick={(e) => setTypeId(e)}>
-      {item?.name}
+    <Container id={id.toString()} onClick={() => setTypeId(type)}>
+      {name}
     </Container>
   );
 }

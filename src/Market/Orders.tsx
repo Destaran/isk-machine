@@ -12,13 +12,11 @@ interface Props {
 
 export function Orders({ regionId, typeId, isBuy }: Props) {
   const ordersQuery = useMarketData({ regionId, typeId, isBuy });
-  const { data: response, isLoading } = ordersQuery;
+  const { data: orders, isLoading } = ordersQuery;
 
-  if (isLoading || !response || !response.data) {
+  if (isLoading || !orders) {
     return null;
   }
-
-  const orders = response.data;
 
   const sortedOrders = orders.sort((a, b) => {
     if (isBuy) {

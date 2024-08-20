@@ -1,7 +1,10 @@
 import styled from "styled-components";
-import { GetMarketsGroupsMarketGroupIdResponse } from "../hey-api";
+import {
+  GetMarketsGroupsMarketGroupIdResponse,
+  PostUniverseNamesResponse,
+} from "../hey-api";
 import { useState } from "react";
-import { Item } from "./Item";
+import { Items } from "./Items";
 
 const Container = styled.div`
   padding-left: 20px;
@@ -17,12 +20,13 @@ const Wrapper = styled.div`
 interface Props {
   group: GetMarketsGroupsMarketGroupIdResponse;
   groups: GetMarketsGroupsMarketGroupIdResponse[];
-  setTypeId: (event: React.MouseEvent<HTMLDivElement>) => void;
+  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
 }
 
 export function Group({ group, groups, setTypeId }: Props) {
   const [showGroups, setShowGroups] = useState(false);
   const [showItems, setShowItems] = useState(false);
+
   const children = groups.filter(
     (g) => g.parent_group_id === group.market_group_id
   );
@@ -51,10 +55,7 @@ export function Group({ group, groups, setTypeId }: Props) {
             setTypeId={setTypeId}
           />
         ))}
-      {showItems &&
-        group.types.map((type) => (
-          <Item key={type} id={type} setTypeId={setTypeId} />
-        ))}
+      {showItems && <Items setTypeId={setTypeId} types={group.types} />}
     </Container>
   );
 }

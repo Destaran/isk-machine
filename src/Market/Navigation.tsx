@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Browse } from "./Browse";
+import { PostUniverseNamesResponse } from "../hey-api";
 
 const Container = styled.div`
   width: 500px;
@@ -10,7 +11,7 @@ const Container = styled.div`
 `;
 
 interface Props {
-  setTypeId: (event: React.MouseEvent<HTMLDivElement>) => void;
+  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
 }
 
 export function Navigation({ setTypeId }: Props) {

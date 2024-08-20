@@ -12,5 +12,6 @@ export function useMarketRegionTypes(id: number) {
   return useQuery({
     queryKey: ["marketRegionTypes", id],
     queryFn: () => getMarketsRegionIdTypes(options),
+    select: (response) => response.data,
   });
 }

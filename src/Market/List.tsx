@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 interface Props {
   isBuy?: boolean;
   regionId: number;
-  typeId: number | null;
+  typeId: number | undefined;
 }
 
 export function List({ regionId, typeId, isBuy }: Props) {

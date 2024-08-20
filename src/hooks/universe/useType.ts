@@ -12,5 +12,6 @@ export function useType(id: number) {
   return useQuery({
     queryKey: ["type", id],
     queryFn: () => getUniverseTypesTypeId(options),
+    select: (response) => response.data,
   });
 }
