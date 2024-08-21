@@ -21,7 +21,7 @@ export function Item({ type, setTypeId }: Props) {
 
   return (
     <Container id={id.toString()} onClick={() => setTypeId(type)}>
-      {name}
+      - {name}
     </Container>
   );
 }

@@ -9,6 +9,7 @@ const Container = styled.div`
   display: flex;
   justify-content: start;
   align-items: start;
+  background-color: #2b2b2b;
 `;
 
 export function Market() {

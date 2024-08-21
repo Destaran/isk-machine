@@ -3,11 +3,12 @@ import { Browse } from "./Browse";
 import { PostUniverseNamesResponse } from "../hey-api";
 
 const Container = styled.div`
-  width: 500px;
-  max-height: 100vh;
-  border: 1px solid black;
+  min-width: 500px;
+  width: auto;
+  min-height: 100vh;
   margin-right: 15px;
   overflow: scroll;
+  background-color: #4b4b4b;
 `;
 
 interface Props {

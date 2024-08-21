@@ -6,6 +6,10 @@ const Container = styled.div`
   width: 100%;
 `;
 
+const Title = styled.h2`
+  color: white;
+`;
+
 interface Props {
   isBuy?: boolean;
   regionId: number;
@@ -24,7 +28,7 @@ export function List({ regionId, typeId, isBuy }: Props) {
   } = MarketTableColumnWidths;
   return (
     <Container>
-      <h2>{isBuy ? "Buy Orders" : "Sell Orders"}</h2>
+      <Title>{isBuy ? "Buy Orders" : "Sell Orders"}</Title>
       <Table>
         <TableHead>
           <Cell width={regionW}>Region</Cell>
