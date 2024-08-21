@@ -3,7 +3,9 @@ import { List } from "./List";
 import { Title } from "./Title";
 import { PostUniverseNamesResponse } from "../hey-api";
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 80%;
+`;
 
 interface Props {
   regionId: number;

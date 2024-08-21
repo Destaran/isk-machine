@@ -1,25 +1,33 @@
-import styled from "styled-components";
 import { GetMarketsRegionIdOrdersResponse } from "../hey-api";
-
-const Container = styled.div`
-  display: flex;
-  border: 1px solid black;
-`;
-
-const Column = styled.div`
-  width: 400px;
-`;
+import { Row, Cell, MarketTableColumnWidths } from "./Table";
 
 interface Props {
-  order: GetMarketsRegionIdOrdersResponse[number];
+  order: GetMarketsRegionIdOrdersResponse[number] & { location: string };
+  regionId: number;
 }
 
-export function Order({ order }: Props) {
+export function Order({ order, regionId }: Props) {
+  const {
+    regionW,
+    quantityW,
+    priceW,
+    locationW,
+    jumpsW,
+    expiresW,
+    lastModifiedW,
+  } = MarketTableColumnWidths;
+
   return (
-    <Container>
-      <Column>{new Intl.NumberFormat("en-US").format(order.price)} ISK</Column>
-      <Column>{order.volume_remain}</Column>
-      <Column>{order.location_id}</Column>
-    </Container>
+    <Row>
+      <Cell width={regionW}>{regionId}</Cell>
+      <Cell width={quantityW}>{order.volume_remain}</Cell>
+      <Cell width={priceW}>
+        {new Intl.NumberFormat("en-US").format(order.price)} ISK
+      </Cell>
+      <Cell width={locationW}>{order.location}</Cell>
+      <Cell width={jumpsW}>{69}</Cell>
+      <Cell width={expiresW}>{order.issued}</Cell>
+      <Cell width={lastModifiedW}>{order.issued}</Cell>
+    </Row>
   );
 }

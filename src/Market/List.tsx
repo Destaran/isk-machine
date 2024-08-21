@@ -1,13 +1,9 @@
 import styled from "styled-components";
 import { Orders } from "./Orders";
+import { Table, TableHead, Cell, MarketTableColumnWidths } from "./Table";
 
-const Container = styled.div``;
-
-const Wrapper = styled.div`
-  border: 1px solid black;
-  width: 1200px;
-  height: 400px;
-  overflow: scroll;
+const Container = styled.div`
+  width: 100%;
 `;
 
 interface Props {
@@ -17,12 +13,30 @@ interface Props {
 }
 
 export function List({ regionId, typeId, isBuy }: Props) {
+  const {
+    regionW,
+    quantityW,
+    priceW,
+    locationW,
+    jumpsW,
+    expiresW,
+    lastModifiedW,
+  } = MarketTableColumnWidths;
   return (
     <Container>
       <h2>{isBuy ? "Buy Orders" : "Sell Orders"}</h2>
-      <Wrapper>
+      <Table>
+        <TableHead>
+          <Cell width={regionW}>Region</Cell>
+          <Cell width={quantityW}>Quantity</Cell>
+          <Cell width={priceW}>Price</Cell>
+          <Cell width={locationW}>Location</Cell>
+          <Cell width={jumpsW}>Jumps</Cell>
+          <Cell width={expiresW}>Expires In</Cell>
+          <Cell width={lastModifiedW}>Last Modified</Cell>
+        </TableHead>
         {typeId && <Orders regionId={regionId} typeId={typeId} isBuy={isBuy} />}
-      </Wrapper>
+      </Table>
     </Container>
   );
 }

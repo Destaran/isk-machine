@@ -1,8 +1,5 @@
-import styled from "styled-components";
-import { useMarketData } from "../hooks/markets/useMarketData";
+import { useMarketDataWithNames } from "../hooks/markets/useMarketDataWithNames";
 import { Order } from "./Order";
-
-const Container = styled.div``;
 
 interface Props {
   isBuy?: boolean;
@@ -11,7 +8,7 @@ interface Props {
 }
 
 export function Orders({ regionId, typeId, isBuy }: Props) {
-  const ordersQuery = useMarketData({ regionId, typeId, isBuy });
+  const ordersQuery = useMarketDataWithNames({ regionId, typeId, isBuy });
   const { data: orders, isLoading } = ordersQuery;
 
   if (isLoading || !orders) {
@@ -27,10 +24,10 @@ export function Orders({ regionId, typeId, isBuy }: Props) {
   });
 
   return (
-    <Container>
+    <>
       {sortedOrders.map((order) => (
-        <Order key={order.order_id} order={order} />
+        <Order key={order.order_id} order={order} regionId={regionId} />
       ))}
-    </Container>
+    </>
   );
 }
