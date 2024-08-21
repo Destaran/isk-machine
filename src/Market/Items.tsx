@@ -11,16 +11,13 @@ interface Props {
 }
 
 export function Items({ setTypeId, types }: Props) {
-  const typesWithNamesQuery = useNames(types);
-  const { data: response, isLoading } = typesWithNamesQuery;
+  const { data: names, isLoading } = useNames(types);
 
-  if (isLoading || response === undefined || response.data === undefined) {
+  if (isLoading || names === undefined) {
     return null;
   }
 
-  const typesWithNames = response.data.sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
+  const typesWithNames = names.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <Container>
