@@ -8,18 +8,20 @@ import { Group } from "./Group";
 
 const Container = styled.div`
   cursor: pointer;
+  background-color: #2b2b2b;
 `;
 
 const Wrapper = styled.div`
-  border: 1px solid black;
   height: 100%;
   width: 100%;
+  background-color: #4b4b4b;
+  color: white;
   &:hover {
-    background-color: aliceblue;
+    background-color: grey;
   }
 `;
 
-const Title = styled.h2`
+const Title = styled.p`
   margin: 0;
 `;
 
@@ -42,7 +44,9 @@ export function MainGroup({ group, groups, setTypeId }: Props) {
   return (
     <Container>
       <Wrapper>
-        <Title onClick={handleClick}>{group.name}</Title>
+        <Title onClick={handleClick}>
+          {`${open ? "▾" : "▸"} ${group.name}`}
+        </Title>
       </Wrapper>
       {open &&
         children.map((child) => (

@@ -3,8 +3,11 @@ import { PostUniverseNamesResponse } from "../hey-api";
 
 const Container = styled.div`
   margin-left: 20px;
+  background-color: #2b2b2b;
+  color: white;
+
   &:hover {
-    background-color: aliceblue;
+    background-color: grey;
   }
 `;
 
@@ -18,7 +21,7 @@ export function Item({ type, setTypeId }: Props) {
 
   return (
     <Container id={id.toString()} onClick={() => setTypeId(type)}>
-      - {name}
+      {name}
     </Container>
   );
 }

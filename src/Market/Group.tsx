@@ -11,10 +11,11 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  border: 1px solid black;
+  background-color: #2b2b2b;
+  color: white;
 
   &:hover {
-    background-color: aliceblue;
+    background-color: grey;
   }
 `;
 
@@ -49,7 +50,7 @@ export function Group({ group, groups, setTypeId }: Props) {
   return (
     <Container>
       <Wrapper onClick={handleClick}>
-        <Title>{group.name}</Title>
+        <Title> {`${showGroups || showItems ? "▾" : "▸"} ${group.name}`}</Title>
       </Wrapper>
       {showGroups &&
         children.map((child) => (
