@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { PostUniverseNamesResponse } from "../hey-api";
 
 const Container = styled.div`
-  padding-left: 20px;
+  margin-left: 20px;
   &:hover {
     background-color: aliceblue;
   }
@@ -18,7 +18,7 @@ export function Item({ type, setTypeId }: Props) {
 
   return (
     <Container id={id.toString()} onClick={() => setTypeId(type)}>
-      {name}
+      - {name}
     </Container>
   );
 }

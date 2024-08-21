@@ -7,17 +7,20 @@ import { useState } from "react";
 import { Group } from "./Group";
 
 const Container = styled.div`
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
   cursor: pointer;
 `;
 
 const Wrapper = styled.div`
+  border: 1px solid black;
   height: 100%;
   width: 100%;
   &:hover {
     background-color: aliceblue;
   }
+`;
+
+const Title = styled.h2`
+  margin: 0;
 `;
 
 interface Props {
@@ -39,7 +42,7 @@ export function MainGroup({ group, groups, setTypeId }: Props) {
   return (
     <Container>
       <Wrapper>
-        <h2 onClick={handleClick}>{group.name}</h2>
+        <Title onClick={handleClick}>{group.name}</Title>
       </Wrapper>
       {open &&
         children.map((child) => (

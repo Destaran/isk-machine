@@ -8,13 +8,18 @@ import { Items } from "./Items";
 
 const Container = styled.div`
   padding-left: 20px;
-  border-bottom: 1px solid black;
 `;
 
 const Wrapper = styled.div`
+  border: 1px solid black;
+
   &:hover {
     background-color: aliceblue;
   }
+`;
+
+const Title = styled.p`
+  margin: 0;
 `;
 
 interface Props {
@@ -44,7 +49,7 @@ export function Group({ group, groups, setTypeId }: Props) {
   return (
     <Container>
       <Wrapper onClick={handleClick}>
-        <p>{group.name}</p>
+        <Title>{group.name}</Title>
       </Wrapper>
       {showGroups &&
         children.map((child) => (
