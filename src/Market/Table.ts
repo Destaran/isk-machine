@@ -38,7 +38,7 @@ export const MarketTableColumnWidths = {
   regionW: "5%",
   quantityW: "5%",
   priceW: "10%",
-  locationW: "20%",
+  locationW: "30%",
   jumpsW: "10%",
   expiresW: "20%",
   lastModifiedW: "20%",
