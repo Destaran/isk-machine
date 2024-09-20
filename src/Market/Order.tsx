@@ -25,7 +25,7 @@ export function Order({ order, regionId }: Props) {
         {new Intl.NumberFormat("en-US").format(order.price)} ISK
       </Cell>
       <Cell width={locationW}>{order.location}</Cell>
-      <Cell width={jumpsW}>{69}</Cell>
+      <Cell width={jumpsW}>{"-"}</Cell>
       <Cell width={expiresW}>{order.issued}</Cell>
       <Cell width={lastModifiedW}>{order.issued}</Cell>
     </Row>
