@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useMarketGroups } from "../hooks/markets/useMarketGroups";
+import groupsData from "../utils/market_groups_details.json";
 import { MainGroup } from "./MainGroup";
 import {
   GetMarketsGroupsMarketGroupIdResponse,
@@ -15,13 +15,7 @@ interface Props {
 }
 
 export function Browse({ setTypeId }: Props) {
-  const groupsQuery = useMarketGroups();
-
-  const { data: groups, isPending, isError } = groupsQuery;
-
-  if (groups.some((group) => group === undefined) || isPending || isError) {
-    return null;
-  }
+  const groups = groupsData as GetMarketsGroupsMarketGroupIdResponse[];
 
   const orderedGroups = groups
     .filter(
