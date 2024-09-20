@@ -26,6 +26,8 @@ export function useMarketDataWithNames(params: UseMarketDataParams) {
   const { data: orders } = useQuery({
     queryKey: ["market", regionId, typeId, isBuy],
     queryFn: () => getMarketsRegionIdOrders(marketsOptions),
+    retry: 3,
+    retryDelay: 2000,
     select: (response) => ({
       data: response.data,
       ids: getUniqueLocIds(response.data ?? []),
