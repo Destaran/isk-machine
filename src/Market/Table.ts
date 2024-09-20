@@ -12,8 +12,8 @@ export const Table = styled.div`
 export const Row = styled.div`
   display: flex;
   height: 25px;
-  outline: thin solid;
   background-color: white;
+  border-bottom: 1px black solid;
   width: 100%;
 `;
 
