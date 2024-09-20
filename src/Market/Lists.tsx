@@ -20,6 +20,7 @@ export function Lists({ regionId, type }: Props) {
   return (
     <Container>
       {type && <Title>{type.name}</Title>}
+      <img src={`https://images.evetech.net/types/${type?.id}/icon?size=64`} />
       <List regionId={regionId} typeId={type?.id} />
       <List regionId={regionId} typeId={type?.id} isBuy />
     </Container>
