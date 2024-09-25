@@ -39,7 +39,14 @@ export const marketSlice = createSlice({
 export const { setOrders, resetOrders } = marketSlice.actions;
 
 export const selectOrders = (state: RootState) => {
-  const orders = state.market.orders;
+  let orders = state.market.orders;
+
+  if (state.market.location) {
+    orders = orders.filter(
+      (order) => order.location_id === state.market.location
+    );
+  }
+
   const buy = orders
     .filter((order) => order.is_buy_order)
     .sort((a, b) => b.price - a.price);
