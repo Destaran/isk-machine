@@ -1,7 +1,9 @@
-import { QueryClient } from "@tanstack/react-query";
-import { Market } from "./Market/Market";
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { QueryClient } from '@tanstack/react-query';
+import { Market } from './Market/Market';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +24,9 @@ export function App() {
       client={queryClient}
       persistOptions={{ persister }}
     >
-      <Market />
+      <Provider store={store}>
+        <Market />
+      </Provider>
     </PersistQueryClientProvider>
   );
 }
