@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import { Orders } from "./Orders";
-import { Table, TableHead, Cell, MarketTableColumnWidths } from "./Table";
+import styled from 'styled-components';
+import { Orders } from './Orders';
+import { Table, TableHead, Cell, MarketTableColumnWidths } from './Table';
+import { GetMarketsRegionIdOrdersResponse } from '../hey-api';
 
 const Container = styled.div`
   width: 100%;
@@ -11,12 +12,11 @@ const Title = styled.h2`
 `;
 
 interface Props {
+  orders: GetMarketsRegionIdOrdersResponse;
   isBuy?: boolean;
-  regionId: number;
-  typeId: number | undefined;
 }
 
-export function List({ regionId, typeId, isBuy }: Props) {
+export function List({ orders, isBuy }: Props) {
   const {
     regionW,
     quantityW,
@@ -26,9 +26,10 @@ export function List({ regionId, typeId, isBuy }: Props) {
     expiresW,
     lastModifiedW,
   } = MarketTableColumnWidths;
+
   return (
     <Container>
-      <Title>{isBuy ? "Buy Orders" : "Sell Orders"}</Title>
+      <Title>{isBuy ? 'Buy Orders' : 'Sell Orders'}</Title>
       <Table>
         <TableHead>
           <Cell width={regionW}>Region</Cell>
@@ -39,7 +40,7 @@ export function List({ regionId, typeId, isBuy }: Props) {
           <Cell width={expiresW}>Expires In</Cell>
           <Cell width={lastModifiedW}>Last Modified</Cell>
         </TableHead>
-        {typeId && <Orders regionId={regionId} typeId={typeId} isBuy={isBuy} />}
+        <Orders orders={orders} />
       </Table>
     </Container>
   );

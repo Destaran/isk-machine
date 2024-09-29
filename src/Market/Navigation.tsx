@@ -1,6 +1,5 @@
-import styled from "styled-components";
-import { Browse } from "./Browse";
-import { PostUniverseNamesResponse } from "../hey-api";
+import styled from 'styled-components';
+import { Browse } from './Browse';
 
 const Container = styled.div`
   min-width: 500px;
@@ -11,14 +10,10 @@ const Container = styled.div`
   background-color: #4b4b4b;
 `;
 
-interface Props {
-  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
-}
-
-export function Navigation({ setTypeId }: Props) {
+export function Navigation() {
   return (
     <Container>
-      <Browse setTypeId={setTypeId} />
+      <Browse />
     </Container>
   );
 }

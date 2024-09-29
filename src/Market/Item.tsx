@@ -1,5 +1,9 @@
-import styled from "styled-components";
-import { PostUniverseNamesResponse } from "../hey-api";
+import styled from 'styled-components';
+import { PostUniverseNamesResponse } from '../hey-api';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useTypeSelected } from '../hooks/universe/useTypeSelected';
+import { setType } from '../redux/orders/ordersSlice';
 
 const Container = styled.div`
   margin-left: 20px;
@@ -13,14 +17,25 @@ const Container = styled.div`
 
 interface Props {
   type: PostUniverseNamesResponse[number];
-  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
 }
 
-export function Item({ type, setTypeId }: Props) {
+export function Item({ type }: Props) {
+  const dispatch = useDispatch();
+  const [enabled, setEnabled] = useState(false);
   const { id, name } = type;
 
+  function handleClick() {
+    setEnabled(true);
+  }
+
+  const { data: typeData, isFetched } = useTypeSelected(id, enabled);
+
+  if (isFetched && typeData && enabled) {
+    dispatch(setType(typeData));
+  }
+
   return (
-    <Container id={id.toString()} onClick={() => setTypeId(type)}>
+    <Container id={id.toString()} onClick={() => handleClick()}>
       - {name}
     </Container>
   );

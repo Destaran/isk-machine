@@ -1,10 +1,7 @@
-import styled from "styled-components";
-import {
-  GetMarketsGroupsMarketGroupIdResponse,
-  PostUniverseNamesResponse,
-} from "../hey-api";
-import { useState } from "react";
-import { Items } from "./Items";
+import styled from 'styled-components';
+import { GetMarketsGroupsMarketGroupIdResponse } from '../hey-api';
+import { useState } from 'react';
+import { Items } from './Items';
 
 const Container = styled.div`
   padding-left: 20px;
@@ -26,10 +23,9 @@ const Title = styled.p`
 interface Props {
   group: GetMarketsGroupsMarketGroupIdResponse;
   groups: GetMarketsGroupsMarketGroupIdResponse[];
-  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
 }
 
-export function Group({ group, groups, setTypeId }: Props) {
+export function Group({ group, groups }: Props) {
   const [showGroups, setShowGroups] = useState(false);
   const [showItems, setShowItems] = useState(false);
 
@@ -50,18 +46,13 @@ export function Group({ group, groups, setTypeId }: Props) {
   return (
     <Container>
       <Wrapper onClick={handleClick}>
-        <Title> {`${showGroups || showItems ? "▾" : "▸"} ${group.name}`}</Title>
+        <Title> {`${showGroups || showItems ? '▾' : '▸'} ${group.name}`}</Title>
       </Wrapper>
       {showGroups &&
         children.map((child) => (
-          <Group
-            key={child.market_group_id}
-            group={child}
-            groups={groups}
-            setTypeId={setTypeId}
-          />
+          <Group key={child.market_group_id} group={child} groups={groups} />
         ))}
-      {showItems && <Items setTypeId={setTypeId} types={group.types} />}
+      {showItems && <Items types={group.types} />}
     </Container>
   );
 }

@@ -1,16 +1,14 @@
-import styled from "styled-components";
-import { useNames } from "../hooks/universe/useNames";
-import { Item } from "./Item";
-import { PostUniverseNamesResponse } from "../hey-api";
+import styled from 'styled-components';
+import { useNames } from '../hooks/universe/useNames';
+import { Item } from './Item';
 
 const Container = styled.div``;
 
 interface Props {
-  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
   types: number[];
 }
 
-export function Items({ setTypeId, types }: Props) {
+export function Items({ types }: Props) {
   const { data: names, isLoading } = useNames(types);
 
   if (isLoading || names === undefined) {
@@ -23,9 +21,7 @@ export function Items({ setTypeId, types }: Props) {
     <Container>
       {typesWithNames.length > 0 &&
         typesWithNames.map((type) =>
-          type.id ? (
-            <Item key={type.id} setTypeId={setTypeId} type={type} />
-          ) : null
+          type.id ? <Item key={type.id} type={type} /> : null
         )}
     </Container>
   );

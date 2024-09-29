@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import { List } from "./List";
-import { PostUniverseNamesResponse } from "../hey-api";
+import styled from 'styled-components';
+import { List } from './List';
+import { useSelector } from 'react-redux';
+import { selectOrders, type as selectType } from '../redux/orders/ordersSlice';
 
 const Container = styled.div`
   width: 80%;
@@ -11,18 +12,21 @@ const Title = styled.h1`
   color: white;
 `;
 
-interface Props {
-  regionId: number;
-  type: PostUniverseNamesResponse[number] | null;
-}
+export function Lists() {
+  const type = useSelector(selectType);
+  const orders = useSelector(selectOrders);
+  const { sell, buy } = orders;
 
-export function Lists({ regionId, type }: Props) {
   return (
     <Container>
-      {type && <Title>{type.name}</Title>}
-      <img src={`https://images.evetech.net/types/${type?.id}/icon?size=64`} />
-      <List regionId={regionId} typeId={type?.id} />
-      <List regionId={regionId} typeId={type?.id} isBuy />
+      <Title>{type ? type.name : 'Select an item'}</Title>
+      {type && (
+        <img
+          src={`https://images.evetech.net/types/${type.type_id}/icon?size=64`}
+        />
+      )}
+      <List orders={sell} />
+      <List orders={buy} isBuy />
     </Container>
   );
 }

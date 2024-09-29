@@ -1,20 +1,13 @@
-import styled from "styled-components";
-import groupsData from "../utils/market_groups_details.json";
-import { MainGroup } from "./MainGroup";
-import {
-  GetMarketsGroupsMarketGroupIdResponse,
-  PostUniverseNamesResponse,
-} from "../hey-api";
+import styled from 'styled-components';
+import groupsData from '../utils/market_groups_details.json';
+import { MainGroup } from './MainGroup';
+import { GetMarketsGroupsMarketGroupIdResponse } from '../hey-api';
 
 const Container = styled.div`
   overflow: scroll;
 `;
 
-interface Props {
-  setTypeId: (type: PostUniverseNamesResponse[number]) => void;
-}
-
-export function Browse({ setTypeId }: Props) {
+export function Browse() {
   const groups = groupsData as GetMarketsGroupsMarketGroupIdResponse[];
 
   const orderedGroups = groups
@@ -39,7 +32,6 @@ export function Browse({ setTypeId }: Props) {
               key={group?.market_group_id}
               group={group}
               groups={orderedGroups}
-              setTypeId={setTypeId}
             />
           );
         })}

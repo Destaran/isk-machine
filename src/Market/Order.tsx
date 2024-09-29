@@ -1,12 +1,11 @@
-import { GetMarketsRegionIdOrdersResponse } from "../hey-api";
-import { Row, Cell, MarketTableColumnWidths } from "./Table";
+import { GetMarketsRegionIdOrdersResponse } from '../hey-api';
+import { Row, Cell, MarketTableColumnWidths } from './Table';
 
 interface Props {
-  order: GetMarketsRegionIdOrdersResponse[number] & { location: string };
-  regionId: number;
+  order: GetMarketsRegionIdOrdersResponse[number];
 }
 
-export function Order({ order, regionId }: Props) {
+export function Order({ order }: Props) {
   const {
     regionW,
     quantityW,
@@ -19,13 +18,13 @@ export function Order({ order, regionId }: Props) {
 
   return (
     <Row>
-      <Cell width={regionW}>{regionId}</Cell>
+      <Cell width={regionW}>{'region'}</Cell>
       <Cell width={quantityW}>{order.volume_remain}</Cell>
       <Cell width={priceW}>
-        {new Intl.NumberFormat("en-US").format(order.price)} ISK
+        {new Intl.NumberFormat('en-US').format(order.price)} ISK
       </Cell>
-      <Cell width={locationW}>{order.location}</Cell>
-      <Cell width={jumpsW}>{"-"}</Cell>
+      <Cell width={locationW}>{order.location_id}</Cell>
+      <Cell width={jumpsW}>{'-'}</Cell>
       <Cell width={expiresW}>{order.issued}</Cell>
       <Cell width={lastModifiedW}>{order.issued}</Cell>
     </Row>
