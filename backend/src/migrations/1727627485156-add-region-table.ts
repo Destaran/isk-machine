@@ -8,15 +8,21 @@ export class AddRegionTable1727627485156 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'varchar',
+            length: '255',
             isPrimary: true,
+            isUnique: true,
+            isNullable: false,
           },
           {
             name: 'name',
-            type: 'text',
+            type: 'varchar',
+            length: '255',
+            isNullable: false,
           },
         ],
       }),
+      true,
     );
   }
 
