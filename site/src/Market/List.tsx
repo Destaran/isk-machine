@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Orders } from './Orders';
+import { Entries } from './Entries';
 import { Table, TableHead, Cell, MarketTableColumnWidths } from './Table';
-import { GetMarketsRegionIdOrdersResponse } from '../hey-api';
+import { Order } from '../api/market/Order';
 
 const Container = styled.div`
   width: 100%;
@@ -12,7 +12,7 @@ const Title = styled.h2`
 `;
 
 interface Props {
-  orders: GetMarketsRegionIdOrdersResponse;
+  orders: Order[];
   isBuy?: boolean;
 }
 
@@ -40,7 +40,7 @@ export function List({ orders, isBuy }: Props) {
           <Cell width={expiresW}>Expires In</Cell>
           <Cell width={lastModifiedW}>Last Modified</Cell>
         </TableHead>
-        <Orders orders={orders} />
+        <Entries orders={orders} />
       </Table>
     </Container>
   );
