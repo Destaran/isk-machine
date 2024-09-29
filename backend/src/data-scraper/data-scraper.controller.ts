@@ -11,8 +11,8 @@ export class DataScraperController {
   }
 
   @Delete('regions')
-  async clearRegions() {
-    await this.DataScraperService.clearRegions();
+  async wipeRegions() {
+    await this.DataScraperService.wipeRegions();
   }
 
   @Post('orders')

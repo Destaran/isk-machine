@@ -68,7 +68,7 @@ export class DataScraperService {
     }
   }
 
-  async clearRegions() {
+  async wipeRegions() {
     await this.regionRepository.clear();
   }
 
