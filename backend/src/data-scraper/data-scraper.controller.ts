@@ -1,4 +1,4 @@
-import { Controller, Delete, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { DataScraperService } from './data-scraper.service';
 
 @Controller('data-scraper')
@@ -16,12 +16,37 @@ export class DataScraperController {
   }
 
   @Post('orders')
-  async getAllRegionOrders() {
-    await this.DataScraperService.getAllRegionOrders();
+  async getAllRegionsAllOrders() {
+    await this.DataScraperService.getAllRegionsAllOrders();
+  }
+
+  @Post('orders/continue/:regionId')
+  async continueAllRegionsAllOrdersFrom(@Param('regionId') regionId: number) {
+    await this.DataScraperService.continueAllRegionsAllOrders(regionId);
+  }
+
+  @Post('orders/continue')
+  async continueAllRegionsAllOrders() {
+    return await this.DataScraperService.continueAllRegionsAllOrders();
+  }
+
+  @Post('orders/:regionId')
+  async getAllRegionOrders(@Param('regionId') regionId: number) {
+    await this.DataScraperService.getAllRegionOrders(regionId);
+  }
+
+  @Get('orders/total')
+  async getOrdersTotal() {
+    return this.DataScraperService.getOrdersTotal();
   }
 
   @Delete('orders')
-  async clearOrders() {
-    await this.DataScraperService.clearOrders();
+  async wipeAllOrders() {
+    await this.DataScraperService.wipeAllOrders();
+  }
+
+  @Delete('orders/:regionId')
+  async wipeRegionOrders(@Param('regionId') regionId: number) {
+    await this.DataScraperService.wipeRegionOrders(regionId);
   }
 }

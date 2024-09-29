@@ -5,9 +5,12 @@ import { RegionRepository } from './region.repository';
 import { Region } from './region.entity';
 import { OrderRepository } from './order.repository';
 import { Order } from './order.entity';
+import { MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class DataScraperService {
+  private currentRegionId: number | null = null;
+
   constructor(
     private readonly httpService: HttpService,
     private readonly regionRepository: RegionRepository,
@@ -83,7 +86,8 @@ export class DataScraperService {
     return regionOrdersRequest;
   }
 
-  async getAllRegionOrders(regionId: number = 10000002) {
+  async getAllRegionOrders(regionId: number) {
+    this.currentRegionId = regionId;
     let orders = 0;
     let reachedMaxPages = false;
     let pageNum = 1;
@@ -133,9 +137,56 @@ export class DataScraperService {
     }
 
     console.log(`Saved ${orders} orders for region ${regionId}.`);
+    return orders;
   }
 
-  async clearOrders() {
+  async getAllRegionsAllOrders() {
+    const regions = await this.regionRepository.find();
+
+    for (const region of regions) {
+      await this.getAllRegionOrders(region.id);
+      setTimeout(() => {}, 500);
+    }
+    const count = await this.orderRepository.count();
+    console.log(`Saved ${count} orders for all regions.`);
+  }
+
+  async continueAllRegionsAllOrders(regionId: number = this.currentRegionId) {
+    if (!regionId) {
+      console.error('No current region. Start scraping all regions first.');
+      return;
+    }
+    const deleted = await this.orderRepository.delete({
+      region_id: regionId,
+    });
+
+    console.log(`Deleted ${deleted.affected} orders from region ${regionId}.`);
+
+    console.log(`Continuing from ${regionId} region.`);
+
+    const regions = await this.regionRepository.find({
+      where: { id: MoreThanOrEqual(regionId) },
+    });
+
+    for (const region of regions) {
+      await this.getAllRegionOrders(region.id);
+      setTimeout(() => {}, 500);
+    }
+    const count = await this.orderRepository.count();
+    console.log(`Saved ${count} orders for all regions.`);
+    this.currentRegionId = null;
+  }
+
+  async getOrdersTotal() {
+    const count = await this.orderRepository.count();
+    return `Total orders: ${count}`;
+  }
+
+  async wipeAllOrders() {
     await this.orderRepository.clear();
+  }
+
+  async wipeRegionOrders(regionId: number) {
+    await this.orderRepository.delete({ region_id: regionId });
   }
 }
