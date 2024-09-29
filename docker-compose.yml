@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  site:
+    image: site
+    build:
+      context: site
+      target: dev
+    volumes:
+      - ./site/index.html:/app/index.html
+      - ./site/vite.config.ts:/app/vite.config.ts
+      - ./site/tsconfig.json:/app/tsconfig.json
+      - ./site/public:/app/public
+      - ./site/src:/app/src
+    ports:
+      - 5173:5173
+    # depends_on:
+    #   - backend
+  # backend:
+  #   image: backend
+  #   build:
+  #     context: backend
+  #     target: dev
+  #   volumes:
+  #     - ./backend/src:/backend/src
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     POSTGRES_HOST: db
+  #     POSTGRES_PORT: 5432
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: mysecretpassword
+  #     POSTGRES_DATABASE: pp-dev
+  #     ENVIRONMENT: dev
+  #     PORT: 3000
+  #     AUTH0_ISSUER_URL: https://dev-7mjq6hdbmvzm1sfu.us.auth0.com/
+  #     AUTH0_AUDIENCE: https://pp-dev.demo.com
+  #   depends_on:
+  #     - db
+  # db:
+  #   platform: linux/amd64
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: isk-machine-db
+  #   ports:
+  #     - 6543:5432
