@@ -6,8 +6,6 @@ export class MarketService {
   constructor(private readonly orderRepository: OrderRepository) {}
 
   async getOrdersByTypeId(typeId: number) {
-    console.log(typeId);
-
     const orders = await this.orderRepository.find({
       where: { type_id: typeId },
     });
