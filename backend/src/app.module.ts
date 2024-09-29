@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { appDataSourceConfig } from './data-source';
 import { DataScraperModule } from './data-scraper/data-scraper.module';
 import { Order } from './data-scraper/order.entity';
+import { MarketModule } from './market/market.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { Order } from './data-scraper/order.entity';
       imports: [ConfigModule],
     }),
     DataScraperModule,
+    MarketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
