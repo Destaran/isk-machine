@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appDataSourceConfig } from './data-source';
+import { DataScraperModule } from './data-scraper/data-scraper.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { appDataSourceConfig } from './data-source';
       inject: [ConfigService],
       imports: [ConfigModule],
     }),
+    DataScraperModule,
   ],
   controllers: [AppController],
   providers: [AppService],
