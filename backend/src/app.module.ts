@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appDataSourceConfig } from './data-source';
 import { DataScraperModule } from './data-scraper/data-scraper.module';
+import { Order } from './data-scraper/order.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DataScraperModule } from './data-scraper/data-scraper.module';
           password: config.getOrThrow<string>('POSTGRES_PASSWORD'),
           database: config.getOrThrow<string>('POSTGRES_DATABASE'),
           autoLoadEntities: true,
+          entities: [Order],
         };
       },
       inject: [ConfigService],

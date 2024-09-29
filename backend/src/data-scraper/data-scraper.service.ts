@@ -3,19 +3,22 @@ import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { RegionRepository } from './region.repository';
 import { Region } from './region.entity';
+import { OrderRepository } from './order.repository';
+import { Order } from './order.entity';
 
 @Injectable()
 export class DataScraperService {
   constructor(
     private readonly httpService: HttpService,
     private readonly regionRepository: RegionRepository,
+    private readonly orderRepository: OrderRepository,
   ) {}
 
-  async getNames(ids: number[]) {
+  async postNames(ids: number[]) {
     const namesUrl =
       'https://esi.evetech.net/latest/universe/names/?datasource=tranquility';
     const response = await firstValueFrom(this.httpService.post(namesUrl, ids));
-    return response.data;
+    return response;
   }
 
   async scrapeRegions() {
@@ -29,29 +32,110 @@ export class DataScraperService {
     }
 
     if (regionIds.status !== 200) {
-      console.error('Failed to scrape regions.');
+      console.error(
+        'Failed to scrape regions.',
+        regionIds.status,
+        regionIds.statusText,
+      );
       return;
     }
 
-    const regionsWithNames = await this.getNames(regionIds.data);
+    const regionsWithNames = await this.postNames(regionIds.data);
 
     if (regionsWithNames.status === 200) {
       console.log(
         `Scraped ${regionsWithNames.data.length} regions with names.`,
-        regionsWithNames.status,
       );
     }
 
     if (regionsWithNames.status !== 200) {
-      console.error('Failed to scrape regions with names.');
+      console.error(
+        'Failed to scrape regions with names.',
+        regionsWithNames.status,
+        regionsWithNames.statusText,
+      );
       return;
     }
 
-    for (const regionWithName of regionsWithNames) {
+    for (const regionWithName of regionsWithNames.data) {
       const region = new Region();
       region.id = regionWithName.id;
       region.name = regionWithName.name;
       await this.regionRepository.save(region);
     }
+  }
+
+  async clearRegions() {
+    await this.regionRepository.clear();
+  }
+
+  async getRegionOrders(regionId: number, pageNum: number = 1) {
+    const regionOrdersUrl = `https://esi.evetech.net/latest/markets/${regionId}/orders/?datasource=tranquility&order_type=all&page=${pageNum}`;
+
+    const regionOrdersRequest = await firstValueFrom(
+      this.httpService.get(regionOrdersUrl, {
+        validateStatus: (status) => {
+          return status === 200 || status === 404 || status === 504;
+        },
+      }),
+    );
+
+    return regionOrdersRequest;
+  }
+
+  async getAllRegionOrders(regionId: number = 10000002) {
+    let orders = 0;
+    let reachedMaxPages = false;
+    let pageNum = 1;
+
+    while (!reachedMaxPages) {
+      const regionOrdersRequest = await this.getRegionOrders(regionId, pageNum);
+
+      if (regionOrdersRequest.status === 504) {
+        console.log('Request timed out. Retrying in 1 second...');
+        setTimeout(() => {}, 1000);
+        continue;
+      }
+
+      if (regionOrdersRequest.status === 200) {
+        console.log(
+          `Scraped page ${pageNum} of orders for region ${regionId}.`,
+        );
+
+        regionOrdersRequest.data.forEach((scrapedOrder) => {
+          const order = new Order();
+          order.order_id = scrapedOrder.order_id;
+          order.duration = scrapedOrder.duration;
+          order.is_buy_order = scrapedOrder.is_buy_order;
+          order.issued = new Date(scrapedOrder.issued);
+          order.min_volume = scrapedOrder.min_volume;
+          order.volume_remain = scrapedOrder.volume_remain;
+          order.volume_total = scrapedOrder.volume_total;
+          order.region_id = regionId;
+          order.location_id = scrapedOrder.location_id;
+          order.system_id = scrapedOrder.system_id;
+          order.type_id = scrapedOrder.type_id;
+          order.price = scrapedOrder.price;
+          order.range = scrapedOrder.range;
+
+          this.orderRepository.save(order);
+        });
+        console.log(`Save successful.`);
+        orders += regionOrdersRequest.data.length;
+
+        pageNum++;
+      }
+
+      if (regionOrdersRequest.status === 404) {
+        reachedMaxPages = true;
+        console.log(`Saved all pages for region ${regionId}.`);
+      }
+    }
+
+    console.log(`Saved ${orders} orders for region ${regionId}.`);
+  }
+
+  async clearOrders() {
+    await this.orderRepository.clear();
   }
 }
