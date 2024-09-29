@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import {
@@ -33,29 +33,41 @@ export const marketSlice = createSlice({
     resetOrders: (state) => {
       state.orders = [];
     },
+    setType: (
+      state,
+      action: PayloadAction<null | GetUniverseTypesTypeIdResponse>
+    ) => {
+      state.type = action.payload;
+    },
   },
 });
 
-export const { setOrders, resetOrders } = marketSlice.actions;
+export const { setOrders, resetOrders, setType } = marketSlice.actions;
 
-export const selectOrders = (state: RootState) => {
-  let orders = state.market.orders;
+export const type = (state: RootState) => state.market.type;
+// const region = (state: RootState) => state.market.region;
+const location = (state: RootState) => state.market.location;
+const orders = (state: RootState) => state.market.orders;
 
-  if (state.market.location) {
-    orders = orders.filter(
-      (order) => order.location_id === state.market.location
-    );
+export const selectOrders = createSelector(
+  [orders, location],
+  (orders, location) => {
+    let moddedOrders = orders;
+
+    if (location) {
+      moddedOrders = orders.filter((order) => order.location_id === location);
+    }
+
+    const buy = moddedOrders
+      .filter((order) => order.is_buy_order)
+      .sort((a, b) => b.price - a.price);
+
+    const sell = moddedOrders
+      .filter((order) => !order.is_buy_order)
+      .sort((a, b) => a.price - b.price);
+
+    return { buy, sell };
   }
-
-  const buy = orders
-    .filter((order) => order.is_buy_order)
-    .sort((a, b) => b.price - a.price);
-
-  const sell = orders
-    .filter((order) => !order.is_buy_order)
-    .sort((a, b) => a.price - b.price);
-
-  return { buy, sell };
-};
+);
 
 export default marketSlice.reducer;
