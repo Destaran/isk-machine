@@ -1,22 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import {
   getMarketsRegionIdOrders,
   GetMarketsRegionIdOrdersData,
   postUniverseNames,
-} from "../../hey-api";
-import { getUniqueLocIds } from "./getUniqueIds";
+} from '../../hey-api';
+import { getUniqueLocIds } from './getUniqueIds';
 
-interface UseMarketDataParams {
-  regionId: number;
-  typeId?: number;
-  isBuy?: boolean;
-}
-
-export function useMarketDataWithNames(params: UseMarketDataParams) {
-  const { regionId, typeId, isBuy } = params;
+export function useMarketDataWithNames(regionId: number, typeId: number) {
   const marketsOptions: GetMarketsRegionIdOrdersData = {
     path: { region_id: regionId },
-    query: { order_type: isBuy ? "buy" : "sell", type_id: typeId },
+    query: { order_type: 'all', type_id: typeId },
   };
 
   if (typeId) {
@@ -24,7 +17,7 @@ export function useMarketDataWithNames(params: UseMarketDataParams) {
   }
 
   const { data: orders } = useQuery({
-    queryKey: ["market", regionId, typeId, isBuy],
+    queryKey: ['market', regionId, typeId],
     queryFn: () => getMarketsRegionIdOrders(marketsOptions),
     retry: 3,
     retryDelay: 2000,
@@ -39,7 +32,7 @@ export function useMarketDataWithNames(params: UseMarketDataParams) {
   };
 
   return useQuery({
-    queryKey: ["names", orders?.ids],
+    queryKey: ['names', orders?.ids],
     staleTime: Infinity,
     enabled: !!orders?.data,
     queryFn: () => postUniverseNames(namesOptions),
@@ -49,7 +42,7 @@ export function useMarketDataWithNames(params: UseMarketDataParams) {
             const name = response?.data?.find(
               (name) => name.id === order.location_id
             );
-            return { ...order, location: name?.name ?? "Unknown" };
+            return { ...order, location: name?.name ?? 'Unknown' };
           })
         : [],
   });
