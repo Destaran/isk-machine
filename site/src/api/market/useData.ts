@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { get } from '../API';
-import { Order } from './Order';
+import { MarketData } from './MarketData';
 import { useCallback } from 'react';
 
-async function getOrders(typeId: number) {
-  return await get<Order[]>(`/market/orders/${typeId}`);
+async function getData(typeId: number) {
+  return await get<MarketData>(`/market/orders/${typeId}`);
 }
 
-export function useOrders(typeId: number, enabled: boolean) {
+export function useData(typeId: number, enabled: boolean) {
   const getCurrentOrders = useCallback(
-    async () => await getOrders(typeId),
+    async () => await getData(typeId),
     [typeId]
   );
   return useQuery({

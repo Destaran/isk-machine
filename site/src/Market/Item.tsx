@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { PostUniverseNamesResponse } from '../hey-api';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useTypeSelected } from '../hooks/universe/useTypeSelected';
-import { setType } from '../redux/orders/ordersSlice';
+import { useData } from '../api/market/useData';
+import { setData } from '../redux/orders/ordersSlice';
 
 const Container = styled.div`
   margin-left: 20px;
@@ -28,14 +28,14 @@ export function Item({ type }: Props) {
     setEnabled(true);
   }
 
-  const { data: typeData, isFetched } = useTypeSelected(id, enabled);
+  const { data, isFetched } = useData(id, enabled);
 
   useEffect(() => {
-    if (isFetched && typeData && enabled) {
-      dispatch(setType(typeData));
+    if (isFetched && data && enabled) {
+      dispatch(setData(data));
       setEnabled(false);
     }
-  }, [isFetched, typeData, enabled, dispatch]);
+  }, [isFetched, enabled, dispatch, data]);
 
   return (
     <Container id={id.toString()} onClick={() => handleClick()}>

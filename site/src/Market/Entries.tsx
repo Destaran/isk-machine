@@ -1,4 +1,4 @@
-import { Order } from '../api/market/Order';
+import { Order } from '../api/market/MarketData';
 import { Entry } from './Entry';
 
 interface Props {

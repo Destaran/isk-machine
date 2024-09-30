@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { List } from './List';
 import { useSelector } from 'react-redux';
-import { type as selectType } from '../redux/orders/ordersSlice';
-import { useOrders } from '../api/market/useOrders';
-import { orderOrders } from './orderOrders';
+import { selectOrders, type as selectType } from '../redux/orders/ordersSlice';
 
 const Container = styled.div`
   width: 80%;
@@ -22,29 +20,16 @@ const Title = styled.h1`
 
 export function Lists() {
   const type = useSelector(selectType);
-  const { data: orders, isFetched } = useOrders(type?.type_id || 0, !!type);
-
-  if (!isFetched || !orders) {
-    return (
-      <Container>
-        <Title>Select an item</Title>
-        <Image src="./unselected.png" />
-        <List orders={[]} />
-        <List orders={[]} isBuy />
-      </Container>
-    );
-  }
-
-  const { sell, buy } = orderOrders(orders);
+  const { buy, sell } = useSelector(selectOrders);
+  const title = type ? type.name : 'Select an item';
+  const imgSrc = type
+    ? `https://images.evetech.net/types/${type.type_id}/icon?size=64`
+    : './placeholder.png';
 
   return (
     <Container>
-      <Title>{type ? type.name : 'Select an item'}</Title>
-      {type && (
-        <Image
-          src={`https://images.evetech.net/types/${type.type_id}/icon?size=64`}
-        />
-      )}
+      <Title>{title}</Title>
+      <Image src={imgSrc} />
       <List orders={sell} />
       <List orders={buy} isBuy />
     </Container>

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Table = styled.div`
   display: block;
@@ -27,10 +27,11 @@ interface CellProps {
 }
 
 export const Cell = styled.div<CellProps>`
+  display: flex;
   text-align: start;
   height: 25px;
   line-height: 25px;
-  width: ${(props) => props.width ?? "10%"};
+  width: ${(props) => props.width ?? '10%'};
   font-size: 12px;
   background-color: #2b2b2b;
   border: 1px solid;
@@ -39,11 +40,11 @@ export const Cell = styled.div<CellProps>`
 `;
 
 export const MarketTableColumnWidths = {
-  regionW: "5%",
-  quantityW: "5%",
-  priceW: "10%",
-  locationW: "30%",
-  jumpsW: "10%",
-  expiresW: "20%",
-  lastModifiedW: "20%",
+  regionW: '5%',
+  quantityW: '5%',
+  priceW: '10%',
+  locationW: '55%',
+  jumpsW: '5%',
+  expiresW: '10%',
+  lastModifiedW: '10%',
 };
