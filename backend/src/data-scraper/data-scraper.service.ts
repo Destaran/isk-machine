@@ -6,6 +6,8 @@ import { Region } from './region.entity';
 import { OrderRepository } from './order.repository';
 import { Order } from './order.entity';
 import { MoreThanOrEqual } from 'typeorm';
+import { System } from './system.entity';
+import { SystemRepository } from './system.repository';
 
 @Injectable()
 export class DataScraperService {
@@ -15,13 +17,17 @@ export class DataScraperService {
     private readonly httpService: HttpService,
     private readonly regionRepository: RegionRepository,
     private readonly orderRepository: OrderRepository,
+    private readonly systemRepository: SystemRepository,
   ) {}
 
   async postNames(ids: number[]) {
     const namesUrl =
       'https://esi.evetech.net/latest/universe/names/?datasource=tranquility';
     const response = await firstValueFrom(this.httpService.post(namesUrl, ids));
-    return response;
+    if (response.status === 200) {
+      console.log(`Scraped ${response.data.length} names.`);
+    }
+    return response.data;
   }
 
   async scrapeRegions() {
@@ -34,33 +40,9 @@ export class DataScraperService {
       console.log(`Scraped ${regionIds.data.length} regions.`);
     }
 
-    if (regionIds.status !== 200) {
-      console.error(
-        'Failed to scrape regions.',
-        regionIds.status,
-        regionIds.statusText,
-      );
-      return;
-    }
-
     const regionsWithNames = await this.postNames(regionIds.data);
 
-    if (regionsWithNames.status === 200) {
-      console.log(
-        `Scraped ${regionsWithNames.data.length} regions with names.`,
-      );
-    }
-
-    if (regionsWithNames.status !== 200) {
-      console.error(
-        'Failed to scrape regions with names.',
-        regionsWithNames.status,
-        regionsWithNames.statusText,
-      );
-      return;
-    }
-
-    for (const regionWithName of regionsWithNames.data) {
+    for (const regionWithName of regionsWithNames) {
       const region = new Region();
       region.id = regionWithName.id;
       region.name = regionWithName.name;
@@ -70,6 +52,55 @@ export class DataScraperService {
 
   async wipeRegions() {
     await this.regionRepository.clear();
+  }
+
+  async scrapeSystems() {
+    const systemsUrl =
+      'https://esi.evetech.net/latest/universe/systems/?datasource=tranquility';
+
+    const systemIdsRequest = await firstValueFrom(
+      this.httpService.get(systemsUrl),
+    );
+
+    if (systemIdsRequest.status === 200) {
+      console.log(`Scraped ${systemIdsRequest.data.length} systems.`);
+    }
+
+    systemIdsRequest.data.forEach(async (systemId: number) => {
+      const systemUrl = `https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility`;
+
+      const systemRequest = await firstValueFrom(
+        this.httpService.get(systemUrl),
+      );
+
+      if (systemRequest.status === 200) {
+        console.log(`Scraped system ${systemId}.`);
+      }
+
+      const scrapedSystem = systemRequest.data;
+
+      const system = new System();
+      system.id = scrapedSystem.system_id;
+      system.name = scrapedSystem.name;
+      system.security_status = Number(scrapedSystem.security_status.toFixed(2));
+      this.systemRepository.save(system);
+    });
+  }
+
+  async wipeSystems() {
+    await this.systemRepository.clear();
+  }
+
+  async scrapeType(typeId: number) {
+    const typeUrl = `https://esi.evetech.net/latest/universe/types/${typeId}/?datasource=tranquility`;
+
+    const typeRequest = await firstValueFrom(this.httpService.get(typeUrl));
+
+    if (typeRequest.status === 200) {
+      console.log(`Scraped type ${typeId}.`);
+    }
+
+    return typeRequest.data;
   }
 
   async getRegionOrders(regionId: number, pageNum: number = 1) {
@@ -86,7 +117,7 @@ export class DataScraperService {
     return regionOrdersRequest;
   }
 
-  async getAllRegionOrders(regionId: number) {
+  async scrapeAllRegionOrders(regionId: number) {
     this.currentRegionId = regionId;
     let orders = 0;
     let reachedMaxPages = false;
@@ -140,11 +171,11 @@ export class DataScraperService {
     return orders;
   }
 
-  async getAllRegionsAllOrders() {
+  async scrapeAllRegionsAllOrders() {
     const regions = await this.regionRepository.find();
 
     for (const region of regions) {
-      await this.getAllRegionOrders(region.id);
+      await this.scrapeAllRegionOrders(region.id);
       setTimeout(() => {}, 500);
     }
     const count = await this.orderRepository.count();
@@ -169,7 +200,7 @@ export class DataScraperService {
     });
 
     for (const region of regions) {
-      await this.getAllRegionOrders(region.id);
+      await this.scrapeAllRegionOrders(region.id);
       setTimeout(() => {}, 500);
     }
     const count = await this.orderRepository.count();

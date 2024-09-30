@@ -10,14 +10,24 @@ export class DataScraperController {
     await this.DataScraperService.scrapeRegions();
   }
 
+  @Post('systems')
+  async scrapeSystems() {
+    await this.DataScraperService.scrapeSystems();
+  }
+
+  @Delete('systems')
+  async wipeSystems() {
+    await this.DataScraperService.wipeSystems();
+  }
+
   @Delete('regions')
   async wipeRegions() {
     await this.DataScraperService.wipeRegions();
   }
 
   @Post('orders')
-  async getAllRegionsAllOrders() {
-    await this.DataScraperService.getAllRegionsAllOrders();
+  async scrapeAllRegionsAllOrders() {
+    await this.DataScraperService.scrapeAllRegionsAllOrders();
   }
 
   @Post('orders/continue/:regionId')
@@ -31,8 +41,8 @@ export class DataScraperController {
   }
 
   @Post('orders/:regionId')
-  async getAllRegionOrders(@Param('regionId') regionId: number) {
-    await this.DataScraperService.getAllRegionOrders(regionId);
+  async scrapeAllRegionOrders(@Param('regionId') regionId: number) {
+    await this.DataScraperService.scrapeAllRegionOrders(regionId);
   }
 
   @Get('orders/total')
