@@ -6,10 +6,17 @@ import { RegionRepository } from './region.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Region } from './region.entity';
 import { OrderRepository } from './order.repository';
+import { SystemRepository } from './system.repository';
+import { System } from './system.entity';
 
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature([Region])],
-  providers: [DataScraperService, RegionRepository, OrderRepository],
+  imports: [HttpModule, TypeOrmModule.forFeature([Region, System])],
+  providers: [
+    DataScraperService,
+    RegionRepository,
+    OrderRepository,
+    SystemRepository,
+  ],
   controllers: [DataScraperController],
 })
 export class DataScraperModule {}
