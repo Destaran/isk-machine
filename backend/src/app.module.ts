@@ -7,6 +7,7 @@ import { appDataSourceConfig } from './data-source';
 import { DataScraperModule } from './data-scraper/data-scraper.module';
 import { Order } from './data-scraper/order.entity';
 import { MarketModule } from './market/market.module';
+import { System } from './data-scraper/system.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { MarketModule } from './market/market.module';
           password: config.getOrThrow<string>('POSTGRES_PASSWORD'),
           database: config.getOrThrow<string>('POSTGRES_DATABASE'),
           autoLoadEntities: true,
-          entities: [Order],
+          entities: [Order, System],
         };
       },
       inject: [ConfigService],
