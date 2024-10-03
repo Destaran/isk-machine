@@ -53,8 +53,8 @@ export class OrdersService {
           `Scraped page ${pageNum} of orders for region ${regionId}.`,
         );
 
-        regionOrdersRequest.data.forEach((scrapedOrder) => {
-          const order = new Order();
+        regionOrdersRequest.data.forEach(async (scrapedOrder) => {
+          let order = new Order();
           order.order_id = scrapedOrder.order_id;
           order.duration = scrapedOrder.duration;
           order.is_buy_order = scrapedOrder.is_buy_order;
@@ -69,7 +69,8 @@ export class OrdersService {
           order.price = scrapedOrder.price;
           order.range = scrapedOrder.range;
 
-          this.orderRepository.save(order);
+          await this.orderRepository.save(order);
+          order = null;
         });
         console.log(`Save successful.`);
         orders += regionOrdersRequest.data.length;
