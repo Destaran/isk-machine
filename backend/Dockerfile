@@ -21,4 +21,5 @@ COPY test /backend
 
 FROM source as dev
 
+ENV NODE_OPTIONS=--max-old-space-size=16384
 CMD ["yarn", "start:dev"]
