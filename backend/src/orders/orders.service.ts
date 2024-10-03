@@ -17,7 +17,7 @@ export class OrdersService {
   ) {}
 
   async scrapeRegionOrdersByPage(regionId: number, pageNum: number = 1) {
-    const regionOrdersUrl = `https://esi.evetech.net/latest/markets/${regionId}/orders/?datasource=tranquility&order_type=all&page=${pageNum}`;
+    let regionOrdersUrl = `https://esi.evetech.net/latest/markets/${regionId}/orders/?datasource=tranquility&order_type=all&page=${pageNum}`;
 
     const regionOrdersRequest = await firstValueFrom(
       this.httpService.get(regionOrdersUrl, {
@@ -26,6 +26,8 @@ export class OrdersService {
         },
       }),
     );
+
+    regionOrdersUrl = null;
 
     return regionOrdersRequest;
   }
@@ -89,10 +91,10 @@ export class OrdersService {
   }
 
   async scrapeAllRegionsAllOrders() {
-    const regions = await this.regionService.getRegions();
+    const regionsIds = await this.regionService.getRegionIds();
 
-    for (const region of regions) {
-      await this.scrapeAllRegionOrders(region.id);
+    for (const regionId of regionsIds) {
+      await this.scrapeAllRegionOrders(regionId);
       setTimeout(() => {}, 500);
     }
     const count = await this.orderRepository.count();
