@@ -32,6 +32,8 @@ export class OrdersService {
   }
 
   async scrapeAllRegionOrders(regionId: number) {
+    console.log(`Scraping orders for region ${regionId}...`);
+
     this.currentRegionId = regionId;
     let reachedMaxPages = false;
     let pageNum = 1;
@@ -81,6 +83,8 @@ export class OrdersService {
   }
 
   async scrapeAllRegionsAllOrders() {
+    console.log('Scraping all regions orders...');
+
     const regionsIds = await this.regionService.getRegionIds();
     const sortedRegionsIds = regionsIds.sort();
 
@@ -124,7 +128,9 @@ export class OrdersService {
   }
 
   async wipeAllOrders() {
+    const count = await this.orderRepository.count();
     await this.orderRepository.clear();
+    console.log(`Deleted ${count} orders.`);
   }
 
   async wipeRegionOrders(regionId: number) {
