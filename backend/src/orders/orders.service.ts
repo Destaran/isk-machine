@@ -44,14 +44,19 @@ export class OrdersService {
         pageNum,
       );
 
+      if (regionOrdersRequest.status === 404) {
+        reachedMaxPages = true;
+        console.log(`Saved all pages for region ${regionId}.`);
+      }
+
       if (regionOrdersRequest.status === 504) {
         console.log('Request timed out. Retrying in 1 second...');
-        setTimeout(() => {}, 1000);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         continue;
       }
 
       if (regionOrdersRequest.status === 200) {
-        regionOrdersRequest.data.forEach(async (scrapedOrder) => {
+        for (const scrapedOrder of regionOrdersRequest.data) {
           let order = new Order();
           order.order_id = scrapedOrder.order_id;
           order.duration = scrapedOrder.duration;
@@ -67,16 +72,15 @@ export class OrdersService {
           order.price = scrapedOrder.price;
           order.range = scrapedOrder.range;
 
-          await this.orderRepository.save(order);
+          try {
+            await this.orderRepository.save(order);
+          } catch (error) {
+            console.error('Error saving order:', error);
+          }
           order = null;
-        });
+        }
 
         pageNum++;
-      }
-
-      if (regionOrdersRequest.status === 404) {
-        reachedMaxPages = true;
-        console.log(`Saved all pages for region ${regionId}.`);
       }
     }
     return;
@@ -90,8 +94,8 @@ export class OrdersService {
 
     for (const regionId of sortedRegionsIds) {
       await this.scrapeAllRegionOrders(regionId);
-      setTimeout(() => {}, 500);
     }
+
     const count = await this.orderRepository.count();
     console.log(`Saved ${count} orders for all regions.`);
   }
@@ -114,7 +118,6 @@ export class OrdersService {
 
     for (const regionId of sortedRegionsIds) {
       await this.scrapeAllRegionOrders(regionId);
-      setTimeout(() => {}, 500);
     }
 
     const count = await this.orderRepository.count();
