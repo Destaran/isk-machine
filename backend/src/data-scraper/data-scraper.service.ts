@@ -31,6 +31,7 @@ export class DataScraperService {
   }
 
   async scrapeRegions() {
+    this.wipeRegions();
     const regionIdsUrl =
       'https://esi.evetech.net/latest/universe/regions/?datasource=tranquility';
 
@@ -44,14 +45,26 @@ export class DataScraperService {
       console.log(`Scraped ${regionIds.length} regions.`);
     }
 
-    const regionsWithNames = await this.postNames(regionIds);
+    for (const regionId of regionIds) {
+      const regionUrl = `https://esi.evetech.net/latest/universe/regions/${regionId}/?datasource=tranquility`;
 
-    for (const regionWithName of regionsWithNames) {
+      const regionRequest = await firstValueFrom(
+        this.httpService.get(regionUrl),
+      );
+
+      if (regionRequest.status === 200) {
+        console.log(`Scraped region ${regionId}.`);
+      }
+
+      const scrapedRegion = regionRequest.data;
+
       const region = new Region();
-      region.id = regionWithName.id;
-      region.name = regionWithName.name;
+      region.id = scrapedRegion.region_id;
+      region.name = scrapedRegion.name;
+      region.description = scrapedRegion.description;
       await this.regionRepository.save(region);
     }
+    console.log(`Saved ${regionIds.length} regions.`);
   }
 
   async wipeRegions() {
