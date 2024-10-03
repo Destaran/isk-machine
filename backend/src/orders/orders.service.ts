@@ -23,6 +23,7 @@ export class OrdersService {
         validateStatus: (status) => {
           return status === 200 || status === 404 || status === 504;
         },
+        timeout: 15000,
       }),
     );
 
@@ -73,7 +74,7 @@ export class OrdersService {
           order.range = scrapedOrder.range;
 
           try {
-            await this.orderRepository.save(order);
+            await this.orderRepository.upsert(order, ['order_id']);
           } catch (error) {
             console.error('Error saving order:', error);
           }
