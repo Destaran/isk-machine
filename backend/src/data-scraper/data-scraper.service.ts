@@ -34,13 +34,17 @@ export class DataScraperService {
     const regionIdsUrl =
       'https://esi.evetech.net/latest/universe/regions/?datasource=tranquility';
 
-    const regionIds = await firstValueFrom(this.httpService.get(regionIdsUrl));
+    const regionIdsRequest = await firstValueFrom(
+      this.httpService.get(regionIdsUrl),
+    );
 
-    if (regionIds.status === 200) {
-      console.log(`Scraped ${regionIds.data.length} regions.`);
+    const regionIds = regionIdsRequest.data;
+
+    if (regionIdsRequest.status === 200) {
+      console.log(`Scraped ${regionIds.length} regions.`);
     }
 
-    const regionsWithNames = await this.postNames(regionIds.data);
+    const regionsWithNames = await this.postNames(regionIds);
 
     for (const regionWithName of regionsWithNames) {
       const region = new Region();

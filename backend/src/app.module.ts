@@ -8,6 +8,10 @@ import { DataScraperModule } from './data-scraper/data-scraper.module';
 import { Order } from './data-scraper/order.entity';
 import { MarketModule } from './market/market.module';
 import { System } from './data-scraper/system.entity';
+import { RegionService } from './region/region.service';
+import { SystemService } from './system/system.service';
+import { TypeService } from './type/type.service';
+import { OrdersService } from './orders/orders.service';
 
 @Module({
   imports: [
@@ -32,6 +36,12 @@ import { System } from './data-scraper/system.entity';
     MarketModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    RegionService,
+    SystemService,
+    TypeService,
+    OrdersService,
+  ],
 })
 export class AppModule {}
