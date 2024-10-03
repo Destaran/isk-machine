@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TypeService } from './type.service';
+import { TypeService } from './types.service';
 import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Type } from './type.entity';
-import { TypeRepository } from './type.repository';
+import { TypeRepository } from './types.repository';
 
 @Module({
   imports: [HttpModule, TypeOrmModule.forFeature([Type])],
