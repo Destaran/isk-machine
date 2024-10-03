@@ -16,7 +16,7 @@ export class OrdersService {
     private regionService: RegionService,
   ) {}
 
-  async getRegionOrders(regionId: number, pageNum: number = 1) {
+  async scrapeRegionOrders(regionId: number, pageNum: number = 1) {
     const regionOrdersUrl = `https://esi.evetech.net/latest/markets/${regionId}/orders/?datasource=tranquility&order_type=all&page=${pageNum}`;
 
     const regionOrdersRequest = await firstValueFrom(
@@ -37,7 +37,10 @@ export class OrdersService {
     let pageNum = 1;
 
     while (!reachedMaxPages) {
-      const regionOrdersRequest = await this.getRegionOrders(regionId, pageNum);
+      const regionOrdersRequest = await this.scrapeRegionOrders(
+        regionId,
+        pageNum,
+      );
 
       if (regionOrdersRequest.status === 504) {
         console.log('Request timed out. Retrying in 1 second...');
@@ -132,5 +135,11 @@ export class OrdersService {
 
   async wipeRegionOrders(regionId: number) {
     await this.orderRepository.delete({ region_id: regionId });
+  }
+
+  async getOrdersByTypeId(typeId: number) {
+    return await this.orderRepository.find({
+      where: { type_id: typeId },
+    });
   }
 }

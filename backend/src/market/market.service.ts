@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { DataScraperService } from 'src/data-scraper/data-scraper.service';
-import { OrdersRepository } from 'src/orders/orders.repository';
 import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
+import { OrdersService } from 'src/orders/orders.service';
 
 @Injectable()
 export class MarketService {
   constructor(
-    private readonly ordersRepository: OrdersRepository,
+    private readonly ordersSerivce: OrdersService,
     private readonly regionService: RegionService,
     private readonly systemService: SystemService,
     private readonly dataScraperService: DataScraperService,
@@ -16,9 +16,7 @@ export class MarketService {
   async getOrdersByTypeId(typeId: number) {
     console.log(typeId);
 
-    const orders = await this.ordersRepository.find({
-      where: { type_id: typeId },
-    });
+    const orders = await this.ordersSerivce.getOrdersByTypeId(typeId);
 
     const uniquieRegionIds = [
       ...new Set(orders.map((order) => order.region_id)),
