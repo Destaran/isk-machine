@@ -12,6 +12,7 @@ import { OrdersService } from './orders/orders.service';
 import { RegionModule } from './region/region.module';
 import { SystemModule } from './system/system.module';
 import { TypeModule } from './type/type.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { TypeModule } from './type/type.module';
     RegionModule,
     SystemModule,
     TypeModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService, OrdersService],
