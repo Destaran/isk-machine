@@ -16,7 +16,7 @@ export class OrdersService {
     private regionService: RegionService,
   ) {}
 
-  async scrapeRegionOrders(regionId: number, pageNum: number = 1) {
+  async scrapeRegionOrdersByPage(regionId: number, pageNum: number = 1) {
     const regionOrdersUrl = `https://esi.evetech.net/latest/markets/${regionId}/orders/?datasource=tranquility&order_type=all&page=${pageNum}`;
 
     const regionOrdersRequest = await firstValueFrom(
@@ -37,7 +37,7 @@ export class OrdersService {
     let pageNum = 1;
 
     while (!reachedMaxPages) {
-      const regionOrdersRequest = await this.scrapeRegionOrders(
+      const regionOrdersRequest = await this.scrapeRegionOrdersByPage(
         regionId,
         pageNum,
       );
