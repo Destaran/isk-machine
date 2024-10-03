@@ -67,7 +67,7 @@ export class DataScraperService {
   }
 
   async getOrdersTotal() {
-    this.ordersService.getOrdersTotal();
+    return this.ordersService.getOrdersTotal();
   }
 
   async wipeAllOrders() {
