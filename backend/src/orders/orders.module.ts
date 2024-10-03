@@ -4,9 +4,10 @@ import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './order.entity';
 import { OrdersRepository } from './orders.repository';
+import { RegionModule } from 'src/region/region.module';
 
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature([Order])],
+  imports: [HttpModule, RegionModule, TypeOrmModule.forFeature([Order])],
   exports: [OrdersService],
   providers: [OrdersService, OrdersRepository],
 })

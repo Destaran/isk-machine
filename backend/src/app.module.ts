@@ -8,7 +8,6 @@ import { DataScraperModule } from './data-scraper/data-scraper.module';
 import { Order } from './orders/order.entity';
 import { MarketModule } from './market/market.module';
 import { System } from './system/system.entity';
-import { OrdersService } from './orders/orders.service';
 import { RegionModule } from './region/region.module';
 import { SystemModule } from './system/system.module';
 import { TypeModule } from './type/type.module';
@@ -41,6 +40,6 @@ import { OrdersModule } from './orders/orders.module';
     OrdersModule,
   ],
   controllers: [AppController],
-  providers: [AppService, OrdersService],
+  providers: [AppService],
 })
 export class AppModule {}
