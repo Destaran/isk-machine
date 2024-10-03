@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appDataSourceConfig } from './data-source';
 import { DataScraperModule } from './data-scraper/data-scraper.module';
-import { Order } from './data-scraper/order.entity';
+import { Order } from './orders/order.entity';
 import { MarketModule } from './market/market.module';
 import { System } from './system/system.entity';
 import { OrdersService } from './orders/orders.service';

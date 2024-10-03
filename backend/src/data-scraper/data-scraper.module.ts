@@ -4,7 +4,7 @@ import { HttpModule } from '@nestjs/axios';
 import { DataScraperController } from './data-scraper.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Region } from '../region/region.entity';
-import { OrderRepository } from './order.repository';
+import { OrdersRepository } from '../orders/orders.repository';
 import { System } from '../system/system.entity';
 import { RegionModule } from 'src/region/region.module';
 import { SystemModule } from 'src/system/system.module';
@@ -16,7 +16,7 @@ import { SystemModule } from 'src/system/system.module';
     RegionModule,
     SystemModule,
   ],
-  providers: [DataScraperService, OrderRepository],
+  providers: [DataScraperService, OrdersRepository],
   controllers: [DataScraperController],
 })
 export class DataScraperModule {}

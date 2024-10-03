@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { OrderRepository } from './order.repository';
-import { Order } from './order.entity';
+import { OrdersRepository } from '../orders/orders.repository';
+import { Order } from '../orders/order.entity';
 import { MoreThanOrEqual } from 'typeorm';
 import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
@@ -15,7 +15,7 @@ export class DataScraperService {
     private readonly httpService: HttpService,
     private readonly regionService: RegionService,
     private readonly systemService: SystemService,
-    private readonly orderRepository: OrderRepository,
+    private readonly orderRepository: OrdersRepository,
   ) {}
 
   async postNames(ids: number[]) {
