@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Browse } from './Browse';
+import { Filters } from './Filters';
 
 const Container = styled.div`
   min-width: 500px;
@@ -13,6 +14,7 @@ const Container = styled.div`
 export function Navigation() {
   return (
     <Container>
+      <Filters />
       <Browse />
     </Container>
   );
