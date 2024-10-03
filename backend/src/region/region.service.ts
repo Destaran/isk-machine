@@ -57,6 +57,10 @@ export class RegionService {
     return await this.regionRepository.find();
   }
 
+  async getRegionIds() {
+    return await this.regionRepository.find({ select: ['id'] });
+  }
+
   async getOneBy(options: FindOptionsWhere<Region>) {
     return await this.regionRepository.findOneBy(options);
   }
