@@ -1,13 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { RegionRepository } from './region.repository';
-import { Region } from './region.entity';
 import { OrderRepository } from './order.repository';
 import { Order } from './order.entity';
 import { MoreThanOrEqual } from 'typeorm';
-import { System } from './system.entity';
-import { SystemRepository } from './system.repository';
+import { RegionService } from 'src/region/region.service';
+import { SystemService } from 'src/system/system.service';
 
 @Injectable()
 export class DataScraperService {
@@ -15,9 +13,9 @@ export class DataScraperService {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly regionRepository: RegionRepository,
+    private readonly regionService: RegionService,
+    private readonly systemService: SystemService,
     private readonly orderRepository: OrderRepository,
-    private readonly systemRepository: SystemRepository,
   ) {}
 
   async postNames(ids: number[]) {
@@ -31,81 +29,19 @@ export class DataScraperService {
   }
 
   async scrapeRegions() {
-    this.wipeRegions();
-    const regionIdsUrl =
-      'https://esi.evetech.net/latest/universe/regions/?datasource=tranquility';
-
-    const regionIdsRequest = await firstValueFrom(
-      this.httpService.get(regionIdsUrl),
-    );
-
-    const regionIds = regionIdsRequest.data;
-
-    if (regionIdsRequest.status === 200) {
-      console.log(`Scraped ${regionIds.length} regions.`);
-    }
-
-    for (const regionId of regionIds) {
-      const regionUrl = `https://esi.evetech.net/latest/universe/regions/${regionId}/?datasource=tranquility`;
-
-      const regionRequest = await firstValueFrom(
-        this.httpService.get(regionUrl),
-      );
-
-      if (regionRequest.status === 200) {
-        console.log(`Scraped region ${regionId}.`);
-      }
-
-      const scrapedRegion = regionRequest.data;
-
-      const region = new Region();
-      region.id = scrapedRegion.region_id;
-      region.name = scrapedRegion.name;
-      region.description = scrapedRegion.description;
-      await this.regionRepository.save(region);
-    }
-    console.log(`Saved ${regionIds.length} regions.`);
+    this.regionService.scrape();
   }
 
   async wipeRegions() {
-    await this.regionRepository.clear();
+    this.regionService.wipe();
   }
 
   async scrapeSystems() {
-    const systemsUrl =
-      'https://esi.evetech.net/latest/universe/systems/?datasource=tranquility';
-
-    const systemIdsRequest = await firstValueFrom(
-      this.httpService.get(systemsUrl),
-    );
-
-    if (systemIdsRequest.status === 200) {
-      console.log(`Scraped ${systemIdsRequest.data.length} systems.`);
-    }
-
-    systemIdsRequest.data.forEach(async (systemId: number) => {
-      const systemUrl = `https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility`;
-
-      const systemRequest = await firstValueFrom(
-        this.httpService.get(systemUrl),
-      );
-
-      if (systemRequest.status === 200) {
-        console.log(`Scraped system ${systemId}.`);
-      }
-
-      const scrapedSystem = systemRequest.data;
-
-      const system = new System();
-      system.id = scrapedSystem.system_id;
-      system.name = scrapedSystem.name;
-      system.security_status = Number(scrapedSystem.security_status.toFixed(2));
-      this.systemRepository.save(system);
-    });
+    this.systemService.scrape();
   }
 
   async wipeSystems() {
-    await this.systemRepository.clear();
+    this.systemService.wipe();
   }
 
   async scrapeType(typeId: number) {
@@ -189,7 +125,7 @@ export class DataScraperService {
   }
 
   async scrapeAllRegionsAllOrders() {
-    const regions = await this.regionRepository.find();
+    const regions = await this.regionService.getRegions();
 
     for (const region of regions) {
       await this.scrapeAllRegionOrders(region.id);
@@ -212,7 +148,7 @@ export class DataScraperService {
 
     console.log(`Continuing from ${regionId} region.`);
 
-    const regions = await this.regionRepository.find({
+    const regions = await this.regionService.getManyBy({
       where: { id: MoreThanOrEqual(regionId) },
     });
 

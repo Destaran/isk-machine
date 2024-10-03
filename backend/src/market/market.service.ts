@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { DataScraperService } from 'src/data-scraper/data-scraper.service';
 import { OrderRepository } from 'src/data-scraper/order.repository';
-import { RegionRepository } from 'src/data-scraper/region.repository';
-import { SystemRepository } from 'src/data-scraper/system.repository';
+import { RegionService } from 'src/region/region.service';
+import { SystemService } from 'src/system/system.service';
 
 @Injectable()
 export class MarketService {
   constructor(
     private readonly orderRepository: OrderRepository,
-    private readonly regionRepository: RegionRepository,
-    private readonly systemRepository: SystemRepository,
+    private readonly regionService: RegionService,
+    private readonly systemService: SystemService,
     private readonly dataScraperService: DataScraperService,
   ) {}
 
@@ -25,7 +25,7 @@ export class MarketService {
     ];
 
     const uniqueRegions = uniquieRegionIds.map(async (regionId) => {
-      return await this.regionRepository.findOneBy({ id: regionId });
+      return await this.regionService.getOneBy({ id: regionId });
     });
 
     const resolvedRegions = await Promise.all(uniqueRegions);
@@ -40,7 +40,7 @@ export class MarketService {
     ];
 
     const uniqueSystems = uniqueSystemIds.map(async (systemId) => {
-      return await this.systemRepository.findOneBy({ id: systemId });
+      return await this.systemService.getOneBy({ id: systemId });
     });
 
     const resolvedSystems = await Promise.all(uniqueSystems);

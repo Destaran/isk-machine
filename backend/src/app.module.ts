@@ -7,11 +7,11 @@ import { appDataSourceConfig } from './data-source';
 import { DataScraperModule } from './data-scraper/data-scraper.module';
 import { Order } from './data-scraper/order.entity';
 import { MarketModule } from './market/market.module';
-import { System } from './data-scraper/system.entity';
-import { RegionService } from './region/region.service';
-import { SystemService } from './system/system.service';
-import { TypeService } from './type/type.service';
+import { System } from './system/system.entity';
 import { OrdersService } from './orders/orders.service';
+import { RegionModule } from './region/region.module';
+import { SystemModule } from './system/system.module';
+import { TypeModule } from './type/type.module';
 
 @Module({
   imports: [
@@ -34,14 +34,11 @@ import { OrdersService } from './orders/orders.service';
     }),
     DataScraperModule,
     MarketModule,
+    RegionModule,
+    SystemModule,
+    TypeModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    RegionService,
-    SystemService,
-    TypeService,
-    OrdersService,
-  ],
+  providers: [AppService, OrdersService],
 })
 export class AppModule {}
