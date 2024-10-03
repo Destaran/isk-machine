@@ -14,7 +14,7 @@ export class MarketService {
   ) {}
 
   async getOrdersByTypeId(typeId: number) {
-    console.log(typeId);
+    console.log(`Getting market orders for type ${typeId}`);
 
     const orders = await this.ordersSerivce.getOrdersByTypeId(typeId);
 
