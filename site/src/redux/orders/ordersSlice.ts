@@ -3,9 +3,11 @@ import type { RootState } from '../store';
 import { GetUniverseTypesTypeIdResponse } from '../../hey-api';
 import { Order, System } from '../../api/market/MarketData';
 
+const marketHubs = [60003760, 60011866, 60008494, 60005686];
+
 interface MarketState {
   region: null | number;
-  location: null | number;
+  marketHubsOnly: boolean;
   type: null | GetUniverseTypesTypeIdResponse;
   orders: Order[];
   regions: Record<number, string>;
@@ -15,7 +17,7 @@ interface MarketState {
 
 const initialState: MarketState = {
   region: null,
-  location: null,
+  marketHubsOnly: false,
   type: null,
   orders: [],
   regions: {},
@@ -34,30 +36,35 @@ export const marketSlice = createSlice({
       state.stations = action.payload.stations;
       state.type = action.payload.type;
     },
+    setLocation: (state, action) => {
+      state.marketHubsOnly = action.payload;
+    },
   },
 });
 
-export const { setData } = marketSlice.actions;
+export const { setData, setLocation } = marketSlice.actions;
 
 export const type = (state: RootState) => state.market.type;
 const region = (state: RootState) => state.market.region;
-const location = (state: RootState) => state.market.location;
+const marketHubsOnly = (state: RootState) => state.market.marketHubsOnly;
 const orders = (state: RootState) => state.market.orders;
 export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
 export const stations = (state: RootState) => state.market.stations;
 
 export const selectOrders = createSelector(
-  [orders, region, location],
-  (orders, region, location) => {
+  [orders, region, marketHubsOnly],
+  (orders, region, marketHubsOnly) => {
     let moddedOrders = orders;
 
     if (region) {
       moddedOrders = orders.filter((order) => order.region_id === region);
     }
 
-    if (location) {
-      moddedOrders = orders.filter((order) => order.location_id === location);
+    if (marketHubsOnly) {
+      moddedOrders = orders.filter((order) =>
+        marketHubs.includes(Number(order.location_id))
+      );
     }
 
     const buy = moddedOrders
