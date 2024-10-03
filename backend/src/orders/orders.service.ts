@@ -4,7 +4,6 @@ import { OrdersRepository } from './orders.repository';
 import { RegionService } from 'src/region/region.service';
 import { firstValueFrom } from 'rxjs';
 import { Order } from './order.entity';
-import { MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class OrdersService {
@@ -34,7 +33,6 @@ export class OrdersService {
 
   async scrapeAllRegionOrders(regionId: number) {
     this.currentRegionId = regionId;
-    let orders = 0;
     let reachedMaxPages = false;
     let pageNum = 1;
 
@@ -51,10 +49,6 @@ export class OrdersService {
       }
 
       if (regionOrdersRequest.status === 200) {
-        console.log(
-          `Scraped page ${pageNum} of orders for region ${regionId}.`,
-        );
-
         regionOrdersRequest.data.forEach(async (scrapedOrder) => {
           let order = new Order();
           order.order_id = scrapedOrder.order_id;
@@ -74,8 +68,6 @@ export class OrdersService {
           await this.orderRepository.save(order);
           order = null;
         });
-        console.log(`Save successful.`);
-        orders += regionOrdersRequest.data.length;
 
         pageNum++;
       }
@@ -85,15 +77,14 @@ export class OrdersService {
         console.log(`Saved all pages for region ${regionId}.`);
       }
     }
-
-    console.log(`Saved ${orders} orders for region ${regionId}.`);
-    return orders;
+    return;
   }
 
   async scrapeAllRegionsAllOrders() {
     const regionsIds = await this.regionService.getRegionIds();
+    const sortedRegionsIds = regionsIds.sort();
 
-    for (const regionId of regionsIds) {
+    for (const regionId of sortedRegionsIds) {
       await this.scrapeAllRegionOrders(regionId);
       setTimeout(() => {}, 500);
     }
@@ -101,27 +92,27 @@ export class OrdersService {
     console.log(`Saved ${count} orders for all regions.`);
   }
 
-  async continueAllRegionsAllOrders(regionId: number = this.currentRegionId) {
+  async continueAllRegionsAllOrders(regionId: number) {
     if (!regionId) {
       console.error('No current region. Start scraping all regions first.');
       return;
     }
+
     const deleted = await this.orderRepository.delete({
       region_id: regionId,
     });
 
     console.log(`Deleted ${deleted.affected} orders from region ${regionId}.`);
-
     console.log(`Continuing from ${regionId} region.`);
 
-    const regions = await this.regionService.getManyBy({
-      where: { id: MoreThanOrEqual(regionId) },
-    });
+    const regionsIds = await this.regionService.getRegionIds();
+    const sortedRegionsIds = regionsIds.sort().filter((id) => id >= regionId);
 
-    for (const region of regions) {
-      await this.scrapeAllRegionOrders(region.id);
+    for (const regionId of sortedRegionsIds) {
+      await this.scrapeAllRegionOrders(regionId);
       setTimeout(() => {}, 500);
     }
+
     const count = await this.orderRepository.count();
     console.log(`Saved ${count} orders for all regions.`);
     this.currentRegionId = null;
