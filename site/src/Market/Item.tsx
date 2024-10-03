@@ -28,14 +28,16 @@ export function Item({ type }: Props) {
     setEnabled(true);
   }
 
-  const { data, isFetched } = useData(id, enabled);
+  const { data, isFetched, isError } = useData(id, enabled);
 
   useEffect(() => {
     if (isFetched && data && enabled) {
       dispatch(setData(data));
       setEnabled(false);
+    } else if (isError) {
+      setEnabled(false);
     }
-  }, [isFetched, enabled, dispatch, data]);
+  }, [isFetched, enabled, dispatch, data, isError]);
 
   return (
     <Container id={id.toString()} onClick={() => handleClick()}>
