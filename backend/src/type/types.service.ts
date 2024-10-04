@@ -71,7 +71,7 @@ export class TypesService {
       for (const typeId of typeIds) {
         const typeRequest = await this.scrapeType(typeId);
 
-        if (typeRequest.status === 200) {
+        if (typeRequest.status === 200 && typeRequest.data.published) {
           const scrapedType = typeRequest.data;
           const type = new Type();
           type.id = scrapedType.type_id;
