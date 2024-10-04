@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { List } from './List';
-import { useSelector } from 'react-redux';
-import { selectOrders, type as selectType } from '../redux/orders/ordersSlice';
+import { type as selectType } from '../redux/orders/ordersSlice';
+import { selectOrders } from '../redux/orders/selectOrders';
+import { useAppSelector } from '../redux/hooks';
 
 const Container = styled.div`
   width: 80%;
@@ -19,8 +20,8 @@ const Title = styled.h1`
 `;
 
 export function Lists() {
-  const type = useSelector(selectType);
-  const { buy, sell } = useSelector(selectOrders);
+  const type = useAppSelector(selectType);
+  const { buy, sell } = useAppSelector(selectOrders);
   const title = type ? type.name : 'Select an item';
   const imgSrc = type
     ? `https://images.evetech.net/types/${type.type_id}/icon?size=64`
