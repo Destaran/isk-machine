@@ -7,8 +7,6 @@ import { Order } from './order.entity';
 
 @Injectable()
 export class OrdersService {
-  private currentRegionId: number | null = null;
-
   constructor(
     private httpService: HttpService,
     private orderRepository: OrdersRepository,
@@ -21,7 +19,9 @@ export class OrdersService {
     const regionOrdersRequest = await firstValueFrom(
       this.httpService.get(regionOrdersUrl, {
         validateStatus: (status) => {
-          return status === 200 || status === 404 || status === 504;
+          return (
+            status === 200 || status === 404 || status === 504 || status === 500
+          );
         },
         timeout: 15000,
       }),
@@ -35,7 +35,6 @@ export class OrdersService {
   async scrapeAllRegionOrders(regionId: number) {
     console.log(`Scraping orders for region ${regionId}...`);
 
-    this.currentRegionId = regionId;
     let reachedMaxPages = false;
     let pageNum = 1;
 
@@ -50,35 +49,43 @@ export class OrdersService {
         console.log(`Saved all pages for region ${regionId}.`);
       }
 
-      if (regionOrdersRequest.status === 504) {
-        console.log('Request timed out. Retrying in 1 second...');
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (
+        regionOrdersRequest.status === 504 ||
+        regionOrdersRequest.status === 500
+      ) {
+        console.log(
+          `Server error ${regionOrdersRequest.status}. Retrying in 2 seconds...`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         continue;
       }
 
       if (regionOrdersRequest.status === 200) {
-        for (const scrapedOrder of regionOrdersRequest.data) {
-          let order = new Order();
-          order.order_id = scrapedOrder.order_id;
-          order.duration = scrapedOrder.duration;
-          order.is_buy_order = scrapedOrder.is_buy_order;
-          order.issued = new Date(scrapedOrder.issued);
-          order.min_volume = scrapedOrder.min_volume;
-          order.volume_remain = scrapedOrder.volume_remain;
-          order.volume_total = scrapedOrder.volume_total;
-          order.region_id = regionId;
-          order.location_id = scrapedOrder.location_id;
-          order.system_id = scrapedOrder.system_id;
-          order.type_id = scrapedOrder.type_id;
-          order.price = scrapedOrder.price;
-          order.range = scrapedOrder.range;
+        const orders = await Promise.all(
+          regionOrdersRequest.data.map(async (scrapedOrder) => {
+            const order = new Order();
+            order.order_id = scrapedOrder.order_id;
+            order.duration = scrapedOrder.duration;
+            order.is_buy_order = scrapedOrder.is_buy_order;
+            order.issued = new Date(scrapedOrder.issued);
+            order.min_volume = scrapedOrder.min_volume;
+            order.volume_remain = scrapedOrder.volume_remain;
+            order.volume_total = scrapedOrder.volume_total;
+            order.region_id = regionId;
+            order.location_id = scrapedOrder.location_id;
+            order.system_id = scrapedOrder.system_id;
+            order.type_id = scrapedOrder.type_id;
+            order.price = scrapedOrder.price;
+            order.range = scrapedOrder.range;
 
-          try {
-            await this.orderRepository.upsert(order, ['order_id']);
-          } catch (error) {
-            console.error('Error saving order:', error);
-          }
-          order = null;
+            return order;
+          }),
+        );
+
+        try {
+          await this.orderRepository.upsert(orders, ['order_id']);
+        } catch (error) {
+          console.error('Error saving order:', error);
         }
 
         pageNum++;
@@ -123,7 +130,6 @@ export class OrdersService {
 
     const count = await this.orderRepository.count();
     console.log(`Saved ${count} orders for all regions.`);
-    this.currentRegionId = null;
   }
 
   async getOrdersTotal() {
