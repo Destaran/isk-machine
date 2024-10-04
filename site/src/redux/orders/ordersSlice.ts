@@ -6,23 +6,25 @@ import { Order, System } from '../../api/market/MarketData';
 const marketHubs = [60003760, 60011866, 60008494, 60005686];
 
 interface MarketState {
-  region: null | number;
-  marketHubsFilter: boolean;
-  type: null | GetUniverseTypesTypeIdResponse;
   orders: Order[];
+  type: null | GetUniverseTypesTypeIdResponse;
   regions: Record<number, string>;
   systems: Record<number, System>;
   stations: Record<number, string>;
+  locationFilter: null | string;
+  regionFilter: null | string;
+  marketHubsFilter: boolean;
 }
 
 const initialState: MarketState = {
-  region: null,
-  marketHubsFilter: false,
-  type: null,
   orders: [],
+  type: null,
   regions: {},
   systems: {},
   stations: {},
+  locationFilter: null,
+  regionFilter: null,
+  marketHubsFilter: false,
 };
 
 export const marketSlice = createSlice({
@@ -44,21 +46,57 @@ export const marketSlice = createSlice({
 
 export const { setData, filterMarketHubs } = marketSlice.actions;
 
-export const type = (state: RootState) => state.market.type;
-const region = (state: RootState) => state.market.region;
-const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 const orders = (state: RootState) => state.market.orders;
+export const type = (state: RootState) => state.market.type;
 export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
 export const stations = (state: RootState) => state.market.stations;
+const locationFilter = (state: RootState) => state.market.locationFilter;
+const regionFilter = (state: RootState) => state.market.regionFilter;
+const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 
 export const selectOrders = createSelector(
-  [orders, region, marketHubsFilter],
-  (orders, region, marketHubsFilter) => {
+  [orders, regions, stations, locationFilter, regionFilter, marketHubsFilter],
+  (
+    orders,
+    regions,
+    stations,
+    locationFilter,
+    regionFilter,
+    marketHubsFilter
+  ) => {
     let moddedOrders = orders;
 
-    if (region) {
-      moddedOrders = orders.filter((order) => order.region_id === region);
+    if (locationFilter) {
+      let result: Order[] = [];
+      console.log(Object.entries(stations));
+
+      for (const [stationId, stationName] of Object.entries(stations)) {
+        if (stationName.includes(locationFilter)) {
+          console.log(stationId);
+
+          const matches = orders.filter(
+            (order) => Number(order.location_id) === Number(stationId)
+          );
+
+          result = [...result, ...matches];
+        }
+      }
+      moddedOrders = result;
+    }
+
+    if (regionFilter) {
+      let result: Order[] = [];
+      for (const [regionId, regionName] of Object.entries(regions)) {
+        if (regionName.includes(regionFilter)) {
+          const matches = orders.filter(
+            (order) => order.region_id === Number(regionId)
+          );
+
+          result = [...result, ...matches];
+        }
+      }
+      moddedOrders = result;
     }
 
     if (marketHubsFilter) {
