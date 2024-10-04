@@ -55,26 +55,22 @@ export class DataScraperService {
   }
 
   async scrapeAllRegionOrders(regionId: number) {
-    this.ordersService.scrapeAllRegionOrders(regionId);
+    this.ordersService.scrapeRegion(regionId);
   }
 
   async scrapeAllRegionsAllOrders() {
-    this.ordersService.scrapeAllRegionsAllOrders();
-  }
-
-  async continueAllRegionsAllOrders(regionId: number = this.currentRegionId) {
-    this.ordersService.continueAllRegionsAllOrders(regionId);
+    this.ordersService.scrapeAll();
   }
 
   async getOrdersTotal() {
-    return this.ordersService.getOrdersTotal();
+    return this.ordersService.getTotal();
   }
 
   async wipeAllOrders() {
-    this.ordersService.wipeAllOrders();
+    this.ordersService.wipeAll();
   }
 
   async wipeRegionOrders(regionId: number) {
-    this.ordersService.wipeRegionOrders(regionId);
+    this.ordersService.wipeRegion(regionId);
   }
 }

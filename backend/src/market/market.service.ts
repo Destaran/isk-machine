@@ -16,7 +16,7 @@ export class MarketService {
   async getOrdersByTypeId(typeId: number) {
     console.log(`Getting market orders for type ${typeId}`);
 
-    const orders = await this.ordersSerivce.getOrdersByTypeId(typeId);
+    const orders = await this.ordersSerivce.getByTypeId(typeId);
 
     const uniquieRegionIds = [
       ...new Set(orders.map((order) => order.region_id)),

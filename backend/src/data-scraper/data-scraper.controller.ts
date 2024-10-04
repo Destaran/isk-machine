@@ -10,6 +10,11 @@ export class DataScraperController {
     await this.DataScraperService.scrapeRegions();
   }
 
+  @Delete('regions')
+  async wipeRegions() {
+    await this.DataScraperService.wipeRegions();
+  }
+
   @Post('systems')
   async scrapeSystems() {
     await this.DataScraperService.scrapeSystems();
@@ -20,24 +25,9 @@ export class DataScraperController {
     await this.DataScraperService.wipeSystems();
   }
 
-  @Delete('regions')
-  async wipeRegions() {
-    await this.DataScraperService.wipeRegions();
-  }
-
   @Post('orders')
   async scrapeAllRegionsAllOrders() {
     await this.DataScraperService.scrapeAllRegionsAllOrders();
-  }
-
-  @Post('orders/continue/:regionId')
-  async continueAllRegionsAllOrdersFrom(@Param('regionId') regionId: number) {
-    await this.DataScraperService.continueAllRegionsAllOrders(regionId);
-  }
-
-  @Post('orders/continue')
-  async continueAllRegionsAllOrders() {
-    return await this.DataScraperService.continueAllRegionsAllOrders();
   }
 
   @Post('orders/:regionId')

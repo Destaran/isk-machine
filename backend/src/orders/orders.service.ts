@@ -13,7 +13,7 @@ export class OrdersService {
     private regionService: RegionService,
   ) {}
 
-  async scrapeRegionOrdersByPage(regionId: number, pageNum: number = 1) {
+  async scrapeRegionByPage(regionId: number, pageNum: number = 1) {
     let regionOrdersUrl = `https://esi.evetech.net/latest/markets/${regionId}/orders/?datasource=tranquility&order_type=all&page=${pageNum}`;
 
     const regionOrdersRequest = await firstValueFrom(
@@ -32,14 +32,15 @@ export class OrdersService {
     return regionOrdersRequest;
   }
 
-  async scrapeAllRegionOrders(regionId: number) {
+  async scrapeRegion(regionId: number) {
     console.log(`Scraping orders for region ${regionId}...`);
+    await this.wipeRegion(regionId);
 
     let reachedMaxPages = false;
     let pageNum = 1;
 
     while (!reachedMaxPages) {
-      const regionOrdersRequest = await this.scrapeRegionOrdersByPage(
+      const regionOrdersRequest = await this.scrapeRegionByPage(
         regionId,
         pageNum,
       );
@@ -94,60 +95,36 @@ export class OrdersService {
     return;
   }
 
-  async scrapeAllRegionsAllOrders() {
+  async scrapeAll() {
     console.log('Scraping all regions orders...');
 
     const regionsIds = await this.regionService.getRegionIds();
     const sortedRegionsIds = regionsIds.sort();
 
     for (const regionId of sortedRegionsIds) {
-      await this.scrapeAllRegionOrders(regionId);
+      await this.scrapeRegion(regionId);
     }
 
     const count = await this.orderRepository.count();
     console.log(`Saved ${count} orders for all regions.`);
   }
 
-  async continueAllRegionsAllOrders(regionId: number) {
-    if (!regionId) {
-      console.error('No current region. Start scraping all regions first.');
-      return;
-    }
-
-    const deleted = await this.orderRepository.delete({
-      region_id: regionId,
-    });
-
-    console.log(`Deleted ${deleted.affected} orders from region ${regionId}.`);
-    console.log(`Continuing from ${regionId} region.`);
-
-    const regionsIds = await this.regionService.getRegionIds();
-    const sortedRegionsIds = regionsIds.sort().filter((id) => id >= regionId);
-
-    for (const regionId of sortedRegionsIds) {
-      await this.scrapeAllRegionOrders(regionId);
-    }
-
-    const count = await this.orderRepository.count();
-    console.log(`Saved ${count} orders for all regions.`);
-  }
-
-  async getOrdersTotal() {
+  async getTotal() {
     const count = await this.orderRepository.count();
     return `Total orders: ${count}`;
   }
 
-  async wipeAllOrders() {
+  async wipeAll() {
     const count = await this.orderRepository.count();
     await this.orderRepository.clear();
     console.log(`Deleted ${count} orders.`);
   }
 
-  async wipeRegionOrders(regionId: number) {
+  async wipeRegion(regionId: number) {
     await this.orderRepository.delete({ region_id: regionId });
   }
 
-  async getOrdersByTypeId(typeId: number) {
+  async getByTypeId(typeId: number) {
     return await this.orderRepository.find({
       where: { type_id: typeId },
     });
