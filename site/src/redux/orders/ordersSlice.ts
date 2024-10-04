@@ -13,11 +13,17 @@ interface TextFilterState extends FilterState {
   filter: string;
 }
 
-export type FilterKey = 'locationFilter' | 'regionFilter' | 'marketHubsFilter';
+export type FilterKey = 'marketHubsFilter';
+export type TextFilterKey = 'locationFilter' | 'regionFilter';
 
 interface FilterSwitchPayload {
-  type: FilterKey;
+  type: FilterKey | TextFilterKey;
   active: boolean;
+}
+
+interface FilterTextPayload {
+  type: TextFilterKey;
+  filter: string;
 }
 
 interface MarketState {
@@ -37,8 +43,8 @@ const initialState: MarketState = {
   regions: {},
   systems: {},
   stations: {},
-  locationFilter: { active: false, filter: '' },
-  regionFilter: { active: false, filter: '' },
+  locationFilter: { active: false, filter: 'Jita IV - Moon 4' },
+  regionFilter: { active: false, filter: 'The Forge' },
   marketHubsFilter: { active: false },
 };
 
@@ -59,10 +65,16 @@ export const marketSlice = createSlice({
     switchFilter: (state, action: PayloadAction<FilterSwitchPayload>) => {
       state[action.payload.type].active = action.payload.active;
     },
+    setFilter: (state, action: PayloadAction<FilterTextPayload>) => {
+      console.log(action.payload);
+
+      state[action.payload.type].filter = action.payload.filter;
+    },
   },
 });
 
-export const { setData, filterMarketHubs, switchFilter } = marketSlice.actions;
+export const { setData, filterMarketHubs, switchFilter, setFilter } =
+  marketSlice.actions;
 
 const orders = (state: RootState) => state.market.orders;
 export const type = (state: RootState) => state.market.type;
@@ -89,7 +101,11 @@ export const selectOrders = createSelector(
       let result: Order[] = [];
 
       for (const [stationId, stationName] of Object.entries(stations)) {
-        if (stationName.includes(locationFilter.filter)) {
+        if (
+          stationName
+            .toLowerCase()
+            .includes(locationFilter.filter.toLocaleLowerCase())
+        ) {
           const matches = orders.filter(
             (order) => Number(order.location_id) === Number(stationId)
           );
@@ -104,7 +120,11 @@ export const selectOrders = createSelector(
       let result: Order[] = [];
 
       for (const [regionId, regionName] of Object.entries(regions)) {
-        if (regionName.includes(regionFilter.filter)) {
+        if (
+          regionName
+            .toLocaleLowerCase()
+            .includes(regionFilter.filter.toLocaleLowerCase())
+        ) {
           const matches = orders.filter(
             (order) => order.region_id === Number(regionId)
           );
