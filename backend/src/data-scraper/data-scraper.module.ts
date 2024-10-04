@@ -2,21 +2,14 @@ import { Module } from '@nestjs/common';
 import { DataScraperService } from './data-scraper.service';
 import { HttpModule } from '@nestjs/axios';
 import { DataScraperController } from './data-scraper.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Region } from '../region/region.entity';
-import { System } from '../system/system.entity';
 import { RegionModule } from 'src/region/region.module';
 import { SystemModule } from 'src/system/system.module';
 import { OrdersModule } from 'src/orders/orders.module';
+import { TypesModule } from 'src/type/types.module';
 
 @Module({
-  imports: [
-    HttpModule,
-    TypeOrmModule.forFeature([Region, System]),
-    RegionModule,
-    SystemModule,
-    OrdersModule,
-  ],
+  imports: [HttpModule, RegionModule, SystemModule, OrdersModule, TypesModule],
+  exports: [DataScraperService],
   providers: [DataScraperService],
   controllers: [DataScraperController],
 })

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeService } from './types.service';
+import { TypesService } from './types.service';
 import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Type } from './type.entity';
-import { TypeRepository } from './types.repository';
+import { TypesRepository } from './types.repository';
 
 @Module({
   imports: [HttpModule, TypeOrmModule.forFeature([Type])],
-  exports: [TypeService],
-  providers: [TypeService, TypeRepository],
+  exports: [TypesService],
+  providers: [TypesService, TypesRepository],
 })
-export class TypeModule {}
+export class TypesModule {}

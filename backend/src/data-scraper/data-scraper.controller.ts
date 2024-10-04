@@ -49,4 +49,9 @@ export class DataScraperController {
   async wipeRegionOrders(@Param('regionId') regionId: number) {
     await this.DataScraperService.wipeRegionOrders(regionId);
   }
+
+  @Post('types')
+  async scrapeAllTypes() {
+    await this.DataScraperService.scrapeAllTypes();
+  }
 }

@@ -10,7 +10,7 @@ import { MarketModule } from './market/market.module';
 import { System } from './system/system.entity';
 import { RegionModule } from './region/region.module';
 import { SystemModule } from './system/system.module';
-import { TypeModule } from './type/types.module';
+import { TypesModule } from './type/types.module';
 import { OrdersModule } from './orders/orders.module';
 
 @Module({
@@ -36,7 +36,7 @@ import { OrdersModule } from './orders/orders.module';
     MarketModule,
     RegionModule,
     SystemModule,
-    TypeModule,
+    TypesModule,
     OrdersModule,
   ],
   controllers: [AppController],

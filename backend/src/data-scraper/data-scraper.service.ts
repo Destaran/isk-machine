@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
 import { OrdersService } from 'src/orders/orders.service';
+import { TypesService } from 'src/type/types.service';
 
 @Injectable()
 export class DataScraperService {
@@ -14,6 +15,7 @@ export class DataScraperService {
     private readonly regionService: RegionService,
     private readonly systemService: SystemService,
     private readonly ordersService: OrdersService,
+    private readonly typeService: TypesService,
   ) {}
 
   async postNames(ids: number[]) {
@@ -72,5 +74,9 @@ export class DataScraperService {
 
   async wipeRegionOrders(regionId: number) {
     this.ordersService.wipeRegion(regionId);
+  }
+
+  async scrapeAllTypes() {
+    this.typeService.scrapeAll();
   }
 }
