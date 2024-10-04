@@ -6,6 +6,10 @@ import { SearchResults } from './SearchResults';
 
 const Container = styled.div``;
 
+const SearchInput = styled.input`
+  width: 400px;
+`;
+
 export function Search() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -32,12 +36,13 @@ export function Search() {
       setEnabled(false);
     } else if (isError) {
       setEnabled(false);
+      resetSearch();
     }
-  }, [isFetched, enabled, data, isError]);
+  }, [isFetched, data, enabled, isError]);
 
   return (
     <Container>
-      <input onChange={(e) => handleChange(e)} />
+      <SearchInput onChange={(e) => handleChange(e)} />
       <button onClick={handleSearch}>Search</button>
       {results.length > 0 && (
         <SearchResults results={results} resetSearch={resetSearch} />
