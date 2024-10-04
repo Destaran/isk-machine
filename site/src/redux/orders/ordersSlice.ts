@@ -1,9 +1,24 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { GetUniverseTypesTypeIdResponse } from '../../hey-api';
 import { Order, System } from '../../api/market/MarketData';
 
 const marketHubs = [60003760, 60011866, 60008494, 60005686];
+
+interface FilterState {
+  active: boolean;
+}
+
+interface TextFilterState extends FilterState {
+  filter: string;
+}
+
+export type FilterKey = 'locationFilter' | 'regionFilter' | 'marketHubsFilter';
+
+interface FilterSwitchPayload {
+  type: FilterKey;
+  active: boolean;
+}
 
 interface MarketState {
   orders: Order[];
@@ -11,9 +26,9 @@ interface MarketState {
   regions: Record<number, string>;
   systems: Record<number, System>;
   stations: Record<number, string>;
-  locationFilter: null | string;
-  regionFilter: null | string;
-  marketHubsFilter: boolean;
+  locationFilter: TextFilterState;
+  regionFilter: TextFilterState;
+  marketHubsFilter: FilterState;
 }
 
 const initialState: MarketState = {
@@ -22,9 +37,9 @@ const initialState: MarketState = {
   regions: {},
   systems: {},
   stations: {},
-  locationFilter: null,
-  regionFilter: null,
-  marketHubsFilter: false,
+  locationFilter: { active: false, filter: '' },
+  regionFilter: { active: false, filter: '' },
+  marketHubsFilter: { active: false },
 };
 
 export const marketSlice = createSlice({
@@ -41,10 +56,13 @@ export const marketSlice = createSlice({
     filterMarketHubs: (state, action) => {
       state.marketHubsFilter = action.payload;
     },
+    switchFilter: (state, action: PayloadAction<FilterSwitchPayload>) => {
+      state[action.payload.type].active = action.payload.active;
+    },
   },
 });
 
-export const { setData, filterMarketHubs } = marketSlice.actions;
+export const { setData, filterMarketHubs, switchFilter } = marketSlice.actions;
 
 const orders = (state: RootState) => state.market.orders;
 export const type = (state: RootState) => state.market.type;
@@ -67,11 +85,11 @@ export const selectOrders = createSelector(
   ) => {
     let moddedOrders = orders;
 
-    if (locationFilter) {
+    if (locationFilter.active) {
       let result: Order[] = [];
 
       for (const [stationId, stationName] of Object.entries(stations)) {
-        if (stationName.includes(locationFilter)) {
+        if (stationName.includes(locationFilter.filter)) {
           const matches = orders.filter(
             (order) => Number(order.location_id) === Number(stationId)
           );
@@ -82,11 +100,11 @@ export const selectOrders = createSelector(
       moddedOrders = result;
     }
 
-    if (regionFilter) {
+    if (regionFilter.active) {
       let result: Order[] = [];
 
       for (const [regionId, regionName] of Object.entries(regions)) {
-        if (regionName.includes(regionFilter)) {
+        if (regionName.includes(regionFilter.filter)) {
           const matches = orders.filter(
             (order) => order.region_id === Number(regionId)
           );
@@ -97,7 +115,7 @@ export const selectOrders = createSelector(
       moddedOrders = result;
     }
 
-    if (marketHubsFilter) {
+    if (marketHubsFilter.active) {
       moddedOrders = orders.filter((order) =>
         marketHubs.includes(Number(order.location_id))
       );

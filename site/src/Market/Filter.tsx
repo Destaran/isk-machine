@@ -1,6 +1,6 @@
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit/react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { useAppDispatch } from '../redux/hooks';
+import { FilterKey, switchFilter } from '../redux/orders/ordersSlice';
 
 const Container = styled.div`
   display: flex;
@@ -12,14 +12,14 @@ const FilterName = styled.p`
 
 interface Props {
   name: string;
-  action: ActionCreatorWithPayload<boolean>;
+  type: FilterKey;
 }
 
-export function Filter({ name, action }: Props) {
-  const dispatch = useDispatch();
+export function Filter({ name, type }: Props) {
+  const dispatch = useAppDispatch();
 
   function handleCheck(e: React.ChangeEvent<HTMLInputElement>) {
-    dispatch(action(e.target.checked));
+    dispatch(switchFilter({ active: e.target.checked, type }));
   }
 
   return (
