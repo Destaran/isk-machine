@@ -7,7 +7,7 @@ const marketHubs = [60003760, 60011866, 60008494, 60005686];
 
 interface MarketState {
   region: null | number;
-  marketHubsOnly: boolean;
+  marketHubsFilter: boolean;
   type: null | GetUniverseTypesTypeIdResponse;
   orders: Order[];
   regions: Record<number, string>;
@@ -17,7 +17,7 @@ interface MarketState {
 
 const initialState: MarketState = {
   region: null,
-  marketHubsOnly: false,
+  marketHubsFilter: false,
   type: null,
   orders: [],
   regions: {},
@@ -37,7 +37,7 @@ export const marketSlice = createSlice({
       state.type = action.payload.type;
     },
     filterMarketHubs: (state, action) => {
-      state.marketHubsOnly = action.payload;
+      state.marketHubsFilter = action.payload;
     },
   },
 });
@@ -46,22 +46,22 @@ export const { setData, filterMarketHubs } = marketSlice.actions;
 
 export const type = (state: RootState) => state.market.type;
 const region = (state: RootState) => state.market.region;
-const marketHubsOnly = (state: RootState) => state.market.marketHubsOnly;
+const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 const orders = (state: RootState) => state.market.orders;
 export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
 export const stations = (state: RootState) => state.market.stations;
 
 export const selectOrders = createSelector(
-  [orders, region, marketHubsOnly],
-  (orders, region, marketHubsOnly) => {
+  [orders, region, marketHubsFilter],
+  (orders, region, marketHubsFilter) => {
     let moddedOrders = orders;
 
     if (region) {
       moddedOrders = orders.filter((order) => order.region_id === region);
     }
 
-    if (marketHubsOnly) {
+    if (marketHubsFilter) {
       moddedOrders = orders.filter((order) =>
         marketHubs.includes(Number(order.location_id))
       );
