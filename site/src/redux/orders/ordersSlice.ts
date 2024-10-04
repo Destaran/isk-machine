@@ -1,28 +1,22 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { GetUniverseTypesTypeIdResponse } from '../../hey-api';
-import { Order, System } from '../../api/market/MarketData';
+import { Order } from '../../api/market/MarketData';
 
 const marketHubs = [60003760, 60011866, 60008494, 60005686];
 
 interface MarketState {
-  region: null | number;
-  marketHubsFilter: boolean;
-  type: null | GetUniverseTypesTypeIdResponse;
   orders: Order[];
-  regions: Record<number, string>;
-  systems: Record<number, System>;
-  stations: Record<number, string>;
+  type: null | GetUniverseTypesTypeIdResponse;
+  marketHubsFilter: boolean;
+  regionFilter: number | null;
 }
 
 const initialState: MarketState = {
-  region: null,
+  regionFilter: null,
   marketHubsFilter: false,
   type: null,
   orders: [],
-  regions: {},
-  systems: {},
-  stations: {},
 };
 
 export const marketSlice = createSlice({
@@ -31,9 +25,6 @@ export const marketSlice = createSlice({
   reducers: {
     setData: (state, action) => {
       state.orders = action.payload.orders;
-      state.regions = action.payload.regions;
-      state.systems = action.payload.systems;
-      state.stations = action.payload.stations;
       state.type = action.payload.type;
     },
     filterMarketHubs: (state, action) => {
@@ -44,16 +35,13 @@ export const marketSlice = createSlice({
 
 export const { setData, filterMarketHubs } = marketSlice.actions;
 
-export const type = (state: RootState) => state.market.type;
-const region = (state: RootState) => state.market.region;
-const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 const orders = (state: RootState) => state.market.orders;
-export const regions = (state: RootState) => state.market.regions;
-export const systems = (state: RootState) => state.market.systems;
-export const stations = (state: RootState) => state.market.stations;
+export const type = (state: RootState) => state.market.type;
+const regionFilter = (state: RootState) => state.market.regionFilter;
+const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 
 export const selectOrders = createSelector(
-  [orders, region, marketHubsFilter],
+  [orders, regionFilter, marketHubsFilter],
   (orders, region, marketHubsFilter) => {
     let moddedOrders = orders;
 
