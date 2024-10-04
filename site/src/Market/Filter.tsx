@@ -8,6 +8,7 @@ const Container = styled.div`
 
 const FilterName = styled.p`
   color: white;
+  margin: 10px 0;
 `;
 
 interface Props {
@@ -24,8 +25,8 @@ export function Filter({ name, type }: Props) {
 
   return (
     <Container>
-      <FilterName>{name}</FilterName>
       <input type="checkbox" onChange={handleCheck} />
+      <FilterName>{name}</FilterName>
     </Container>
   );
 }
