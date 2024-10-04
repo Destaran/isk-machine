@@ -5,6 +5,8 @@ import { SearchResult } from './SearchResult';
 const Container = styled.div`
   position: absolute;
   overflow: scroll;
+  width: 400px;
+  max-height: 1000px;
 `;
 
 interface Props {

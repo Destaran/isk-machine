@@ -6,7 +6,6 @@ import { setData } from '../redux/orders/ordersSlice';
 import { type SearchResult } from '../api/market/SearchResult';
 
 const Container = styled.div`
-  margin-left: 20px;
   background-color: #2b2b2b;
   color: white;
 
