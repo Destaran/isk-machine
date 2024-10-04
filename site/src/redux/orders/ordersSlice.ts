@@ -69,12 +69,9 @@ export const selectOrders = createSelector(
 
     if (locationFilter) {
       let result: Order[] = [];
-      console.log(Object.entries(stations));
 
       for (const [stationId, stationName] of Object.entries(stations)) {
         if (stationName.includes(locationFilter)) {
-          console.log(stationId);
-
           const matches = orders.filter(
             (order) => Number(order.location_id) === Number(stationId)
           );
@@ -87,6 +84,7 @@ export const selectOrders = createSelector(
 
     if (regionFilter) {
       let result: Order[] = [];
+
       for (const [regionId, regionName] of Object.entries(regions)) {
         if (regionName.includes(regionFilter)) {
           const matches = orders.filter(
