@@ -85,7 +85,7 @@ export class OrdersService {
         try {
           await this.orderRepository.upsert(orders, ['order_id']);
         } catch (error) {
-          console.error('Error saving order:', error);
+          throw new Error(error);
         }
 
         pageNum++;
