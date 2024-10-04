@@ -3,6 +3,7 @@ import { DataScraperService } from 'src/data-scraper/data-scraper.service';
 import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
 import { OrdersService } from 'src/orders/orders.service';
+import { TypesService } from 'src/type/types.service';
 
 @Injectable()
 export class MarketService {
@@ -10,8 +11,13 @@ export class MarketService {
     private readonly ordersSerivce: OrdersService,
     private readonly regionService: RegionService,
     private readonly systemService: SystemService,
+    private readonly typeService: TypesService,
     private readonly dataScraperService: DataScraperService,
   ) {}
+
+  async searchTypes(search: string) {
+    return await this.typeService.searchByName(search);
+  }
 
   async getOrdersByTypeId(typeId: number) {
     console.log(`Getting market orders for type ${typeId}`);

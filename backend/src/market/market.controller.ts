@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { MarketService } from './market.service';
 
 @Controller('market')
@@ -8,5 +8,10 @@ export class MarketController {
   @Get('orders/:typeId')
   async getOrdersByTypeId(@Param('typeId') typeId: number) {
     return await this.marketService.getOrdersByTypeId(typeId);
+  }
+
+  @Get('search')
+  async searchTypes(@Query('s') search: string) {
+    return await this.marketService.searchTypes(search);
   }
 }
