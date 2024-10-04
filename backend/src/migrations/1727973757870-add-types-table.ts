@@ -8,7 +8,7 @@ export class AddTypesTable1727973757870 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'int',
             isPrimary: true,
           },
           {
@@ -68,6 +68,6 @@ export class AddTypesTable1727973757870 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('type');
+    await queryRunner.dropTable('types');
   }
 }

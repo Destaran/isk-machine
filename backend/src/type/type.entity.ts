@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('types')
 export class Type {
-  @PrimaryColumn('uuid', { nullable: false })
+  @PrimaryColumn('int', { nullable: false })
   id: number;
 
   @Column('text', { nullable: false })
