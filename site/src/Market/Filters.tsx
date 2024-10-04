@@ -10,7 +10,7 @@ export function Filters() {
       <TextFilter
         name="Location"
         type={'locationFilter'}
-        defaultValue="Jita IV - Moon 4"
+        defaultValue="Jita IV - Moon 4 - Caldari Navy"
       />
       <TextFilter
         name="Region"
