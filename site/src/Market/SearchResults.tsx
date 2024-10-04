@@ -1,11 +1,23 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+import { type SearchResult as SearchResultType } from '../api/market/SearchResult';
+import { SearchResult } from './SearchResult';
 
-const Container = styled.div``;
+const Container = styled.div`
+  position: absolute;
+  overflow: scroll;
+`;
 
 interface Props {
-  types: number[];
+  results: SearchResultType[];
+  resetSearch: () => void;
 }
 
-export function SearchResults({ types }: Props) {
-  return <Container></Container>;
+export function SearchResults({ results, resetSearch }: Props) {
+  return (
+    <Container>
+      {results.map((result) => (
+        <SearchResult key={result.id} type={result} resetSearch={resetSearch} />
+      ))}
+    </Container>
+  );
 }

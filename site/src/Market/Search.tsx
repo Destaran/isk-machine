@@ -1,40 +1,47 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { SearchResults } from "./SearchResults";
-import { useMarketRegionTypes } from "../hooks/markets/useMarketRegionTypes";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useSearch } from '../api/market/useSearch';
+import { SearchResult } from '../api/market/SearchResult';
+import { SearchResults } from './SearchResults';
 
 const Container = styled.div``;
 
-interface Props {
-  regionId: number;
-}
+export function Search() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [enabled, setEnabled] = useState(false);
 
-export function Search({ regionId }: Props) {
-  const [search, setSearch] = useState("");
-  const typesQuery = useMarketRegionTypes(regionId);
-
-  const {
-    data: types,
-    isError: typesError,
-    isLoading: typesLoading,
-  } = typesQuery;
-
-  if (typesLoading) {
-    return null;
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchTerm(e.target.value);
   }
 
-  if (typesError || types !== null) {
-    return null;
+  function handleSearch() {
+    setEnabled(true);
   }
 
-  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearch(e.target.value);
+  function resetSearch() {
+    setSearchTerm('');
+    setResults([]);
   }
+
+  const { data, isFetched, isError } = useSearch(searchTerm, enabled);
+
+  useEffect(() => {
+    if (isFetched && data && enabled) {
+      setResults(data);
+      setEnabled(false);
+    } else if (isError) {
+      setEnabled(false);
+    }
+  }, [isFetched, enabled, data, isError]);
 
   return (
     <Container>
-      <input onChange={(e) => handleSearch(e)} />
-      {search && <SearchResults types={types} />}
+      <input onChange={(e) => handleChange(e)} />
+      <button onClick={handleSearch}>Search</button>
+      {results.length > 0 && (
+        <SearchResults results={results} resetSearch={resetSearch} />
+      )}
     </Container>
   );
 }
