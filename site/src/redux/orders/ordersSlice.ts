@@ -36,13 +36,13 @@ export const marketSlice = createSlice({
       state.stations = action.payload.stations;
       state.type = action.payload.type;
     },
-    setLocation: (state, action) => {
+    filterMarketHubs: (state, action) => {
       state.marketHubsOnly = action.payload;
     },
   },
 });
 
-export const { setData, setLocation } = marketSlice.actions;
+export const { setData, filterMarketHubs } = marketSlice.actions;
 
 export const type = (state: RootState) => state.market.type;
 const region = (state: RootState) => state.market.region;
