@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
-import { GetUniverseTypesTypeIdResponse } from '../../hey-api';
 import { Order, System } from '../../api/market/MarketData';
 
 interface FilterState {
@@ -24,9 +23,23 @@ interface FilterTextPayload {
   filter: string;
 }
 
+interface Type {
+  id: number;
+  name: string;
+  capacity: number;
+  description: string;
+  group_id: number;
+  market_group_id: number;
+  mass: number;
+  packaged_volume: number;
+  portion_size: number;
+  published: boolean;
+  volume: number;
+}
+
 interface MarketState {
   orders: Order[];
-  type: null | GetUniverseTypesTypeIdResponse;
+  type: null | Type;
   regions: Record<number, string>;
   systems: Record<number, System>;
   stations: Record<number, string>;

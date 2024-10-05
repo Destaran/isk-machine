@@ -24,7 +24,7 @@ export function Lists() {
   const { buy, sell } = useAppSelector(selectOrders);
   const title = type ? type.name : 'Select an item';
   const imgSrc = type
-    ? `https://images.evetech.net/types/${type.type_id}/icon?size=64`
+    ? `https://images.evetech.net/types/${type.id}/icon?size=64`
     : './placeholder.png';
 
   return (
