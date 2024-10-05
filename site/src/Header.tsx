@@ -5,7 +5,7 @@ const Container = styled.div`
   border-bottom: 1px solid black;
   color: white;
   background-color: #4b4b4b;
-  padding: 2px 0 2px 0;
+  padding: 15px 0;
 `;
 
 const Wrapper = styled.div`
@@ -14,11 +14,15 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
+const Title = styled.h1`
+  margin: 0;
+`;
+
 export function Header() {
   return (
     <Container>
       <Wrapper>
-        <h1>ISK Machine</h1>
+        <Title>ISK Machine</Title>
       </Wrapper>
     </Container>
   );
