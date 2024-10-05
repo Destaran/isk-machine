@@ -25,7 +25,7 @@ export function Lists() {
   const title = type ? type.name : 'Select an item';
   const imgSrc = type
     ? `https://images.evetech.net/types/${type.id}/icon?size=64`
-    : './placeholder.png';
+    : '../placeholder.png';
 
   return (
     <Container>
