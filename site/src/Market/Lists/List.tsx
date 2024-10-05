@@ -9,6 +9,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
   color: white;
+  margin: 10px 0;
 `;
 
 interface Props {

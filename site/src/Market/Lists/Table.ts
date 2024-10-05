@@ -9,6 +9,7 @@ export const Table = styled.div`
   border-color: #4b4b4b;
   table-layout: fixed;
   overflow-x: hidden;
+  border: 1px solid black;
 `;
 
 export const Row = styled.div`

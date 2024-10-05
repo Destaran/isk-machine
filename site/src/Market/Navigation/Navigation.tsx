@@ -7,7 +7,6 @@ const Container = styled.div`
   min-width: 500px;
   width: auto;
   min-height: 100vh;
-  margin-right: 15px;
   overflow: scroll;
   background-color: #4b4b4b;
   border-right: 1px solid black;

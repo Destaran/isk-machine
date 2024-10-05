@@ -6,7 +6,8 @@ import { type as selectType } from '../../redux/orders/ordersSlice';
 
 const Container = styled.div`
   width: 80%;
-  background-color: #2b2b2b;
+  padding: 10px;
+  background-color: #4b4b4b;
 `;
 
 const Image = styled.img`
@@ -17,6 +18,8 @@ const Image = styled.img`
 
 const Title = styled.h1`
   color: white;
+  margin: 0;
+  margin-bottom: 10px;
 `;
 
 export function Lists() {
