@@ -70,6 +70,13 @@ export const marketSlice = createSlice({
       state.stations = action.payload.stations;
       state.type = action.payload.type;
     },
+    resetData: (state) => {
+      state.orders = [];
+      state.regions = {};
+      state.systems = {};
+      state.stations = {};
+      state.type = null;
+    },
     filterMarketHubs: (state, action) => {
       state.marketHubsFilter = action.payload;
     },
@@ -82,7 +89,7 @@ export const marketSlice = createSlice({
   },
 });
 
-export const { setData, filterMarketHubs, switchFilter, setFilter } =
+export const { setData, resetData, filterMarketHubs, switchFilter, setFilter } =
   marketSlice.actions;
 
 export const orders = (state: RootState) => state.market.orders;
