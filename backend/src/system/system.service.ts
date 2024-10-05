@@ -28,7 +28,7 @@ export class SystemService {
     const systemIds = systemIdsRequest.data;
 
     if (systemIdsRequest.status === 200) {
-      console.log(`Scraped ${systemIds.length} systems.`);
+      console.log(`Scraped ${systemIds.length} system IDs.`);
     }
 
     for (const systemId of systemIds) {
