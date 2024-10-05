@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useData } from '../api/market/useData';
-import { setData } from '../redux/orders/ordersSlice';
-import { type SearchResult } from '../api/market/SearchResult';
+import { useData } from '../../api/market/useData';
+import { setData } from '../../redux/orders/ordersSlice';
+import { type SearchResult } from '../../api/market/SearchResult';
 
 const Container = styled.div`
   background-color: #2b2b2b;

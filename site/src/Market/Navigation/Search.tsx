@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useSearch } from '../api/market/useSearch';
-import { SearchResult } from '../api/market/SearchResult';
+import { useSearch } from '../../api/market/useSearch';
+import { SearchResult } from '../../api/market/SearchResult';
 import { SearchResults } from './SearchResults';
 
 const Container = styled.div``;

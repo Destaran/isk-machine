@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useNames } from '../hooks/universe/useNames';
 import { Item } from './Item';
+import { useNames } from '../../hooks/universe/useNames';
 
 const Container = styled.div``;
 

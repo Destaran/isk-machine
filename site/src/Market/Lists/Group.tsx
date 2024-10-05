@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { GetMarketsGroupsMarketGroupIdResponse } from '../hey-api';
 import { useState } from 'react';
 import { Items } from './Items';
+import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
 
 const Container = styled.div`
   padding-left: 20px;

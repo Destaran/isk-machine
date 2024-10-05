@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Entries } from './Entries';
 import { Table, TableHead, Cell, MarketTableColumnWidths } from './Table';
-import { Order } from '../api/market/MarketData';
+import { Order } from '../../api/market/MarketData';
 
 const Container = styled.div`
   width: 100%;

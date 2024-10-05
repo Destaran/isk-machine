@@ -1,11 +1,12 @@
 import { useSelector } from 'react-redux';
-import { type Order } from '../api/market/MarketData';
-import { useExpiresIn } from '../hooks/utils/useExpiresIn';
 import { Row, Cell, MarketTableColumnWidths } from './Table';
 import { format } from 'date-fns';
-import { regions, stations, systems } from '../redux/orders/ordersSlice';
 import styled from 'styled-components';
-import { colors } from '../utils/SecurityColors';
+import { Order } from '../../api/market/MarketData';
+import { regions, stations, systems } from '../../redux/orders/ordersSlice';
+import { useExpiresIn } from '../../hooks/utils/useExpiresIn';
+import { useAppSelector } from '../../redux/hooks';
+import { colors } from '../../utils/SecurityColors';
 
 interface Props {
   order: Order;
@@ -46,8 +47,8 @@ export function Entry({ order }: Props) {
   const price = new Intl.NumberFormat('en-US').format(order.price);
   const issued = format(new Date(order.issued), 'yyyy-MM-dd HH:mm:ss');
   const expiresIn = useExpiresIn(order.issued, order.duration);
-  const regionName = useSelector(regions)[order.region_id];
-  const secStatus = useSelector(systems)[order.system_id].security_status;
+  const regionName = useAppSelector(regions)[order.region_id];
+  const secStatus = useAppSelector(systems)[order.system_id].security_status;
   const showSecStatus = secStatus < 0 ? '0.0' : secStatus.toFixed(1);
   const color = colors[showSecStatus];
 

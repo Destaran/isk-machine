@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { Filter } from './Filter';
 import { TextFilter } from './TextFilter';
 
-const Container = styled.div``;
+const Container = styled.div`
+  border-bottom: 2px solid #333;
+`;
 
 export function Filters() {
   return (

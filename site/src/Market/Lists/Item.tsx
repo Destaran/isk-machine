@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { PostUniverseNamesResponse } from '../hey-api';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useData } from '../api/market/useData';
-import { setData } from '../redux/orders/ordersSlice';
+import { PostUniverseNamesResponse } from '../../hey-api';
+import { useData } from '../../api/market/useData';
+import { setData } from '../../redux/orders/ordersSlice';
 
 const Container = styled.div`
   margin-left: 20px;

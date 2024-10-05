@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { List } from './List';
-import { type as selectType } from '../redux/orders/ordersSlice';
-import { selectOrders } from '../redux/orders/selectOrders';
-import { useAppSelector } from '../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
+import { selectOrders } from '../../redux/orders/selectOrders';
+import { type as selectType } from '../../redux/orders/ordersSlice';
 
 const Container = styled.div`
   width: 80%;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useAppDispatch } from '../redux/hooks';
-import { FilterKey, switchFilter } from '../redux/orders/ordersSlice';
+import { useAppDispatch } from '../../redux/hooks';
+import { FilterKey, switchFilter } from '../../redux/orders/ordersSlice';
 
 const Container = styled.div`
   display: flex;

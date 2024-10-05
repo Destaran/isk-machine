@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { type SearchResult as SearchResultType } from '../api/market/SearchResult';
+import { type SearchResult as SearchResultType } from '../../api/market/SearchResult';
 import { SearchResult } from './SearchResult';
 
 const Container = styled.div`

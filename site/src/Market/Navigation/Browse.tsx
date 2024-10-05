@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import groupsData from '../utils/market_groups_details.json';
-import { MainGroup } from './MainGroup';
-import { GetMarketsGroupsMarketGroupIdResponse } from '../hey-api';
+import groupsData from '../../utils/market_groups_details.json';
+import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
+import { MainGroup } from '../Lists/MainGroup';
 
 const Container = styled.div`
   overflow: scroll;
+  margin-top: 10px;
 `;
 
 export function Browse() {

@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import {
   setFilter,
   switchFilter,
   TextFilterKey,
-} from '../redux/orders/ordersSlice';
+} from '../../redux/orders/ordersSlice';
 
 const Container = styled.div`
   display: flex;
