@@ -1,19 +1,12 @@
-import styled from 'styled-components';
 import { Lists } from './Lists';
 import { Navigation } from './Navigation';
-
-const Container = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: start;
-  background-color: #2b2b2b;
-`;
+import { PageBase } from '../components/PageBase';
 
 export function Market() {
   return (
-    <Container>
+    <PageBase>
       <Navigation />
       <Lists />
-    </Container>
+    </PageBase>
   );
 }
