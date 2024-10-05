@@ -10,6 +10,7 @@ const Container = styled.div`
   margin-right: 15px;
   overflow: scroll;
   background-color: #4b4b4b;
+  border-right: 1px solid black;
 `;
 
 export function Navigation() {
