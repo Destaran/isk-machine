@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { ServerStatusService } from './server-status.service';
 
 @Controller('server-status')
-export class ServerStatusController {}
+export class ServerStatusController {
+  constructor(private readonly serverStatusService: ServerStatusService) {}
+
+  @Get()
+  async getStatus() {
+    return this.serverStatusService.getStatus();
+  }
+}
