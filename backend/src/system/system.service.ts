@@ -47,7 +47,7 @@ export class SystemService {
       const system = new System();
       system.id = scrapedSystem.system_id;
       system.name = scrapedSystem.name;
-      system.security_status = Number(scrapedSystem.security_status.toFixed(2));
+      system.security_status = Number(scrapedSystem.security_status);
       await this.systemRepository.save(system);
     }
     console.log(`Saved ${systemIds.length} systems.`);
