@@ -64,8 +64,6 @@ export const marketSlice = createSlice({
       state[action.payload.type].active = action.payload.active;
     },
     setFilter: (state, action: PayloadAction<FilterTextPayload>) => {
-      console.log(action.payload);
-
       state[action.payload.type].filter = action.payload.filter;
     },
   },

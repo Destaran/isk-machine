@@ -4,8 +4,6 @@ import { useCallback } from 'react';
 import { SearchResult } from './SearchResult';
 
 async function getTypes(searchTerm: string) {
-  console.log(searchTerm);
-
   return await get<SearchResult[]>(`/market/search?s=${searchTerm}`);
 }
 

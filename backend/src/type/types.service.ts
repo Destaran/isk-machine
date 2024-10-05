@@ -100,10 +100,9 @@ export class TypesService {
   }
 
   async searchByName(name: string) {
-    console.log(`Searching for type ${name}.`);
     return this.typeRepository
       .createQueryBuilder('types')
-      .where('types.name ILIKE :name', { name: `%${name}%` }) // The '%' wildcards allow for partial matching
+      .where('types.name ILIKE :name', { name: `%${name}%` })
       .select(['types.id', 'types.name'])
       .getMany();
   }
