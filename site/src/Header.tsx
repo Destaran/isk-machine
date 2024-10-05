@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { ServerStatus } from './ServerStatus';
 
 const Container = styled.div`
   border-top: 1px solid black;
@@ -8,12 +9,6 @@ const Container = styled.div`
   padding: 15px 0;
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  margin: 0 auto;
-  justify-content: space-between;
-`;
-
 const Title = styled.h1`
   margin: 0;
 `;
@@ -21,9 +16,8 @@ const Title = styled.h1`
 export function Header() {
   return (
     <Container>
-      <Wrapper>
-        <Title>ISK Machine</Title>
-      </Wrapper>
+      <Title>ISK Machine</Title>
+      <ServerStatus />
     </Container>
   );
 }
