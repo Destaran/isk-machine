@@ -1,9 +1,10 @@
+import { BrowserRouter } from 'react-router-dom';
 import { QueryClient } from '@tanstack/react-query';
-import { Market } from './Market/Market';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import { AppRoutes } from './AppRoutes';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,13 +21,15 @@ const persister = createSyncStoragePersister({
 
 export function App() {
   return (
-    <PersistQueryClientProvider
-      client={queryClient}
-      persistOptions={{ persister }}
-    >
-      <Provider store={store}>
-        <Market />
-      </Provider>
-    </PersistQueryClientProvider>
+    <BrowserRouter>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister }}
+      >
+        <Provider store={store}>
+          <AppRoutes />
+        </Provider>
+      </PersistQueryClientProvider>
+    </BrowserRouter>
   );
 }
