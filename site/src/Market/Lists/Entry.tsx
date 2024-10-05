@@ -42,8 +42,10 @@ export function Entry({ order }: Props) {
   const expiresIn = useExpiresIn(order.issued, order.duration);
   const regionName = useAppSelector(regions)[order.region_id];
   const secStatus = useAppSelector(systems)[order.system_id].security_status;
-  const showSecStatus = secStatus <= 0 ? '0.0' : (Math.ceil(secStatus * 10) / 10).toFixed(1);
+  const showSecStatus =
+    secStatus <= 0 ? '0.0' : secStatus < 0.1 ? '0.1' : (Math.round(secStatus * 10) / 10).toFixed(1);
   const color = colors[showSecStatus];
+  console.log(locationName, secStatus, showSecStatus);
 
   return (
     <Row>
