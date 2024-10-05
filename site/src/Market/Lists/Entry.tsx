@@ -29,15 +29,8 @@ const Text = styled.p`
 `;
 
 export function Entry({ order }: Props) {
-  const {
-    regionW,
-    quantityW,
-    priceW,
-    locationW,
-    jumpsW,
-    expiresW,
-    lastModifiedW,
-  } = MarketTableColumnWidths;
+  const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
+    MarketTableColumnWidths;
 
   const stationData = useSelector(stations);
   let locationName = 'Unknown';
@@ -49,7 +42,7 @@ export function Entry({ order }: Props) {
   const expiresIn = useExpiresIn(order.issued, order.duration);
   const regionName = useAppSelector(regions)[order.region_id];
   const secStatus = useAppSelector(systems)[order.system_id].security_status;
-  const showSecStatus = secStatus < 0 ? '0.0' : secStatus.toFixed(1);
+  const showSecStatus = secStatus <= 0 ? '0.0' : (Math.ceil(secStatus * 10) / 10).toFixed(1);
   const color = colors[showSecStatus];
 
   return (
