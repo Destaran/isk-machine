@@ -39,10 +39,6 @@ export class TypesService {
 
     const typeRequest = await firstValueFrom(this.httpService.get(typeUrl));
 
-    if (typeRequest.status === 200) {
-      console.log(`Scraped type ${typeId}.`);
-    }
-
     return typeRequest;
   }
 
@@ -51,6 +47,8 @@ export class TypesService {
     let pageNum = 1;
 
     while (!reachedMaxPages) {
+      console.log(`Scraping type ids from page ${pageNum}...`);
+
       const typeIdsRequest = await this.scrapeTypeIdsByPage(pageNum);
 
       if (typeIdsRequest.status === 404) {
@@ -105,5 +103,9 @@ export class TypesService {
       .where('types.name ILIKE :name', { name: `%${name}%` })
       .select(['types.id', 'types.name'])
       .getMany();
+  }
+
+  async getById(id: number) {
+    return this.typeRepository.findOne({ where: { id } });
   }
 }

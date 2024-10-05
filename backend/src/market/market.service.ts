@@ -71,7 +71,7 @@ export class MarketService {
       return acc;
     }, {});
 
-    const type = await this.dataScraperService.scrapeType(typeId);
+    const type = await this.typeService.getById(typeId);
 
     // TODO: Implement structure scraping
     // const structureIds = locationIds.filter(

@@ -44,18 +44,6 @@ export class DataScraperService {
     this.systemService.wipe();
   }
 
-  async scrapeType(typeId: number) {
-    const typeUrl = `https://esi.evetech.net/latest/universe/types/${typeId}/?datasource=tranquility`;
-
-    const typeRequest = await firstValueFrom(this.httpService.get(typeUrl));
-
-    if (typeRequest.status === 200) {
-      console.log(`Scraped type ${typeId}.`);
-    }
-
-    return typeRequest.data;
-  }
-
   async scrapeAllRegionOrders(regionId: number) {
     this.ordersService.scrapeRegion(regionId);
   }
