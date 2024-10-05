@@ -1,10 +1,17 @@
 import styled from 'styled-components';
 import { useServerStatus } from './api/server-status/useServerStatus';
+import { GrStatusGoodSmall } from 'react-icons/gr';
 
 const Title = styled.p`
   margin: 0;
-  margin-bottom: 3px;
+  margin-right: 5px;
   font-size: 10pt;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 3px;
 `;
 
 const Text = styled.p`
@@ -19,19 +26,27 @@ export function ServerStatus() {
 
   if (!isFetched || !data) {
     <div>
-      <Title>Tranquility Status</Title>
+      <Wrapper>
+        <Title>Tranquility Status</Title>
+        <GrStatusGoodSmall color="red" />
+      </Wrapper>
       <Text>Players online:</Text>
       <Text>Server Version:</Text>
       <Text>Start Time:</Text>
     </div>;
   } else {
-    const date = new Date(data.startTime);
+    const color = data.players > 0 ? 'green' : 'red';
+    const date = new Date(data.startTime).toLocaleString();
+
     return (
       <div>
-        <Title>Tranquility Status</Title>
+        <Wrapper>
+          <Title>Tranquility</Title>
+          <GrStatusGoodSmall color={color} />
+        </Wrapper>
         <Text>Players online: {data.players}</Text>
         <Text>Server Version: {data.serverVersion}</Text>
-        <Text>Start Time: {date.toLocaleString()}</Text>
+        <Text>Start Time: {date}</Text>
       </div>
     );
   }
