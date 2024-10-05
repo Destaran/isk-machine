@@ -26,7 +26,7 @@ export function NavBar() {
       <Wrapper>
         <SideWrapper>
           <Button destination="market" title="Market" />
-          <Button destination="market" title="Character" />
+          <Button destination="jita-flipper" title="Jita Flipper" />
         </SideWrapper>
       </Wrapper>
     </Container>
