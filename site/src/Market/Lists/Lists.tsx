@@ -13,7 +13,7 @@ const Container = styled.div`
 const Image = styled.img`
   width: 64px;
   height: 64px;
-  border: 1px solid white;
+  border: 1px solid #2b2b2b;
 `;
 
 const Title = styled.h1`
