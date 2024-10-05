@@ -12,6 +12,7 @@ import { RegionModule } from './region/region.module';
 import { SystemModule } from './system/system.module';
 import { TypesModule } from './type/types.module';
 import { OrdersModule } from './orders/orders.module';
+import { ServerStatusModule } from './server-status/server-status.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { OrdersModule } from './orders/orders.module';
     SystemModule,
     TypesModule,
     OrdersModule,
+    ServerStatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],
