@@ -8,6 +8,7 @@ export function AppRoutes() {
       <Route path="/" element={<Navigation />}>
         <Route index element={<Market />} />
         <Route path="market" element={<Market />} />
+        <Route path="market/:id" element={<Market />} />
       </Route>
     </Routes>
   );

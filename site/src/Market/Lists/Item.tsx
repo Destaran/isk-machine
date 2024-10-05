@@ -1,9 +1,6 @@
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { PostUniverseNamesResponse } from '../../hey-api';
-import { useData } from '../../api/market/useData';
-import { setData } from '../../redux/orders/ordersSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   margin-left: 20px;
@@ -20,24 +17,12 @@ interface Props {
 }
 
 export function Item({ type }: Props) {
-  const dispatch = useDispatch();
-  const [enabled, setEnabled] = useState(false);
+  const navigate = useNavigate();
   const { id, name } = type;
 
   function handleClick() {
-    setEnabled(true);
+    navigate(`/market/${id}`);
   }
-
-  const { data, isFetched, isError } = useData(id, enabled);
-
-  useEffect(() => {
-    if (isFetched && data && enabled) {
-      dispatch(setData(data));
-      setEnabled(false);
-    } else if (isError) {
-      setEnabled(false);
-    }
-  }, [isFetched, enabled, dispatch, data, isError]);
 
   return (
     <Container id={id.toString()} onClick={() => handleClick()}>
