@@ -5,6 +5,13 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { AppRoutes } from './AppRoutes';
+import styled from 'styled-components';
+
+const PageWrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +34,9 @@ export function App() {
         persistOptions={{ persister }}
       >
         <Provider store={store}>
-          <AppRoutes />
+          <PageWrapper>
+            <AppRoutes />
+          </PageWrapper>
         </Provider>
       </PersistQueryClientProvider>
     </BrowserRouter>

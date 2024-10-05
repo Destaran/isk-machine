@@ -7,7 +7,6 @@ const Container = styled.div`
   align-items: start;
   background-color: #4b4b4b;
   box-sizing: border-box;
-  margin: auto;
 `;
 
 interface PageBaseProps {
