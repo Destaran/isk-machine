@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Button } from './components/Button';
 
 const Container = styled.div`
-  border-top: 1px solid black;
   border-bottom: 1px solid black;
   background-color: #2b2b2b;
   padding: 2px 0 2px 0;
