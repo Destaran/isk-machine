@@ -4,7 +4,9 @@ import { useSearch } from '../../api/market/useSearch';
 import { SearchResult } from '../../api/market/SearchResult';
 import { SearchResults } from './SearchResults';
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin-top: 10px;
+`;
 
 const SearchInput = styled.input`
   width: 400px;
@@ -42,7 +44,10 @@ export function Search() {
 
   return (
     <Container>
-      <SearchInput onChange={(e) => handleChange(e)} />
+      <SearchInput
+        onChange={(e) => handleChange(e)}
+        placeholder="Search item..."
+      />
       <button onClick={handleSearch}>Search</button>
       {results.length > 0 && (
         <SearchResults results={results} resetSearch={resetSearch} />
