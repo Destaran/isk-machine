@@ -37,6 +37,7 @@ export function ServerStatus() {
   } else {
     const color = data.players > 0 ? 'green' : 'red';
     const date = new Date(data.startTime).toLocaleString();
+    const players = new Intl.NumberFormat('en-US').format(data.players);
 
     return (
       <div>
@@ -44,7 +45,7 @@ export function ServerStatus() {
           <Title>Tranquility</Title>
           <GrStatusGoodSmall color={color} />
         </Wrapper>
-        <Text>Players online: {data.players}</Text>
+        <Text>Players online: {players}</Text>
         <Text>Server Version: {data.serverVersion}</Text>
         <Text>Start Time: {date}</Text>
       </div>
