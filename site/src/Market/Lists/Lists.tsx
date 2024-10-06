@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { List } from './List';
 import { useAppSelector } from '../../redux/hooks';
 import { selectOrders } from '../../redux/orders/selectOrders';
-import { type as selectType } from '../../redux/orders/ordersSlice';
+import { ItemInfo } from './ItemInfo';
 
 const Container = styled.div`
   width: 80%;
@@ -10,30 +10,13 @@ const Container = styled.div`
   background-color: #4b4b4b;
 `;
 
-const Image = styled.img`
-  width: 64px;
-  height: 64px;
-  border: 1px solid #2b2b2b;
-`;
-
-const Title = styled.h1`
-  color: white;
-  margin: 0;
-  margin-bottom: 10px;
-`;
-
 export function Lists() {
-  const type = useAppSelector(selectType);
-  const { buy, sell } = useAppSelector(selectOrders);
-  const title = type ? type.name : 'Select an item';
-  const imgSrc = type
-    ? `https://images.evetech.net/types/${type.id}/icon?size=64`
-    : '../placeholder.png';
+  const orders = useAppSelector(selectOrders);
+  const { buy, sell } = orders;
 
   return (
     <Container>
-      <Title>{title}</Title>
-      <Image src={imgSrc} />
+      <ItemInfo orders={orders} />
       <List orders={sell} />
       <List orders={buy} isBuy />
     </Container>
