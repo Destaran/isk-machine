@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Order } from '../../api/market/MarketData';
-import { useAppSelector } from '../../redux/hooks';
-import { type as selectType } from '../../redux/orders/ordersSlice';
 import { useOrdersInfo } from '../../hooks/useOrdersInfo';
+import { Type } from '../../redux/orders/ordersSlice';
+import { useMarketGroups } from '../../hooks/useMarketGroups';
 
 const Container = styled.div`
   display: flex;
@@ -27,6 +27,12 @@ const Title = styled.h1`
   font-family: Orbitron;
 `;
 
+const GroupsText = styled.p`
+  margin: 0;
+  color: white;
+  font-size: 11px;
+`;
+
 const Text = styled.p`
   margin: 0;
   color: white;
@@ -38,16 +44,18 @@ interface Props {
     buy: Order[];
     sell: Order[];
   };
+  type: Type;
 }
 
-export function ItemInfo({ orders }: Props) {
+export function ItemInfo({ orders, type }: Props) {
   const { margin, marginPercent, averageSell, averageBuy, sellOrderVolume, buyOrderVolume } =
     useOrdersInfo(orders);
-  const type = useAppSelector(selectType);
+  const groups = useMarketGroups(type.id);
 
   const title = type ? type.name : 'Select an item';
+  const isBp = groups?.includes('Blueprints') ? 'bp' : 'icon';
   const imgSrc = type
-    ? `https://images.evetech.net/types/${type.id}/icon?size=64`
+    ? `https://images.evetech.net/types/${type.id}/${isBp}?size=64`
     : '../placeholder.png';
 
   const profit = new Intl.NumberFormat('en-US').format(margin);
@@ -59,6 +67,7 @@ export function ItemInfo({ orders }: Props) {
 
   return (
     <>
+      <GroupsText>{groups}</GroupsText>
       <Title>{title}</Title>
       <Container>
         <div>
