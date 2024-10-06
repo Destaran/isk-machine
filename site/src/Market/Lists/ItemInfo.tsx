@@ -8,7 +8,11 @@ const Container = styled.div`
   display: flex;
 `;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-left: 100px;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Image = styled.img`
   width: 64px;
@@ -26,6 +30,7 @@ const Title = styled.h1`
 const Text = styled.p`
   margin: 0;
   color: white;
+  font-size: 10px;
 `;
 
 interface Props {
@@ -36,7 +41,8 @@ interface Props {
 }
 
 export function ItemInfo({ orders }: Props) {
-  const { margin, marginPercent } = useOrdersInfo(orders);
+  const { margin, marginPercent, averageSell, averageBuy, sellOrderVolume, buyOrderVolume } =
+    useOrdersInfo(orders);
   const type = useAppSelector(selectType);
 
   const title = type ? type.name : 'Select an item';
@@ -46,17 +52,28 @@ export function ItemInfo({ orders }: Props) {
 
   const profit = new Intl.NumberFormat('en-US').format(margin);
   const profitPercent = `${marginPercent}%`;
+  const averageSellFormatted = new Intl.NumberFormat('en-US').format(averageSell);
+  const averageBuyFormatted = new Intl.NumberFormat('en-US').format(averageBuy);
+  const sellOrderVolumeFormatted = new Intl.NumberFormat('en-US').format(sellOrderVolume);
+  const buyOrderVolumeFormatted = new Intl.NumberFormat('en-US').format(buyOrderVolume);
 
   return (
-    <Container>
-      <Wrapper>
-        <Title>{title}</Title>
-        <Image src={imgSrc} />
-        <Text>
-          Profit / item: {profit} ISK {`(${profitPercent})`}
-        </Text>
-      </Wrapper>
-      <Wrapper></Wrapper>
-    </Container>
+    <>
+      <Title>{title}</Title>
+      <Container>
+        <div>
+          <Image src={imgSrc} />
+        </div>
+        <Wrapper>
+          <Text>
+            Profit / item: {profit} ISK {`(${profitPercent})`}
+          </Text>
+          <Text>Sell price average: {averageSellFormatted} ISK</Text>
+          <Text>Buy price average: {averageBuyFormatted} ISK</Text>
+          <Text>Sell volume total: {sellOrderVolumeFormatted}</Text>
+          <Text>Buy volume total: {buyOrderVolumeFormatted}</Text>
+        </Wrapper>
+      </Container>
+    </>
   );
 }
