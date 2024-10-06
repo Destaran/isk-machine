@@ -11,12 +11,13 @@ const Container = styled.div`
 
 const Title = styled.h1`
   margin: 0;
+  font-family: Orbitron;
 `;
 
 export function Header() {
   return (
     <Container>
-      <Title>ISK Machine</Title>
+      <Title>EVE Magnate</Title>
       <ServerStatus />
     </Container>
   );
