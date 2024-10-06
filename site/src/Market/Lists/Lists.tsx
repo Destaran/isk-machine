@@ -13,10 +13,11 @@ const Container = styled.div`
 export function Lists() {
   const orders = useAppSelector(selectOrders);
   const { buy, sell } = orders;
+  const hasOrders = buy.length > 0 || sell.length > 0;
 
   return (
     <Container>
-      <ItemInfo orders={orders} />
+      {hasOrders && <ItemInfo orders={orders} />}
       <List orders={sell} />
       <List orders={buy} isBuy />
     </Container>
