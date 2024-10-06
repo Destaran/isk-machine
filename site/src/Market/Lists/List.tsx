@@ -10,6 +10,7 @@ const Container = styled.div`
 const Title = styled.h2`
   color: white;
   margin: 10px 0;
+  font-family: Orbitron;
 `;
 
 interface Props {
@@ -18,15 +19,8 @@ interface Props {
 }
 
 export function List({ orders, isBuy }: Props) {
-  const {
-    regionW,
-    quantityW,
-    priceW,
-    locationW,
-    jumpsW,
-    expiresW,
-    lastModifiedW,
-  } = MarketTableColumnWidths;
+  const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
+    MarketTableColumnWidths;
 
   return (
     <Container>

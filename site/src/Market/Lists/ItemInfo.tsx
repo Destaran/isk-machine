@@ -19,6 +19,7 @@ const Title = styled.h1`
   color: white;
   margin: 0;
   margin-bottom: 10px;
+  font-family: Orbitron;
 `;
 
 interface Props {
