@@ -18,7 +18,7 @@ export interface Order {
 
 export interface System {
   name: string;
-  security_status: number;
+  security_status: string;
 }
 
 export interface MarketData {

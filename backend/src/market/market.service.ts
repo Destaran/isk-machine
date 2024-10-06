@@ -50,9 +50,15 @@ export class MarketService {
     const resolvedSystems = await Promise.all(uniqueSystems);
 
     const systems = resolvedSystems.reduce((acc, system) => {
+      const secStatus =
+        system.security_status <= 0
+          ? '0.0'
+          : system.security_status < 0.1
+            ? '0.1'
+            : (Math.round(system.security_status * 10) / 10).toFixed(1);
       acc[system.id] = {
         name: system.name,
-        security_status: system.security_status,
+        security_status: secStatus,
       };
       return acc;
     }, {});

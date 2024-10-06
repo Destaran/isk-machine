@@ -10,7 +10,13 @@ interface TextFilterState extends FilterState {
   filter: string;
 }
 
-export type FilterKey = 'marketHubsFilter';
+export type FilterKey =
+  | 'marketHubsFilter'
+  | 'excludeNullSecFilter'
+  | 'excludeLowSecFilter'
+  | 'excludeHighSecFilter'
+  | 'excludeStationsFilter'
+  | 'excludeStructuresFilter';
 export type TextFilterKey = 'locationFilter' | 'regionFilter';
 
 interface FilterSwitchPayload {
@@ -43,6 +49,11 @@ interface MarketState {
   regions: Record<number, string>;
   systems: Record<number, System>;
   stations: Record<number, string>;
+  excludeNullSecFilter: FilterState;
+  excludeLowSecFilter: FilterState;
+  excludeHighSecFilter: FilterState;
+  excludeStationsFilter: FilterState;
+  excludeStructuresFilter: FilterState;
   locationFilter: TextFilterState;
   regionFilter: TextFilterState;
   marketHubsFilter: FilterState;
@@ -57,6 +68,11 @@ const initialState: MarketState = {
   locationFilter: { active: false, filter: 'Jita IV - Moon 4 - Caldari Navy' },
   regionFilter: { active: false, filter: 'The Forge' },
   marketHubsFilter: { active: false },
+  excludeNullSecFilter: { active: false },
+  excludeLowSecFilter: { active: false },
+  excludeHighSecFilter: { active: false },
+  excludeStationsFilter: { active: false },
+  excludeStructuresFilter: { active: false },
 };
 
 export const marketSlice = createSlice({
@@ -97,9 +113,15 @@ export const type = (state: RootState) => state.market.type;
 export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
 export const stations = (state: RootState) => state.market.stations;
+
+export const excludeNullSecFilter = (state: RootState) => state.market.excludeNullSecFilter;
+export const excludeLowSecFilter = (state: RootState) => state.market.excludeLowSecFilter;
+export const excludeHighSecFilter = (state: RootState) => state.market.excludeHighSecFilter;
+export const excludeStationsFilter = (state: RootState) => state.market.excludeStationsFilter;
+export const excludeStructuresFilter = (state: RootState) => state.market.excludeStructuresFilter;
+
 export const locationFilter = (state: RootState) => state.market.locationFilter;
 export const regionFilter = (state: RootState) => state.market.regionFilter;
-export const marketHubsFilter = (state: RootState) =>
-  state.market.marketHubsFilter;
+export const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 
 export default marketSlice.reducer;

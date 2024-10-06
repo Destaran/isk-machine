@@ -42,10 +42,7 @@ export function Entry({ order }: Props) {
   const expiresIn = useExpiresIn(order.issued, order.duration);
   const regionName = useAppSelector(regions)[order.region_id];
   const secStatus = useAppSelector(systems)[order.system_id].security_status;
-  const showSecStatus =
-    secStatus <= 0 ? '0.0' : secStatus < 0.1 ? '0.1' : (Math.round(secStatus * 10) / 10).toFixed(1);
-  const color = colors[showSecStatus];
-  console.log(locationName, secStatus, showSecStatus);
+  const color = colors[secStatus];
 
   return (
     <Row>
@@ -53,7 +50,7 @@ export function Entry({ order }: Props) {
       <Cell width={quantityW}>{order.volume_remain}</Cell>
       <Cell width={priceW}>{price} ISK</Cell>
       <Cell width={locationW}>
-        <SecStat color={color}>{showSecStatus}</SecStat>
+        <SecStat color={color}>{secStatus}</SecStat>
         <Text>{locationName}</Text>
       </Cell>
       <Cell width={jumpsW}>{'-'}</Cell>
