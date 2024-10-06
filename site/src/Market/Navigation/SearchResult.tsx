@@ -1,13 +1,11 @@
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { useData } from '../../api/market/useData';
-import { setData } from '../../redux/orders/ordersSlice';
 import { type SearchResult } from '../../api/market/SearchResult';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   background-color: #2b2b2b;
   color: white;
+  border-bottom: 1px solid #4b4b4b;
 
   &:hover {
     background-color: grey;
@@ -21,25 +19,13 @@ interface Props {
 }
 
 export function SearchResult({ type, resetSearch }: Props) {
-  const dispatch = useDispatch();
-  const [enabled, setEnabled] = useState(false);
+  const navigate = useNavigate();
   const { id, name } = type;
 
   function handleClick() {
-    setEnabled(true);
+    navigate(`/market/${id}`);
+    resetSearch();
   }
-
-  const { data, isFetched, isError } = useData(Number(id), enabled);
-
-  useEffect(() => {
-    if (isFetched && data && enabled) {
-      dispatch(setData(data));
-      setEnabled(false);
-      resetSearch();
-    } else if (isError) {
-      setEnabled(false);
-    }
-  }, [isFetched, enabled, dispatch, data, isError, resetSearch]);
 
   return (
     <Container id={id.toString()} onClick={() => handleClick()}>

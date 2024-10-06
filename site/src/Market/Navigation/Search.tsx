@@ -21,12 +21,20 @@ export function Search() {
     setSearchTerm(e.target.value);
   }
 
+  function handleSearchFocus({ target }: React.FocusEvent<HTMLInputElement>) {
+    if (searchTerm.length === 0) {
+      return;
+    }
+
+    target.select();
+    setEnabled(true);
+  }
+
   function handleSearch() {
     setEnabled(true);
   }
 
   function resetSearch() {
-    setSearchTerm('');
     setResults([]);
   }
 
@@ -37,15 +45,31 @@ export function Search() {
       setResults(data);
       setEnabled(false);
     } else if (isError) {
-      setEnabled(false);
       resetSearch();
+      setEnabled(false);
     }
   }, [isFetched, data, enabled, isError]);
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Enter') {
+        handleSearch();
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <Container>
-      <SearchInput onChange={(e) => handleChange(e)} placeholder="Search item..." />
-      <button onClick={handleSearch}>Search</button>
+      <SearchInput
+        onChange={(e) => handleChange(e)}
+        placeholder="Search item..."
+        onFocus={handleSearchFocus}
+        value={searchTerm}
+      />
       {results.length > 0 && <SearchResults results={results} resetSearch={resetSearch} />}
     </Container>
   );
