@@ -48,9 +48,15 @@ interface Props {
 }
 
 export function ItemInfo({ orders, type }: Props) {
-  const { margin, marginPercent, averageSell, averageBuy, sellOrderVolume, buyOrderVolume } =
-    useOrdersInfo(orders);
   const groups = useMarketGroups(type.id);
+  const {
+    margin,
+    marginPercent,
+    weightedAverageSell,
+    weightedAverageBuy,
+    sellOrderVolume,
+    buyOrderVolume,
+  } = useOrdersInfo(orders);
 
   const title = type ? type.name : 'Select an item';
   const isBp = groups?.includes('Blueprints') ? 'bp' : 'icon';
@@ -60,8 +66,8 @@ export function ItemInfo({ orders, type }: Props) {
 
   const profit = new Intl.NumberFormat('en-US').format(margin);
   const profitPercent = `${marginPercent}%`;
-  const averageSellFormatted = new Intl.NumberFormat('en-US').format(averageSell);
-  const averageBuyFormatted = new Intl.NumberFormat('en-US').format(averageBuy);
+  const averageSellFormatted = new Intl.NumberFormat('en-US').format(weightedAverageSell);
+  const averageBuyFormatted = new Intl.NumberFormat('en-US').format(weightedAverageBuy);
   const sellOrderVolumeFormatted = new Intl.NumberFormat('en-US').format(sellOrderVolume);
   const buyOrderVolumeFormatted = new Intl.NumberFormat('en-US').format(buyOrderVolume);
 
