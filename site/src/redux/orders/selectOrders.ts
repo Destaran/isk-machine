@@ -55,14 +55,15 @@ export const selectOrders = createSelector(
     }
 
     if (excludeLowSecFilter.active) {
-      moddedOrders = moddedOrders.filter(
-        (order) => Number(systems[order.system_id].security_status) > 0.5
-      );
+      moddedOrders = moddedOrders.filter((order) => {
+        const securityStatus = Number(systems[order.system_id].security_status);
+        return securityStatus === 0 || securityStatus >= 0.5;
+      });
     }
 
     if (excludeHighSecFilter.active) {
       moddedOrders = moddedOrders.filter(
-        (order) => Number(systems[order.system_id].security_status) <= 0.5
+        (order) => Number(systems[order.system_id].security_status) < 0.5
       );
     }
 
