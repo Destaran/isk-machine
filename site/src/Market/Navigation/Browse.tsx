@@ -5,7 +5,7 @@ import { MainGroup } from '../Lists/MainGroup';
 
 const Container = styled.div`
   overflow: scroll;
-  padding: 10px 0;
+  padding: 5px;
   border-bottom: 1px solid #2b2b2b;
 `;
 
@@ -13,10 +13,7 @@ export function Browse() {
   const groups = groupsData as GetMarketsGroupsMarketGroupIdResponse[];
 
   const orderedGroups = groups
-    .filter(
-      (group): group is GetMarketsGroupsMarketGroupIdResponse =>
-        group !== undefined
-    )
+    .filter((group): group is GetMarketsGroupsMarketGroupIdResponse => group !== undefined)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const mainGroups = orderedGroups.filter((group) => !group?.parent_group_id);
@@ -29,13 +26,7 @@ export function Browse() {
             return null;
           }
 
-          return (
-            <MainGroup
-              key={group?.market_group_id}
-              group={group}
-              groups={orderedGroups}
-            />
-          );
+          return <MainGroup key={group?.market_group_id} group={group} groups={orderedGroups} />;
         })}
     </Container>
   );
