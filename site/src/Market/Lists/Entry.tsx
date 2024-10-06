@@ -4,9 +4,9 @@ import { format } from 'date-fns';
 import styled from 'styled-components';
 import { Order } from '../../api/market/MarketData';
 import { regions, stations, systems } from '../../redux/orders/ordersSlice';
-import { useExpiresIn } from '../../hooks/utils/useExpiresIn';
 import { useAppSelector } from '../../redux/hooks';
 import { colors } from '../../utils/SecurityColors';
+import { useExpiresIn } from '../../hooks/useExpiresIn';
 
 interface Props {
   order: Order;

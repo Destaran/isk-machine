@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Item } from './Item';
-import { useNames } from '../../hooks/universe/useNames';
+import { useNames } from '../../hooks/useNames';
 
 const Container = styled.div``;
 
@@ -20,9 +20,7 @@ export function Items({ types }: Props) {
   return (
     <Container>
       {typesWithNames.length > 0 &&
-        typesWithNames.map((type) =>
-          type.id ? <Item key={type.id} type={type} /> : null
-        )}
+        typesWithNames.map((type) => (type.id ? <Item key={type.id} type={type} /> : null))}
     </Container>
   );
 }

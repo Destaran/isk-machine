@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { postUniverseNames } from "../../hey-api";
+import { useQuery } from '@tanstack/react-query';
+import { postUniverseNames } from '../hey-api';
 
 export function useNames(ids: number[]) {
   const options = {
@@ -7,7 +7,7 @@ export function useNames(ids: number[]) {
   };
 
   return useQuery({
-    queryKey: ["names", ids],
+    queryKey: ['names', ids],
     staleTime: Infinity,
     queryFn: () => postUniverseNames(options),
     select: (response) => response.data,
