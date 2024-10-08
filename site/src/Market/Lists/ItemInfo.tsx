@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  margin-left: 100px;
+  margin-left: 20px;
   justify-content: center;
   align-items: center;
 `;
