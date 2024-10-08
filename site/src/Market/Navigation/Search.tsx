@@ -6,16 +6,13 @@ import { SearchResults } from './SearchResults';
 import { RxCross1 } from 'react-icons/rx';
 
 const Container = styled.div`
-  position: absolute;
   padding: 5px;
-  height: 23px;
 `;
 
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
   min-width: 400px;
-  height: 23px;
 `;
 
 const SearchInput = styled.input`
