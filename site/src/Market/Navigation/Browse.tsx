@@ -5,7 +5,7 @@ import { MainGroup } from '../Lists/MainGroup';
 
 const Container = styled.div`
   overflow: scroll;
-  padding: 5px;
+  padding: 10px;
   border-bottom: 1px solid #2b2b2b;
 `;
 

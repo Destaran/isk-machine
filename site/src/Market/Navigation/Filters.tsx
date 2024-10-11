@@ -5,7 +5,7 @@ import { ExcludeFilter } from './ExcludeFIlter';
 
 const Container = styled.div`
   border-bottom: 2px solid #333;
-  padding: 5px;
+  padding: 10px;
 `;
 
 const Title = styled.h3`

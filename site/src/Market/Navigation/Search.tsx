@@ -6,7 +6,7 @@ import { SearchResults } from './SearchResults';
 import { RxCross1 } from 'react-icons/rx';
 
 const Container = styled.div`
-  padding: 5px;
+  padding: 10px;
 `;
 
 const Wrapper = styled.div`
@@ -59,17 +59,6 @@ export function Search() {
     resetSearch();
   }
 
-  const { data, isFetched, isError } = useSearch(searchTerm, enabled);
-
-  useEffect(() => {
-    if (isFetched && data && enabled) {
-      setResults(data);
-      setEnabled(false);
-    } else if (isError) {
-      resetSearch();
-    }
-  }, [isFetched, data, enabled, isError]);
-
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Enter') {
@@ -81,6 +70,17 @@ export function Search() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  const { data, isFetched, isError } = useSearch(searchTerm, enabled);
+
+  useEffect(() => {
+    if (isFetched && data && enabled) {
+      setResults(data);
+      setEnabled(false);
+    } else if (isError) {
+      resetSearch();
+    }
+  }, [isFetched, data, enabled, isError]);
 
   return (
     <Container>
