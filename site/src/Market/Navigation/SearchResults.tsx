@@ -4,8 +4,9 @@ import { SearchResult } from './SearchResult';
 
 const Container = styled.div`
   position: absolute;
+  top: 23px;
   overflow: scroll;
-  width: 400px;
+  width: 100%;
   max-height: 1000px;
 `;
 

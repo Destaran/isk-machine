@@ -7,21 +7,29 @@ import { RxCross1 } from 'react-icons/rx';
 
 const Container = styled.div`
   padding: 10px;
+  width: 100%;
 `;
 
 const Wrapper = styled.div`
+  position: relative;
   align-items: center;
   display: flex;
-  min-width: 400px;
+  width: 100%;
+`;
+
+const Title = styled.h3`
+  color: white;
+  font-family: Orbitron;
+  margin-top: 0;
 `;
 
 const SearchInput = styled.input`
-  width: 400px;
+  width: 100%;
 `;
 
 const Cancel = styled(RxCross1)`
-  position: relative;
-  right: 20px;
+  position: absolute;
+  right: 3px;
   height: 16px;
   width: 16px;
   color: #2b2b2b;
@@ -84,6 +92,7 @@ export function Search() {
 
   return (
     <Container>
+      <Title>Search</Title>
       <Wrapper>
         <SearchInput
           onChange={(e) => handleChange(e)}
@@ -92,8 +101,8 @@ export function Search() {
           value={searchTerm}
         />
         {searchTerm.length > 0 && <Cancel onClick={resetSearchTerm} />}
+        {results.length > 0 && <SearchResults results={results} resetSearch={resetSearch} />}
       </Wrapper>
-      {results.length > 0 && <SearchResults results={results} resetSearch={resetSearch} />}
     </Container>
   );
 }
