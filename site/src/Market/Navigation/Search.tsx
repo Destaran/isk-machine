@@ -97,15 +97,26 @@ export function Search() {
       setTimer(null);
     }
 
-    function handleKeyDown(event: KeyboardEvent) {
+    function handleEnter(event: KeyboardEvent) {
       if (event.key === 'Enter') {
         setEnabled(true);
         handleTimeoutClear();
       }
     }
-    document.addEventListener('keydown', handleKeyDown);
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        console.log('Escape');
+
+        resetSearch();
+        handleTimeoutClear();
+      }
+    }
+    document.addEventListener('keydown', handleEnter);
+    document.addEventListener('keydown', handleEscape);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleEnter);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [timer]);
 
