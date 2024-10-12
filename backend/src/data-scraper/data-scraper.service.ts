@@ -5,6 +5,7 @@ import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
 import { OrdersService } from 'src/orders/orders.service';
 import { TypesService } from 'src/type/types.service';
+import { MetadataService } from 'src/metadata/metadata.service';
 
 @Injectable()
 export class DataScraperService {
@@ -16,6 +17,7 @@ export class DataScraperService {
     private readonly systemService: SystemService,
     private readonly ordersService: OrdersService,
     private readonly typeService: TypesService,
+    private readonly metadataService: MetadataService,
   ) {}
 
   async postNames(ids: number[]) {
@@ -49,7 +51,8 @@ export class DataScraperService {
   }
 
   async scrapeAllRegionsAllOrders() {
-    this.ordersService.scrapeAll();
+    const endDate = await this.ordersService.scrapeAll();
+    this.metadataService.updateLastScrapeDate(endDate);
   }
 
   async getOrdersTotal() {

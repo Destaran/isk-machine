@@ -97,7 +97,7 @@ export class OrdersService {
 
   async scrapeAll() {
     console.log('Scraping all regions orders...');
-    const startTime = new Date().getTime();
+    const startTime = new Date();
 
     const regionsIds = await this.regionService.getRegionIds();
     const sortedRegionsIds = regionsIds.sort();
@@ -108,14 +108,16 @@ export class OrdersService {
 
     const count = await this.orderRepository.count();
 
-    const endTime = new Date().getTime();
-    const elapsedTime = endTime - startTime;
+    const endTime = new Date();
+    const elapsedTime = endTime.getTime() - startTime.getTime();
     const durationMin = Math.floor(elapsedTime / 60000);
     const durationSec = Math.floor((elapsedTime % 60000) / 1000);
 
     console.log(
       `Saved ${count} orders for all regions in ${durationMin} minutes ${durationSec} seconds.`,
     );
+
+    return endTime;
   }
 
   async getTotal() {
