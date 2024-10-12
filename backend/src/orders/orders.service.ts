@@ -114,7 +114,7 @@ export class OrdersService {
     const durationSec = Math.floor((elapsedTime % 60000) / 1000);
 
     console.log(
-      `Saved ${count} orders for all regions in ${durationMin}m ${durationSec}s.`,
+      `Saved ${count} orders for all regions in ${durationMin} minutes ${durationSec} seconds.`,
     );
   }
 
