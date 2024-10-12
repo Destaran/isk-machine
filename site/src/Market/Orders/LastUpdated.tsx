@@ -3,6 +3,8 @@ import styled from 'styled-components';
 const Container = styled.div``;
 
 const Text = styled.p`
+  font-size: 10px;
+  margin: 20px 0;
   color: white;
 `;
 
