@@ -31,7 +31,7 @@ export function Filter({ name, type, color = 'white' }: Props) {
   return (
     <Container>
       <input type="checkbox" onChange={handleCheck} />
-      <FilterName color={color ? color : 'white'}>{name}</FilterName>
+      <FilterName color={color}>{name}</FilterName>
     </Container>
   );
 }
