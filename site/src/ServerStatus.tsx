@@ -5,7 +5,7 @@ import { GrStatusGoodSmall } from 'react-icons/gr';
 const Title = styled.p`
   margin: 0;
   margin-right: 5px;
-  font-size: 10pt;
+  font-size: 12px;
 `;
 
 const Wrapper = styled.div`
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 
 const Text = styled.p`
   margin: 0;
-  font-size: 8px;
+  font-size: 11px;
 `;
 
 export function ServerStatus() {
