@@ -9,7 +9,6 @@ const Container = styled.div`
 `;
 
 const Title = styled.h2`
-  color: white;
   margin: 0 0 10px 0;
   font-family: Orbitron;
 `;

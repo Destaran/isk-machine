@@ -12,7 +12,6 @@ const Wrapper = styled.div`
   height: 100%;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.emGrey};
-  color: white;
   &:hover {
     background-color: grey;
   }

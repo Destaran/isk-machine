@@ -9,7 +9,6 @@ const Container = styled.div`
 const Wrapper = styled.div``;
 
 const Text = styled.p`
-  color: white;
   margin-right: 20px;
 `;
 

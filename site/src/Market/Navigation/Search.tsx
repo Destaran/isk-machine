@@ -18,14 +18,12 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h3`
-  color: white;
   font-family: Orbitron;
   margin-top: 0;
 `;
 
 const Text = styled.p`
   margin: 0;
-  color: white;
 `;
 
 const SearchInput = styled.input`

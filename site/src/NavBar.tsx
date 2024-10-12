@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { Button } from './components/Button';
 
 const Container = styled.div`
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid;
+  border-color: ${({ theme }) => theme.colors.black};
   background-color: #${({ theme }) => theme.colors.emDarkGrey};
   padding: 2px 0 2px 0;
 `;

@@ -9,7 +9,6 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.emDarkGrey};
-  color: white;
 
   &:hover {
     background-color: grey;

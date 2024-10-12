@@ -21,7 +21,6 @@ const Image = styled.img`
 `;
 
 const Title = styled.h1`
-  color: white;
   margin: 0;
   margin-bottom: 10px;
   font-family: Orbitron;
@@ -29,13 +28,11 @@ const Title = styled.h1`
 
 const GroupsText = styled.p`
   margin: 0;
-  color: white;
   font-size: 11px;
 `;
 
 const Text = styled.p`
   margin: 0;
-  color: white;
   font-size: 10px;
 `;
 

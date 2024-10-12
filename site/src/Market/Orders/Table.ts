@@ -36,7 +36,6 @@ export const Cell = styled.div<CellProps>`
   background-color: ${({ theme }) => theme.colors.emDarkGrey};
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.emGrey};
-  color: white;
 `;
 
 export const MarketTableColumnWidths = {

@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import { useAppDispatch } from '../../redux/hooks';
-import {
-  setFilter,
-  switchFilter,
-  TextFilterKey,
-} from '../../redux/orders/ordersSlice';
+import { setFilter, switchFilter, TextFilterKey } from '../../redux/orders/ordersSlice';
 
 const Container = styled.div`
   display: flex;
@@ -12,7 +8,6 @@ const Container = styled.div`
 `;
 
 const FilterName = styled.p`
-  color: white;
   margin: 10px 0;
 `;
 
@@ -43,11 +38,7 @@ export function TextFilter({ name, type, defaultValue }: Props) {
     <Container>
       <input type="checkbox" onChange={handleCheck} />
       <FilterName>{name}</FilterName>
-      <TextInput
-        type="text"
-        onChange={handleInput}
-        defaultValue={defaultValue}
-      />
+      <TextInput type="text" onChange={handleInput} defaultValue={defaultValue} />
     </Container>
   );
 }
