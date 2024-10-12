@@ -3,6 +3,7 @@ import { AddOrderTable1727634344235 } from './1727634344235-add-order-table';
 import { AddSystemTable1727703942743 } from './1727703942743-add-system-table';
 import { ExtendRegionTable1727968614661 } from './1727968614661-extend-region-table';
 import { AddTypesTable1727973757870 } from './1727973757870-add-types-table';
+import { AddMetadataTable1728745761107 } from './1728745761107-add-metadata-table';
 
 export const migrations = [
   AddRegionTable1727627485156,
@@ -10,4 +11,5 @@ export const migrations = [
   AddSystemTable1727703942743,
   ExtendRegionTable1727968614661,
   AddTypesTable1727973757870,
+  AddMetadataTable1728745761107,
 ];
