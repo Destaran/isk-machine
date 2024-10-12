@@ -52,7 +52,7 @@ export class DataScraperService {
 
   async scrapeAllRegionsAllOrders() {
     const endDate = await this.ordersService.scrapeAll();
-    this.metadataService.updateLastScrapeDate(endDate);
+    this.metadataService.updateScrapeDate(endDate);
   }
 
   async getOrdersTotal() {
