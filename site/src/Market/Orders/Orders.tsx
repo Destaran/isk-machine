@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { List } from './List';
+import { OrdersList } from './OrdersList';
 import { useAppSelector } from '../../redux/hooks';
 import { selectOrders } from '../../redux/orders/selectOrders';
 import { ItemInfo } from './ItemInfo';
@@ -12,7 +12,7 @@ const Container = styled.div`
   background-color: #4b4b4b;
 `;
 
-export function Lists() {
+export function Orders() {
   const type = useAppSelector(selectType);
   const orders = useAppSelector(selectOrders);
   const scrapeTimestamp = useAppSelector(scrapeDate);
@@ -22,9 +22,9 @@ export function Lists() {
 
   return (
     <Container>
-      {hasOrders && type && <ItemInfo orders={orders} type={type} />}
-      <List orders={sell} />
-      <List orders={buy} isBuy />
+      {hasOrders && !!type && <ItemInfo orders={orders} type={type} />}
+      <OrdersList orders={sell} />
+      <OrdersList orders={buy} isBuy />
       {!!scrapeTimestamp && <LastUpdated timestamp={scrapeTimestamp} />}
     </Container>
   );

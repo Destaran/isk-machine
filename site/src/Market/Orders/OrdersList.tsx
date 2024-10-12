@@ -19,7 +19,7 @@ interface Props {
   isBuy?: boolean;
 }
 
-export function List({ orders, isBuy }: Props) {
+export function OrdersList({ orders, isBuy }: Props) {
   const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
     MarketTableColumnWidths;
 

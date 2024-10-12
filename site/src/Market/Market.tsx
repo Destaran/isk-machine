@@ -1,6 +1,6 @@
 import { Navigation } from './Navigation/Navigation';
 import { PageBase } from '../components/PageBase';
-import { Lists } from './Lists/Lists';
+import { Orders } from './Orders/Orders';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useData } from '../api/market/useData';
@@ -24,7 +24,7 @@ export function Market() {
   return (
     <PageBase>
       <Navigation />
-      <Lists />
+      <Orders />
     </PageBase>
   );
 }

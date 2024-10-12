@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Group } from '../Lists/Group';
+import { Group } from '../Orders/Group';
 import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
 
 const Container = styled.div`
