@@ -5,11 +5,9 @@ export const Table = styled.div`
   width: 100%;
   height: 400px;
   overflow: scroll;
-  border: 1px solid;
-  border-color: #4b4b4b;
+  border: 1px solid #2b2b2b;
   table-layout: fixed;
   overflow-x: hidden;
-  border: 1px solid black;
 `;
 
 export const Row = styled.div`
