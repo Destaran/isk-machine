@@ -23,6 +23,10 @@ const Title = styled.h3`
   margin-top: 0;
 `;
 
+const Text = styled.p`
+  color: white;
+`;
+
 const SearchInput = styled.input`
   width: 100%;
 `;
@@ -44,6 +48,7 @@ export function Search() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [enabled, setEnabled] = useState(false);
   const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [filterSkins, setFilterSkins] = useState<boolean>(true);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchTerm(e.target.value);
@@ -62,6 +67,13 @@ export function Search() {
 
     target.select();
     if (searchTerm.length > 2) {
+      setEnabled(true);
+    }
+  }
+
+  function handleFilterSkinsChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setFilterSkins(e.target.checked);
+    if (results.length > 2) {
       setEnabled(true);
     }
   }
@@ -100,16 +112,23 @@ export function Search() {
 
   useEffect(() => {
     if (isFetched && data && enabled) {
-      setResults(data);
+      const filteredResults = filterSkins
+        ? data.filter((result) => !result.name.includes('SKIN'))
+        : data;
+      setResults(filteredResults);
       setEnabled(false);
     } else if (isError) {
       resetSearch();
     }
-  }, [isFetched, data, enabled, isError]);
+  }, [isFetched, data, enabled, isError, filterSkins]);
 
   return (
     <Container>
       <Title>Search</Title>
+      <Wrapper>
+        <input checked={filterSkins} type="checkbox" onChange={(e) => handleFilterSkinsChange(e)} />
+        <Text>Filter SKINs</Text>
+      </Wrapper>
       <Wrapper>
         <SearchInput
           onChange={(e) => handleChange(e)}
