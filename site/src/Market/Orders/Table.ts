@@ -5,7 +5,8 @@ export const Table = styled.div`
   width: 100%;
   height: 400px;
   overflow: scroll;
-  border: 1px solid #2b2b2b;
+  border: 1px solid;
+  border-color: ${({ theme }) => theme.colors.emDarkGrey};
   table-layout: fixed;
   overflow-x: hidden;
 `;
@@ -32,9 +33,9 @@ export const Cell = styled.div<CellProps>`
   line-height: 25px;
   width: ${(props) => props.width ?? '10%'};
   font-size: 12px;
-  background-color: #2b2b2b;
+  background-color: ${({ theme }) => theme.colors.emDarkGrey};
   border: 1px solid;
-  border-color: #4b4b4b;
+  border-color: ${({ theme }) => theme.colors.emGrey};
   color: white;
 `;
 

@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 const Image = styled.img`
   width: 64px;
   height: 64px;
-  border: 1px solid #2b2b2b;
+  border: 1px solid ${({ theme }) => theme.colors.emDarkGrey};
 `;
 
 const Title = styled.h1`

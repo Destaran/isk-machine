@@ -5,13 +5,13 @@ import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
 
 const Container = styled.div`
   cursor: pointer;
-  background-color: #2b2b2b;
+  background-color: ${({ theme }) => theme.colors.emDarkGrey};
 `;
 
 const Wrapper = styled.div`
   height: 100%;
   width: 100%;
-  background-color: #4b4b4b;
+  background-color: ${({ theme }) => theme.colors.emGrey};
   color: white;
   &:hover {
     background-color: grey;

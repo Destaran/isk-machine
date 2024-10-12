@@ -8,7 +8,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background-color: #2b2b2b;
+  background-color: ${({ theme }) => theme.colors.emDarkGrey};
   color: white;
 
   &:hover {
@@ -29,9 +29,7 @@ export function Group({ group, groups }: Props) {
   const [showGroups, setShowGroups] = useState(false);
   const [showItems, setShowItems] = useState(false);
 
-  const children = groups.filter(
-    (g) => g.parent_group_id === group.market_group_id
-  );
+  const children = groups.filter((g) => g.parent_group_id === group.market_group_id);
   const lastChild = children.length === 0;
 
   function handleClick() {

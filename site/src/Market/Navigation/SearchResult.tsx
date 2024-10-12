@@ -3,9 +3,9 @@ import { type SearchResult } from '../../api/market/SearchResult';
 import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
-  background-color: #2b2b2b;
+  background-color: ${({ theme }) => theme.colors.emDarkGrey};
   color: white;
-  border-bottom: 1px solid #4b4b4b;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.emGrey};
 
   &:hover {
     background-color: grey;

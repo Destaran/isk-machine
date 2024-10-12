@@ -9,7 +9,7 @@ import { LastUpdated } from './LastUpdated';
 const Container = styled.div`
   width: 80%;
   padding: 10px;
-  background-color: #4b4b4b;
+  background-color: ${({ theme }) => theme.colors.emGrey};
 `;
 
 export function Orders() {

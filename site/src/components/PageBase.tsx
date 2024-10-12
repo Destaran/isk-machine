@@ -5,7 +5,7 @@ const Container = styled.div`
   display: flex;
   justify-content: start;
   align-items: start;
-  background-color: #4b4b4b;
+  background-color: ${({ theme }) => theme.colors.emGrey};
   box-sizing: border-box;
 `;
 

@@ -6,7 +6,7 @@ import { MainGroup } from './MainGroup';
 const Container = styled.div`
   overflow: scroll;
   padding: 10px;
-  border-bottom: 1px solid #2b2b2b;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.emDarkGrey};
 `;
 
 export function Browse() {

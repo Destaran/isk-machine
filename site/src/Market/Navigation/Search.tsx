@@ -37,7 +37,7 @@ const Cancel = styled(RxCross1)`
   right: 3px;
   height: 16px;
   width: 16px;
-  color: #2b2b2b;
+  color: ${({ theme }) => theme.colors.emDarkGrey};
 
   &:hover {
     cursor: pointer;

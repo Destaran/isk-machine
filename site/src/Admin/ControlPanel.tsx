@@ -4,8 +4,8 @@ const Container = styled.div`
   min-width: 500px;
   width: auto;
   overflow: scroll;
-  background-color: #4b4b4b;
-  border-right: 1px solid #2b2b2b;
+  background-color: ${({ theme }) => theme.colors.emGrey};
+  border-right: 1px solid ${({ theme }) => theme.colors.emDarkGrey};
 `;
 
 export function ControlPanel() {
