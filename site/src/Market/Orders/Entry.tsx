@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Order } from '../../api/market/MarketData';
 import { regions, stations, systems } from '../../redux/orders/ordersSlice';
 import { useAppSelector } from '../../redux/hooks';
-import { colors } from '../../style/SecurityColors';
 import { useExpiresIn } from '../../hooks/useExpiresIn';
 
 interface Props {
@@ -13,13 +12,13 @@ interface Props {
 }
 
 interface SecStatProps {
-  color: string;
+  $secstatus: string;
 }
 
 const SecStat = styled.span<SecStatProps>`
   margin: 0;
   margin-right: 10px;
-  color: ${(props) => props.color};
+  color: ${({ theme, $secstatus }) => theme.securityColors[$secstatus]};
   font-weight: bold;
 `;
 
@@ -42,7 +41,6 @@ export function Entry({ order }: Props) {
   const expiresIn = useExpiresIn(order.issued, order.duration);
   const regionName = useAppSelector(regions)[order.region_id];
   const secStatus = useAppSelector(systems)[order.system_id].security_status;
-  const color = colors[secStatus];
 
   return (
     <Row>
@@ -50,7 +48,7 @@ export function Entry({ order }: Props) {
       <Cell width={quantityW}>{order.volume_remain}</Cell>
       <Cell width={priceW}>{price} ISK</Cell>
       <Cell width={locationW}>
-        <SecStat color={color}>{secStatus}</SecStat>
+        <SecStat $secstatus={secStatus}>{secStatus}</SecStat>
         <Text>{locationName}</Text>
       </Cell>
       <Cell width={jumpsW}>{'-'}</Cell>
