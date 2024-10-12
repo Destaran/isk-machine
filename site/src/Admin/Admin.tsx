@@ -1,9 +1,12 @@
 import { PageBase } from '../components/PageBase';
+import { ControlPanel } from './ControlPanel';
+import { InfoPanel } from './InfoPanel';
 
 export function Admin() {
   return (
     <PageBase>
-      <h1>Admin</h1>
+      <ControlPanel />
+      <InfoPanel />
     </PageBase>
   );
 }
