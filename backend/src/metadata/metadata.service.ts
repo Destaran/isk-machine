@@ -12,4 +12,8 @@ export class MetadataService {
     metadata.date = date;
     await this.metadataRepository.save(metadata);
   }
+
+  async getLastScrapeDate() {
+    return this.metadataRepository.findOneBy({ id: 'scrapeDate' });
+  }
 }

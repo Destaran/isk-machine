@@ -4,6 +4,7 @@ import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
 import { OrdersService } from 'src/orders/orders.service';
 import { TypesService } from 'src/type/types.service';
+import { MetadataService } from 'src/metadata/metadata.service';
 
 @Injectable()
 export class MarketService {
@@ -13,6 +14,7 @@ export class MarketService {
     private readonly systemService: SystemService,
     private readonly typeService: TypesService,
     private readonly dataScraperService: DataScraperService,
+    private readonly metadataService: MetadataService,
   ) {}
 
   async searchTypes(search: string) {
@@ -84,12 +86,15 @@ export class MarketService {
     //   (locationId) => locationId.toString().length === 13,
     // );
 
+    const scrapeDate = await this.metadataService.getLastScrapeDate();
+
     return {
       orders,
       regions,
       systems,
       stations,
       type,
+      scrapeDate,
     };
   }
 }

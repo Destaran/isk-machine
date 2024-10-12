@@ -7,6 +7,7 @@ import { SystemModule } from 'src/system/system.module';
 import { OrdersModule } from 'src/orders/orders.module';
 import { DataScraperModule } from 'src/data-scraper/data-scraper.module';
 import { TypesModule } from 'src/type/types.module';
+import { MetadataModule } from 'src/metadata/metadata.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TypesModule } from 'src/type/types.module';
     SystemModule,
     OrdersModule,
     TypesModule,
+    MetadataModule,
   ],
   providers: [MarketService],
   controllers: [MarketController],
