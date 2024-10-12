@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 `;
 
 interface NavlinkProps {
-  $isactive: boolean;
+  $active: boolean;
 }
 
 const NavLink = styled(Link)<NavlinkProps>`
@@ -19,17 +19,11 @@ const NavLink = styled(Link)<NavlinkProps>`
   text-decoration: none;
   padding: 0px;
   cursor: pointer;
-  transition: all 1s;
-  color: white;
-
-  &:hover {
-    color: white;
-    transition: all 0.3s;
-  }
+  transition: all 0.5s;
+  color: ${(props) => (props.$active ? 'orange' : 'white')};
 
   &:active {
-    transform: scale(0.95);
-    color: white;
+    color: orange;
     transition: all 0.03s;
   }
 `;
@@ -39,18 +33,13 @@ interface Props {
   title: string;
 }
 
-function checkPath(path: string) {
-  if (path === location.pathname) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 export function Button({ destination, title }: Props) {
+  const { pathname } = useLocation();
+  const active = pathname.includes(destination);
+
   return (
     <Wrapper>
-      <NavLink to={`/${destination}`} $isactive={checkPath(`/${destination}`)}>
+      <NavLink to={`${destination}`} $active={active}>
         {title}
       </NavLink>
     </Wrapper>

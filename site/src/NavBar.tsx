@@ -1,4 +1,3 @@
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from './components/Button';
 
@@ -19,15 +18,13 @@ const SideWrapper = styled.div`
 `;
 
 export function NavBar() {
-  useLocation();
-
   return (
     <Container>
       <Wrapper>
         <SideWrapper>
-          <Button destination="market" title="Market" />
-          <Button destination="jita-flipper" title="Jita Flipper" />
-          <Button destination="admin" title="Admin" />
+          <Button destination="/market" title="Market" />
+          <Button destination="/jita-flipper" title="Jita Flipper" />
+          <Button destination="/admin" title="Admin" />
         </SideWrapper>
       </Wrapper>
     </Container>
