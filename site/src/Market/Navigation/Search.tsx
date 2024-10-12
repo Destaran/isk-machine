@@ -24,6 +24,7 @@ const Title = styled.h3`
 `;
 
 const Text = styled.p`
+  margin: 0;
   color: white;
 `;
 
