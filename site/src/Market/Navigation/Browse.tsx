@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import groupsData from '../../utils/market_groups_details.json';
 import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
-import { MainGroup } from '../Lists/MainGroup';
+import { MainGroup } from './MainGroup';
 
 const Container = styled.div`
   overflow: scroll;

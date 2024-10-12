@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Group } from './Group';
+import { Group } from '../Lists/Group';
 import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
 
 const Container = styled.div`
@@ -29,9 +29,7 @@ interface Props {
 
 export function MainGroup({ group, groups }: Props) {
   const [open, setOpen] = useState(false);
-  const children = groups.filter(
-    (g) => g.parent_group_id === group.market_group_id
-  );
+  const children = groups.filter((g) => g.parent_group_id === group.market_group_id);
 
   function handleClick() {
     setOpen(!open);
@@ -40,9 +38,7 @@ export function MainGroup({ group, groups }: Props) {
   return (
     <Container>
       <Wrapper>
-        <Title onClick={handleClick}>
-          {`${open ? '▾' : '▸'} ${group.name}`}
-        </Title>
+        <Title onClick={handleClick}>{`${open ? '▾' : '▸'} ${group.name}`}</Title>
       </Wrapper>
       {open &&
         children.map((child) => (
