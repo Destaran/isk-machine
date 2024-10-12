@@ -101,6 +101,7 @@ export class TypesService {
     return this.typeRepository
       .createQueryBuilder('types')
       .where('types.name ILIKE :name', { name: `%${name}%` })
+      .andWhere('types.market_group_id IS NOT NULL')
       .select(['types.id', 'types.name'])
       .getMany();
   }
