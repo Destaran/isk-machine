@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 
 const Text = styled.p`
   margin: 0;
-  font-size: 8pt;
+  font-size: 8px;
 `;
 
 export function ServerStatus() {
