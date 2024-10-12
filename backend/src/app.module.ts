@@ -13,6 +13,7 @@ import { SystemModule } from './system/system.module';
 import { TypesModule } from './type/types.module';
 import { OrdersModule } from './orders/orders.module';
 import { ServerStatusModule } from './server-status/server-status.module';
+import { MetadataModule } from './metadata/metadata.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ServerStatusModule } from './server-status/server-status.module';
     TypesModule,
     OrdersModule,
     ServerStatusModule,
+    MetadataModule,
   ],
   controllers: [AppController],
   providers: [AppService],
