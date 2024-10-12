@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Order } from '../../api/market/MarketData';
 import { regions, stations, systems } from '../../redux/orders/ordersSlice';
 import { useAppSelector } from '../../redux/hooks';
-import { colors } from '../../utils/SecurityColors';
+import { colors } from '../../style/SecurityColors';
 import { useExpiresIn } from '../../hooks/useExpiresIn';
 
 interface Props {
