@@ -106,8 +106,6 @@ export function Search() {
 
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        console.log('Escape');
-
         resetSearch();
         handleTimeoutClear();
       }
