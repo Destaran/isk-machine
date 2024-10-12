@@ -43,9 +43,16 @@ export function Search() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [enabled, setEnabled] = useState(false);
+  const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchTerm(e.target.value);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (searchTerm.length > 2) {
+      setTimer(setTimeout(() => setEnabled(true), 500));
+    }
   }
 
   function handleSearchFocus({ target }: React.FocusEvent<HTMLInputElement>) {
@@ -54,7 +61,9 @@ export function Search() {
     }
 
     target.select();
-    setEnabled(true);
+    if (searchTerm.length > 2) {
+      setEnabled(true);
+    }
   }
 
   function resetSearch() {
@@ -68,16 +77,24 @@ export function Search() {
   }
 
   useEffect(() => {
+    function handleTimeoutClear() {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      setTimer(null);
+    }
+
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Enter') {
         setEnabled(true);
+        handleTimeoutClear();
       }
     }
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [timer]);
 
   const { data, isFetched, isError } = useSearch(searchTerm, enabled);
 
