@@ -5,7 +5,9 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { AppRoutes } from './AppRoutes';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { theme } from './style/theme';
+import { GlobalStyle } from './style/GlobalStyle';
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -28,17 +30,19 @@ const persister = createSyncStoragePersister({
 
 export function App() {
   return (
-    <BrowserRouter>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{ persister }}
-      >
-        <Provider store={store}>
-          <PageWrapper>
-            <AppRoutes />
-          </PageWrapper>
-        </Provider>
-      </PersistQueryClientProvider>
-    </BrowserRouter>
+    <>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
+            <Provider store={store}>
+              <PageWrapper>
+                <AppRoutes />
+              </PageWrapper>
+            </Provider>
+          </PersistQueryClientProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </>
   );
 }
