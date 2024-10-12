@@ -15,6 +15,10 @@ const Wrapper = styled.div`
   align-items: center;
   display: flex;
   width: 100%;
+
+  &:first-of-type {
+    margin-bottom: 8px;
+  }
 `;
 
 const Title = styled.h3`
@@ -28,6 +32,7 @@ const Text = styled.p`
 
 const SearchInput = styled.input`
   width: 100%;
+  padding: 3px;
 `;
 
 const Cancel = styled(RxCross1)`
