@@ -27,5 +27,5 @@ export interface MarketData {
   systems: Record<number, System>;
   stations: Record<number, string>;
   type: GetUniverseTypesTypeIdResponse;
-  scrapeDate: Date;
+  scrapeDate: number;
 }

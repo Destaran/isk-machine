@@ -13,7 +13,10 @@ export class MetadataService {
     await this.metadataRepository.save(metadata);
   }
 
-  async getLastScrapeDate() {
-    return this.metadataRepository.findOneBy({ id: 'scrapeDate' });
+  async getScrapeDate() {
+    const metadata = await this.metadataRepository.findOneBy({
+      id: 'scrapeDate',
+    });
+    return metadata.date;
   }
 }

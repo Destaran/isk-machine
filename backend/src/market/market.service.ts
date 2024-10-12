@@ -86,7 +86,7 @@ export class MarketService {
     //   (locationId) => locationId.toString().length === 13,
     // );
 
-    const scrapeDate = await this.metadataService.getLastScrapeDate();
+    const scrapeDate = (await this.metadataService.getScrapeDate()).getTime();
 
     return {
       orders,

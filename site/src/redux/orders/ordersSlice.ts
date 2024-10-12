@@ -45,6 +45,7 @@ export interface Type {
 
 interface MarketState {
   orders: Order[];
+  scrapeDate: null | number;
   type: null | Type;
   regions: Record<number, string>;
   systems: Record<number, System>;
@@ -61,6 +62,7 @@ interface MarketState {
 
 const initialState: MarketState = {
   orders: [],
+  scrapeDate: null,
   type: null,
   regions: {},
   systems: {},
@@ -81,6 +83,7 @@ export const marketSlice = createSlice({
   reducers: {
     setData: (state, action) => {
       state.orders = action.payload.orders;
+      state.scrapeDate = action.payload.scrapeDate;
       state.regions = action.payload.regions;
       state.systems = action.payload.systems;
       state.stations = action.payload.stations;
@@ -109,6 +112,7 @@ export const { setData, resetData, filterMarketHubs, switchFilter, setFilter } =
   marketSlice.actions;
 
 export const orders = (state: RootState) => state.market.orders;
+export const scrapeDate = (state: RootState) => state.market.scrapeDate;
 export const type = (state: RootState) => state.market.type;
 export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
