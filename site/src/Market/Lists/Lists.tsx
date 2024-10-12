@@ -4,7 +4,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { selectOrders } from '../../redux/orders/selectOrders';
 import { ItemInfo } from './ItemInfo';
 import { scrapeDate, type as selectType } from '../../redux/orders/ordersSlice';
-import { ScrapeDate } from './ScrapeDate';
+import { LastUpdated } from './LastUpdated';
 
 const Container = styled.div`
   width: 80%;
@@ -25,7 +25,7 @@ export function Lists() {
       {hasOrders && type && <ItemInfo orders={orders} type={type} />}
       <List orders={sell} />
       <List orders={buy} isBuy />
-      {!!scrapeTimestamp && <ScrapeDate timestamp={scrapeTimestamp} />}
+      {!!scrapeTimestamp && <LastUpdated timestamp={scrapeTimestamp} />}
     </Container>
   );
 }

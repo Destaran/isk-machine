@@ -10,7 +10,7 @@ interface Props {
   timestamp: number;
 }
 
-export function ScrapeDate({ timestamp }: Props) {
+export function LastUpdated({ timestamp }: Props) {
   const updateDate = new Date(timestamp);
   const nowDate = new Date();
   const diff = nowDate.getTime() - updateDate.getTime();
