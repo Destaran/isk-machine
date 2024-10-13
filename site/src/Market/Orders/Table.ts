@@ -16,6 +16,9 @@ export const Row = styled.div`
   display: flex;
   height: 25px;
   width: 100%;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.emDarkGrey};
+  }
 `;
 
 export const TableHead = styled(Row)`
@@ -25,6 +28,7 @@ export const TableHead = styled(Row)`
 
 interface CellProps {
   width?: string;
+  $interactive?: boolean;
 }
 
 export const Cell = styled.div<CellProps>`
@@ -38,6 +42,12 @@ export const Cell = styled.div<CellProps>`
   background-color: ${({ theme }) => theme.colors.emDarkGrey};
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.emGrey};
+
+  &:hover {
+    cursor: ${({ $interactive }) => ($interactive ? 'pointer' : 'default')};
+    color: ${({ theme, $interactive }) =>
+      $interactive ? theme.colors.orange : theme.colors.emWhite};
+  }
 `;
 
 export const MarketTableColumnWidths = {

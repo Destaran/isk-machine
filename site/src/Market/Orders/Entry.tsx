@@ -62,12 +62,12 @@ export function Entry({ order }: Props) {
 
   return (
     <Row>
-      <Cell width={regionW} onClick={() => handleRegionClick()} style={{ cursor: 'pointer' }}>
+      <Cell width={regionW} onClick={() => handleRegionClick()} $interactive>
         {regionName}
       </Cell>
       <Cell width={quantityW}>{order.volume_remain}</Cell>
       <Cell width={priceW}>{price} ISK</Cell>
-      <Cell width={locationW} onClick={() => handleLocationClick()} style={{ cursor: 'pointer' }}>
+      <Cell width={locationW} onClick={() => handleLocationClick()} $interactive>
         <SecStat $secstatus={secStatus}>{secStatus}</SecStat>
         <Text>{locationName}</Text>
       </Cell>
