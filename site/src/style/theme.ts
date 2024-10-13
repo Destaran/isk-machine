@@ -1,9 +1,11 @@
 export const theme = {
   colors: {
+    white: '#ffffff',
+    emWhite: '#e9e9e9',
+    emLightGrey: '#808080',
     emGrey: '#4b4b4b',
     emDarkGrey: '#2b2b2b',
     black: '#000000',
-    white: '#ffffff',
     orange: '#ffa500',
   },
   securityColors: {
