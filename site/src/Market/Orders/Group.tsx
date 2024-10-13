@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.emDarkGrey};
 
   &:hover {
-    background-color: grey;
+    background-color: ${({ theme }) => theme.colors.emLightGrey};
   }
 `;
 

@@ -20,6 +20,7 @@ const Wrapper = styled.div`
 const SearchInput = styled.input`
   width: 100%;
   padding: 3px;
+  background-color: ${({ theme }) => theme.colors.emWhite};
 `;
 
 const Cancel = styled(RxCross1)`

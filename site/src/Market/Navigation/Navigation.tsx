@@ -8,8 +8,11 @@ const Container = styled.div`
   width: auto;
   overflow: scroll;
   background-color: ${({ theme }) => theme.colors.emGrey};
-  border-right: 1px solid ${({ theme }) => theme.colors.emDarkGrey};
+  border-right: 2px solid ${({ theme }) => theme.colors.emDarkGrey};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.emDarkGrey};
   padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
 `;
 
 const Separator = styled.div`

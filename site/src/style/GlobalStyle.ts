@@ -8,8 +8,12 @@ export const GlobalStyle = createGlobalStyle`
     font-family: roboto;
     font-size: 1rem;
     font-weight: 400;
-    color: white;
-    background-color: ${theme.colors.emGrey};
+    color: ${theme.colors.emWhite};
+    background-color: #090909;
+  }
+
+  input {
+    border-radius: 5px;
   }
 
   *,
