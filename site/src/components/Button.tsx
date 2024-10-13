@@ -18,17 +18,13 @@ const NavLink = styled(Link)<NavlinkProps>`
   margin: 0;
   text-decoration: none;
   padding: 0px;
-  cursor: pointer;
-  transition: all 0.5s;
   color: ${({ $active, theme }) => ($active ? theme.colors.orange : '')};
+  cursor: pointer;
+  transition: all 500ms;
 
   &:hover {
     color: ${({ theme }) => theme.colors.orange};
-  }
-
-  &:active {
-    color: ${({ theme }) => theme.colors.orange};
-    transition: all 0.03s;
+    transition: all 250ms;
   }
 `;
 
