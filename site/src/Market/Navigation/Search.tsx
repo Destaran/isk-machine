@@ -36,6 +36,10 @@ const Cancel = styled(RxCross1)`
   }
 `;
 
+const Text = styled.p`
+  margin-left: 5px;
+`;
+
 export function Search() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -129,7 +133,7 @@ export function Search() {
       <SectionTitle>Search</SectionTitle>
       <Wrapper>
         <input checked={filterSkins} type="checkbox" onChange={(e) => handleFilterSkinsChange(e)} />
-        <p>Filter SKINs</p>
+        <Text>Filter SKINs</Text>
       </Wrapper>
       <Wrapper>
         <SearchInput

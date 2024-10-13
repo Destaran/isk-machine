@@ -12,7 +12,7 @@ interface FilterNameProps {
 
 const FilterName = styled.p<FilterNameProps>`
   color: ${(props) => props.color};
-  margin: 5px 0;
+  margin: 10px 5px;
 `;
 
 interface Props {

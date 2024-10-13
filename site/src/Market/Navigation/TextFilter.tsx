@@ -7,14 +7,21 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  min-width: 150px;
+`;
+
 const FilterName = styled.p`
-  margin: 10px 0;
+  margin: 10px 5px;
 `;
 
 const TextInput = styled.input`
   margin: 0;
   padding: 0;
   height: 25px;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.emWhite};
 `;
 
 interface Props {
@@ -36,8 +43,10 @@ export function TextFilter({ name, type, defaultValue }: Props) {
 
   return (
     <Container>
-      <input type="checkbox" onChange={handleCheck} />
-      <FilterName>{name}</FilterName>
+      <Wrapper>
+        <input type="checkbox" onChange={handleCheck} />
+        <FilterName>{name}</FilterName>
+      </Wrapper>
       <TextInput type="text" onChange={handleInput} defaultValue={defaultValue} />
     </Container>
   );
