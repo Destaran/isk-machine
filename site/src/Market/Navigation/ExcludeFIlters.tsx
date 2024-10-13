@@ -14,7 +14,7 @@ const Text = styled.p`
   margin-right: 20px;
 `;
 
-export function ExcludeFilter() {
+export function ExcludeFilters() {
   return (
     <Container>
       <Wrapper>

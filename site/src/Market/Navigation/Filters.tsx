@@ -1,13 +1,13 @@
 import { Filter } from './Filter';
 import { TextFilter } from './TextFilter';
-import { ExcludeFilter } from './ExcludeFIlter';
+import { ExcludeFilters } from './ExcludeFIlters';
 import { SectionTitle } from './SectionTitle';
 
 export function Filters() {
   return (
     <div>
       <SectionTitle>Filters</SectionTitle>
-      <ExcludeFilter />
+      <ExcludeFilters />
       <TextFilter
         name="Location"
         type={'locationFilter'}
