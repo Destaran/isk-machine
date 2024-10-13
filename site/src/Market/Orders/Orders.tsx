@@ -19,11 +19,10 @@ export function Orders() {
   const scrapeTimestamp = useAppSelector(scrapeDate);
 
   const { buy, sell } = orders;
-  const hasOrders = buy.length > 0 || sell.length > 0;
 
   return (
     <Container>
-      {hasOrders && !!type && <ItemInfo orders={orders} type={type} />}
+      <ItemInfo orders={orders} type={type} />
       <OrdersList orders={sell} />
       <OrdersList orders={buy} isBuy />
       {!!scrapeTimestamp && <LastUpdated timestamp={scrapeTimestamp} />}

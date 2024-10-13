@@ -11,7 +11,10 @@ function getGroupRecursive(group: GetMarketsGroupsMarketGroupIdResponse, groups:
   }
 }
 
-export function useMarketGroups(typeId: number) {
+export function useMarketGroups(typeId: number | null) {
+  if (!typeId) {
+    return;
+  }
   const groups: string[] = [];
   const parent = marketGroups.find((group) => group.types.includes(typeId));
   if (!parent) {

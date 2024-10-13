@@ -41,11 +41,11 @@ interface Props {
     buy: Order[];
     sell: Order[];
   };
-  type: Type;
+  type: Type | null;
 }
 
 export function ItemInfo({ orders, type }: Props) {
-  const groups = useMarketGroups(type.id);
+  const groups = useMarketGroups(type ? type.id : null);
   const {
     margin,
     marginPercent,
@@ -59,7 +59,7 @@ export function ItemInfo({ orders, type }: Props) {
   const isBp = groups?.includes('Blueprints') ? 'bp' : 'icon';
   const imgSrc = type
     ? `https://images.evetech.net/types/${type.id}/${isBp}?size=64`
-    : '../placeholder.png';
+    : '/placeholder.png';
 
   const profit = new Intl.NumberFormat('en-US').format(margin);
   const profitPercent = `${marginPercent}%`;
