@@ -8,6 +8,8 @@ const Container = styled.div`
   overflow: scroll;
   width: 100%;
   max-height: 1000px;
+  background-color: ${({ theme }) => theme.colors.orange};
+  border-radius: 5px;
 `;
 
 interface Props {
