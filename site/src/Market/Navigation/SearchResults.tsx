@@ -4,7 +4,7 @@ import { SearchResult } from './SearchResult';
 
 const Container = styled.div`
   position: absolute;
-  top: 23px;
+  top: 32px;
   overflow: scroll;
   width: 100%;
   max-height: 1000px;
