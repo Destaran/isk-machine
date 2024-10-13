@@ -8,6 +8,16 @@ export const theme = {
     emBlack: '#090909',
     black: '#000000',
     orange: '#ffa500',
+    filters: {
+      excludeNullSecFilter: '#f00000',
+      excludeLowSecFilter: '#d77700',
+      excludeHighSecFilter: '#2fefef',
+      excludeStationsFilter: '#00ffff',
+      excludeStructuresFilter: '#ffff00',
+      locationFilter: '#ff00ff',
+      regionFilter: '#ff00ff',
+      marketHubsFilter: '#ffa500',
+    },
   },
   securityColors: {
     '1.0': '#2fefef',
