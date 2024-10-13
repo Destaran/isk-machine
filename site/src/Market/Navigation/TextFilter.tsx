@@ -20,13 +20,13 @@ const TextInput = styled.input`
 interface Props {
   name: string;
   type: TextFilterKey;
-  state: boolean;
+  filterState: { filter: string; active: boolean };
   exclude?: boolean;
-  defaultValue?: string;
 }
 
-export function TextFilter({ name, type, state, exclude, defaultValue }: Props) {
+export function TextFilter({ name, type, filterState, exclude }: Props) {
   const dispatch = useAppDispatch();
+  const { active: state, filter } = filterState;
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     dispatch(setFilter({ filter: e.target.value, type }));
@@ -35,7 +35,7 @@ export function TextFilter({ name, type, state, exclude, defaultValue }: Props) 
   return (
     <Container>
       <Filter name={name} type={type} state={state} exclude={exclude} />
-      <TextInput type="text" onChange={handleInput} defaultValue={defaultValue ?? ''} />
+      <TextInput value={filter} type="text" onChange={handleInput} />
     </Container>
   );
 }

@@ -61,18 +61,8 @@ export function Filters() {
       </Wrapper>
       <Separator />
 
-      <TextFilter
-        name="Location"
-        type="locationFilter"
-        state={states.locationFilter}
-        defaultValue="Jita IV - Moon 4 - Caldari Navy"
-      />
-      <TextFilter
-        name="Region"
-        type={'regionFilter'}
-        state={states.regionFilter}
-        defaultValue="The Forge"
-      />
+      <TextFilter name="Location" type="locationFilter" filterState={states.locationFilter} />
+      <TextFilter name="Region" type={'regionFilter'} filterState={states.regionFilter} />
       <Filter name="Hubs" type={'marketHubsFilter'} state={states.marketHubsFilter} />
     </div>
   );

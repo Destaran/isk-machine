@@ -160,8 +160,8 @@ export const filterStates = createSelector(
       excludeHighSecFilter: excludeHighSecFilter.active,
       excludeStationsFilter: excludeStationsFilter.active,
       excludeStructuresFilter: excludeStructuresFilter.active,
-      locationFilter: locationFilter.active,
-      regionFilter: regionFilter.active,
+      locationFilter: locationFilter,
+      regionFilter: regionFilter,
       marketHubsFilter: marketHubsFilter.active,
     };
   }
