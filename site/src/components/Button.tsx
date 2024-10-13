@@ -22,7 +22,8 @@ const NavLink = styled(Link)<NavlinkProps>`
   cursor: pointer;
   transition: all 500ms;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: ${({ theme }) => theme.colors.orange};
     transition: all 250ms;
   }
