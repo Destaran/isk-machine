@@ -29,7 +29,8 @@ interface CellProps {
 
 export const Cell = styled.div<CellProps>`
   display: flex;
-  text-align: start;
+  align-items: center;
+  justify-content: start;
   height: 25px;
   line-height: 25px;
   width: ${(props) => props.width ?? '10%'};
