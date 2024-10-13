@@ -6,11 +6,16 @@ import { SearchResults } from './SearchResults';
 import { RxCross1 } from 'react-icons/rx';
 import { SectionTitle } from './SectionTitle';
 
+const Container = styled.div`
+  overflow: visible;
+`;
+
 const Wrapper = styled.div`
   position: relative;
   align-items: center;
   display: flex;
   width: 100%;
+  overflow: visible;
 
   &:first-of-type {
     margin-bottom: 8px;
@@ -121,7 +126,8 @@ export function Search() {
       const filteredResults = filterSkins
         ? data.filter((result) => !result.name.includes('SKIN'))
         : data;
-      setResults(filteredResults);
+      const sortedResults = filteredResults.sort((a, b) => a.name.localeCompare(b.name));
+      setResults(sortedResults);
       setEnabled(false);
     } else if (isError) {
       resetSearch();
@@ -129,7 +135,7 @@ export function Search() {
   }, [isFetched, data, enabled, isError, filterSkins]);
 
   return (
-    <div>
+    <Container>
       <SectionTitle>Search</SectionTitle>
       <Wrapper>
         <input checked={filterSkins} type="checkbox" onChange={(e) => handleFilterSkinsChange(e)} />
@@ -145,6 +151,6 @@ export function Search() {
         {searchTerm.length > 0 && <Cancel onClick={resetSearchTerm} />}
         {results.length > 0 && <SearchResults results={results} resetSearch={resetSearch} />}
       </Wrapper>
-    </div>
+    </Container>
   );
 }

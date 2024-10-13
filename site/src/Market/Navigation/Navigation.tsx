@@ -6,13 +6,14 @@ import { Filters } from './Filters';
 const Container = styled.div`
   min-width: 500px;
   width: auto;
-  overflow: scroll;
   background-color: ${({ theme }) => theme.colors.emGrey};
   border-right: 2px solid ${({ theme }) => theme.colors.emDarkGrey};
   border-bottom: 2px solid ${({ theme }) => theme.colors.emDarkGrey};
   padding: 10px;
   margin-right: 10px;
   border-radius: 5px;
+  overflow-y: auto;
+  overflow-x: auto;
 `;
 
 const Separator = styled.div`

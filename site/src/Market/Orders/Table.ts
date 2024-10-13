@@ -9,6 +9,7 @@ export const Table = styled.div`
   border-color: ${({ theme }) => theme.colors.emDarkGrey};
   table-layout: fixed;
   overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 export const Row = styled.div`
