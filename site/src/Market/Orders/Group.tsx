@@ -8,6 +8,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+  padding: 1px;
   background-color: ${({ theme }) => theme.colors.emDarkGrey};
 
   &:hover {

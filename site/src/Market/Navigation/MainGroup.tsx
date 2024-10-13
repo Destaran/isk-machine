@@ -9,6 +9,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+  padding: 1px;
   height: 100%;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.emGrey};

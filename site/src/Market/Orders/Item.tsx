@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   margin-left: 20px;
+  padding: 1px;
   background-color: ${({ theme }) => theme.colors.emDarkGrey};
 
   &:hover {
