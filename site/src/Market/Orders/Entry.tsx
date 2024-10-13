@@ -3,9 +3,16 @@ import { Row, Cell, MarketTableColumnWidths } from './Table';
 import { format } from 'date-fns';
 import styled from 'styled-components';
 import { Order } from '../../api/market/MarketData';
-import { regions, stations, systems } from '../../redux/orders/ordersSlice';
+import {
+  regions,
+  setFilter,
+  stations,
+  switchFilter,
+  systems,
+} from '../../redux/orders/ordersSlice';
 import { useAppSelector } from '../../redux/hooks';
 import { useExpiresIn } from '../../hooks/useExpiresIn';
+import { useAppDispatch } from '../../hooks/redux';
 
 interface Props {
   order: Order;
@@ -28,8 +35,19 @@ const Text = styled.p`
 `;
 
 export function Entry({ order }: Props) {
+  const dispatch = useAppDispatch();
   const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
     MarketTableColumnWidths;
+
+  function handleRegionClick() {
+    dispatch(setFilter({ type: 'regionFilter', filter: regionName }));
+    dispatch(switchFilter({ type: 'regionFilter', active: true }));
+  }
+
+  function handleLocationClick() {
+    dispatch(setFilter({ type: 'locationFilter', filter: locationName }));
+    dispatch(switchFilter({ type: 'locationFilter', active: true }));
+  }
 
   const stationData = useSelector(stations);
   let locationName = 'Unknown';
@@ -44,10 +62,12 @@ export function Entry({ order }: Props) {
 
   return (
     <Row>
-      <Cell width={regionW}>{regionName}</Cell>
+      <Cell width={regionW} onClick={() => handleRegionClick()} style={{ cursor: 'pointer' }}>
+        {regionName}
+      </Cell>
       <Cell width={quantityW}>{order.volume_remain}</Cell>
       <Cell width={priceW}>{price} ISK</Cell>
-      <Cell width={locationW}>
+      <Cell width={locationW} onClick={() => handleLocationClick()} style={{ cursor: 'pointer' }}>
         <SecStat $secstatus={secStatus}>{secStatus}</SecStat>
         <Text>{locationName}</Text>
       </Cell>
