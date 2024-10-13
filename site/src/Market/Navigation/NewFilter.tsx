@@ -12,13 +12,24 @@ interface ButtonProps {
 }
 
 const Button = styled.button<ButtonProps>`
+  background-color: ${({ theme, $state }) =>
+    $state ? theme.colors.emBlack : theme.colors.emDarkGrey};
   color: ${({ type, theme, $state }) => ($state ? theme.colors.filters[type] : 'white')};
-  background-color: black;
+  border-color: ${({ type, theme, $state }) => ($state ? theme.colors.filters[type] : 'white')};
+  border-radius: 5px;
+  padding: 3px;
+  margin: 5px 0;
+  min-width: 135px;
+  font-family: Orbitron;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 interface Props {
   name: string;
-  type: FilterKey;
+  type: FilterKey | TextFilterKey;
   state: boolean;
   exclude?: boolean;
 }
