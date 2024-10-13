@@ -1,8 +1,8 @@
 import { SectionTitle } from './SectionTitle';
 import { useAppSelector } from '../../redux/hooks';
 import { filterStates } from '../../redux/orders/ordersSlice';
-import { NewFilter } from './NewFilter';
-import { NewTextFilter } from './NewTextFilter';
+import { Filter } from './Filter';
+import { TextFilter } from './TextFilter';
 import styled from 'styled-components';
 
 const Separator = styled.div`
@@ -25,19 +25,19 @@ export function Filters() {
     <div>
       <SectionTitle>Filters</SectionTitle>
       <Wrapper>
-        <NewFilter
+        <Filter
           name="Null Sec"
           type="excludeNullSecFilter"
           state={states.excludeNullSecFilter}
           exclude
         />
-        <NewFilter
+        <Filter
           name="Low Sec"
           type="excludeLowSecFilter"
           state={states.excludeLowSecFilter}
           exclude
         />
-        <NewFilter
+        <Filter
           name="High Sec"
           type="excludeHighSecFilter"
           state={states.excludeHighSecFilter}
@@ -46,13 +46,13 @@ export function Filters() {
       </Wrapper>
       <Separator />
       <Wrapper>
-        <NewFilter
+        <Filter
           name="Stations"
           type="excludeStationsFilter"
           state={states.excludeStationsFilter}
           exclude
         />
-        <NewFilter
+        <Filter
           name="Structures"
           type="excludeStructuresFilter"
           state={states.excludeStructuresFilter}
@@ -61,19 +61,19 @@ export function Filters() {
       </Wrapper>
       <Separator />
 
-      <NewTextFilter
+      <TextFilter
         name="Location"
         type="locationFilter"
         state={states.locationFilter}
         defaultValue="Jita IV - Moon 4 - Caldari Navy"
       />
-      <NewTextFilter
+      <TextFilter
         name="Region"
         type={'regionFilter'}
         state={states.regionFilter}
         defaultValue="The Forge"
       />
-      <NewFilter name="Hubs" type={'marketHubsFilter'} state={states.marketHubsFilter} />
+      <Filter name="Hubs" type={'marketHubsFilter'} state={states.marketHubsFilter} />
     </div>
   );
 }

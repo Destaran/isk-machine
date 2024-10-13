@@ -34,7 +34,7 @@ interface Props {
   exclude?: boolean;
 }
 
-export function NewFilter({ name, type, state, exclude }: Props) {
+export function Filter({ name, type, state, exclude }: Props) {
   const dispatch = useAppDispatch();
 
   function handleCheck() {
