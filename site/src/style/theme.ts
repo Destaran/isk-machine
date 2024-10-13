@@ -5,6 +5,7 @@ export const theme = {
     emLightGrey: '#808080',
     emGrey: '#4b4b4b',
     emDarkGrey: '#2b2b2b',
+    emBlack: '#090909',
     black: '#000000',
     orange: '#ffa500',
   },
