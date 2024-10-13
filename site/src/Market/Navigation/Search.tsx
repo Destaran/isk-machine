@@ -4,11 +4,7 @@ import { useSearch } from '../../api/market/useSearch';
 import { SearchResult } from '../../api/market/SearchResult';
 import { SearchResults } from './SearchResults';
 import { RxCross1 } from 'react-icons/rx';
-
-const Container = styled.div`
-  padding: 10px;
-  width: 100%;
-`;
+import { SectionTitle } from './SectionTitle';
 
 const Wrapper = styled.div`
   position: relative;
@@ -19,15 +15,6 @@ const Wrapper = styled.div`
   &:first-of-type {
     margin-bottom: 8px;
   }
-`;
-
-const Title = styled.h3`
-  font-family: Orbitron;
-  margin-top: 0;
-`;
-
-const Text = styled.p`
-  margin: 0;
 `;
 
 const SearchInput = styled.input`
@@ -136,11 +123,11 @@ export function Search() {
   }, [isFetched, data, enabled, isError, filterSkins]);
 
   return (
-    <Container>
-      <Title>Search</Title>
+    <div>
+      <SectionTitle>Search</SectionTitle>
       <Wrapper>
         <input checked={filterSkins} type="checkbox" onChange={(e) => handleFilterSkinsChange(e)} />
-        <Text>Filter SKINs</Text>
+        <p>Filter SKINs</p>
       </Wrapper>
       <Wrapper>
         <SearchInput
@@ -152,6 +139,6 @@ export function Search() {
         {searchTerm.length > 0 && <Cancel onClick={resetSearchTerm} />}
         {results.length > 0 && <SearchResults results={results} resetSearch={resetSearch} />}
       </Wrapper>
-    </Container>
+    </div>
   );
 }

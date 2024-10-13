@@ -1,13 +1,7 @@
-import styled from 'styled-components';
 import groupsData from '../../utils/market_groups_details.json';
 import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
 import { MainGroup } from './MainGroup';
-
-const Container = styled.div`
-  overflow: scroll;
-  padding: 10px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.emDarkGrey};
-`;
+import { SectionTitle } from './SectionTitle';
 
 export function Browse() {
   const groups = groupsData as GetMarketsGroupsMarketGroupIdResponse[];
@@ -19,7 +13,8 @@ export function Browse() {
   const mainGroups = orderedGroups.filter((group) => !group?.parent_group_id);
 
   return (
-    <Container>
+    <div>
+      <SectionTitle>Browser</SectionTitle>
       {mainGroups.length > 0 &&
         mainGroups.map((group) => {
           if (!group) {
@@ -28,6 +23,6 @@ export function Browse() {
 
           return <MainGroup key={group?.market_group_id} group={group} groups={orderedGroups} />;
         })}
-    </Container>
+    </div>
   );
 }

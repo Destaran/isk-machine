@@ -1,22 +1,12 @@
-import styled from 'styled-components';
 import { Filter } from './Filter';
 import { TextFilter } from './TextFilter';
 import { ExcludeFilter } from './ExcludeFIlter';
-
-const Container = styled.div`
-  border-bottom: 2px solid #333;
-  padding: 10px;
-`;
-
-const Title = styled.h3`
-  font-family: Orbitron;
-  margin-top: 0;
-`;
+import { SectionTitle } from './SectionTitle';
 
 export function Filters() {
   return (
-    <Container>
-      <Title>Filters</Title>
+    <div>
+      <SectionTitle>Filters</SectionTitle>
       <ExcludeFilter />
       <TextFilter
         name="Location"
@@ -25,6 +15,6 @@ export function Filters() {
       />
       <TextFilter name="Region" type={'regionFilter'} defaultValue="The Forge" />
       <Filter name="Market Hubs only" type={'marketHubsFilter'} />
-    </Container>
+    </div>
   );
 }

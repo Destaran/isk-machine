@@ -9,13 +9,23 @@ const Container = styled.div`
   overflow: scroll;
   background-color: ${({ theme }) => theme.colors.emGrey};
   border-right: 1px solid ${({ theme }) => theme.colors.emDarkGrey};
+  padding: 10px;
+`;
+
+const Separator = styled.div`
+  height: 3px;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.emDarkGrey};
+  margin: 10px auto;
 `;
 
 export function Navigation() {
   return (
     <Container>
       <Search />
+      <Separator />
       <Filters />
+      <Separator />
       <Browse />
     </Container>
   );
