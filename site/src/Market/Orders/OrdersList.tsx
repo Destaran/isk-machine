@@ -5,11 +5,10 @@ import { Order } from '../../api/market/MarketData';
 
 const Container = styled.div`
   width: 100%;
-  margin: 0 0 10px 0;
 `;
 
 const Title = styled.h2`
-  margin: 0 0 10px 0;
+  margin: 10px 0;
   font-family: Orbitron;
 `;
 
