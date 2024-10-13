@@ -11,7 +11,7 @@ const Container = styled.div`
   border-right: 2px solid ${({ theme }) => theme.colors.emDarkGrey};
   border-bottom: 2px solid ${({ theme }) => theme.colors.emDarkGrey};
   padding: 10px;
-  margin: 10px;
+  margin-right: 10px;
   border-radius: 5px;
 `;
 

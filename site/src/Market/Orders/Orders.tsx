@@ -9,7 +9,6 @@ import { LastUpdated } from './LastUpdated';
 const Container = styled.div`
   width: 100%;
   padding: 10px;
-  margin: 10px 10px 10px 0;
   background-color: ${({ theme }) => theme.colors.emGrey};
   border-radius: 5px;
 `;
