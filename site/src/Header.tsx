@@ -12,16 +12,18 @@ to {
 `;
 
 const Container = styled.div`
-  /* background-color: ${({ theme }) => theme.colors.emGrey}; */
-  background-image: linear-gradient(315deg, #4d4d4d 45%, ${theme.colors.orange} 50%, #4d4d4d 55%);
-  background-size: 1800%;
-  animation: ${BgAnim} 30s infinite;
   padding: 10px;
   margin: 10px;
   border-radius: 5px;
+  background-color: ${({ theme }) => theme.colors.emGrey};
 `;
 
 const Title = styled.h1`
+  background-image: linear-gradient(315deg, #e9e9e9 45%, ${theme.colors.orange} 50%, #e9e9e9 55%);
+  background-size: 900%;
+  background-clip: text;
+  color: transparent;
+  animation: ${BgAnim} 15s infinite;
   margin: 0;
   font-family: Orbitron;
 `;
