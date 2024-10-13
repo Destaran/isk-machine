@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 1rem;
     font-weight: 400;
     color: ${theme.colors.emWhite};
-    background-color: #090909;
+    background-color: ${theme.colors.emBlack};
   }
 
   input {
