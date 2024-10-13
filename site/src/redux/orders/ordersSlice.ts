@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { Order, System } from '../../api/market/MarketData';
 
@@ -118,6 +118,9 @@ export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
 export const stations = (state: RootState) => state.market.stations;
 
+export const filterByType = (state: RootState, type: FilterKey | TextFilterKey) =>
+  state.market[type];
+
 export const excludeNullSecFilter = (state: RootState) => state.market.excludeNullSecFilter;
 export const excludeLowSecFilter = (state: RootState) => state.market.excludeLowSecFilter;
 export const excludeHighSecFilter = (state: RootState) => state.market.excludeHighSecFilter;
@@ -129,3 +132,37 @@ export const regionFilter = (state: RootState) => state.market.regionFilter;
 export const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 
 export default marketSlice.reducer;
+
+export const filterStates = createSelector(
+  [
+    excludeNullSecFilter,
+    excludeLowSecFilter,
+    excludeHighSecFilter,
+    excludeStationsFilter,
+    excludeStructuresFilter,
+    locationFilter,
+    regionFilter,
+    marketHubsFilter,
+  ],
+  (
+    excludeNullSecFilter,
+    excludeLowSecFilter,
+    excludeHighSecFilter,
+    excludeStationsFilter,
+    excludeStructuresFilter,
+    locationFilter,
+    regionFilter,
+    marketHubsFilter
+  ) => {
+    return {
+      excludeNullSecFilter: excludeNullSecFilter.active,
+      excludeLowSecFilter: excludeLowSecFilter.active,
+      excludeHighSecFilter: excludeHighSecFilter.active,
+      excludeStationsFilter: excludeStationsFilter.active,
+      excludeStructuresFilter: excludeStructuresFilter.active,
+      locationFilter: locationFilter.active,
+      regionFilter: regionFilter.active,
+      marketHubsFilter: marketHubsFilter.active,
+    };
+  }
+);
