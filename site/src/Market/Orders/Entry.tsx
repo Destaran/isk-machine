@@ -1,31 +1,25 @@
-import { useSelector } from 'react-redux';
 import { Row, Cell, MarketTableColumnWidths } from './Table';
 import { format } from 'date-fns';
 import styled from 'styled-components';
 import { Order } from '../../api/market/MarketData';
-import {
-  regions,
-  setFilter,
-  stations,
-  switchFilter,
-  systems,
-} from '../../redux/orders/ordersSlice';
+import { regions, setFilter, stations, systems } from '../../redux/orders/ordersSlice';
 import { useAppSelector } from '../../redux/hooks';
 import { useExpiresIn } from '../../hooks/useExpiresIn';
 import { useAppDispatch } from '../../hooks/redux';
+import { entryFilterStates } from '../../redux/orders/entryFilterStates';
 
 interface Props {
   order: Order;
 }
 
 interface SecStatProps {
-  $secstatus: string;
+  $secStatus: string;
 }
 
 const SecStat = styled.span<SecStatProps>`
   margin: 0;
   margin-right: 10px;
-  color: ${({ theme, $secstatus }) => theme.securityColors[$secstatus]};
+  color: ${({ theme, $secStatus }) => theme.securityColors[$secStatus]};
   font-weight: bold;
 `;
 
@@ -36,20 +30,12 @@ const Text = styled.p`
 
 export function Entry({ order }: Props) {
   const dispatch = useAppDispatch();
+  const filterStates = useAppSelector(entryFilterStates);
+
   const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
     MarketTableColumnWidths;
 
-  function handleRegionClick() {
-    dispatch(setFilter({ type: 'regionFilter', filter: regionName }));
-    dispatch(switchFilter({ type: 'regionFilter', active: true }));
-  }
-
-  function handleLocationClick() {
-    dispatch(setFilter({ type: 'locationFilter', filter: locationName }));
-    dispatch(switchFilter({ type: 'locationFilter', active: true }));
-  }
-
-  const stationData = useSelector(stations);
+  const stationData = useAppSelector(stations);
   let locationName = 'Unknown';
   if (order.location_id.toString().length === 8) {
     locationName = stationData[order.location_id];
@@ -60,15 +46,35 @@ export function Entry({ order }: Props) {
   const regionName = useAppSelector(regions)[order.region_id];
   const secStatus = useAppSelector(systems)[order.system_id].security_status;
 
+  function handleRegionClick() {
+    dispatch(
+      setFilter({
+        type: 'regionFilter',
+        filter: regionName,
+        active: !filterStates.regionFilter,
+      })
+    );
+  }
+
+  function handleLocationClick() {
+    dispatch(
+      setFilter({
+        type: 'locationFilter',
+        filter: locationName,
+        active: !filterStates.locationFilter,
+      })
+    );
+  }
+
   return (
-    <Row>
+    <Row $interactive>
       <Cell width={regionW} onClick={() => handleRegionClick()} $interactive>
         {regionName}
       </Cell>
       <Cell width={quantityW}>{order.volume_remain}</Cell>
       <Cell width={priceW}>{price} ISK</Cell>
       <Cell width={locationW} onClick={() => handleLocationClick()} $interactive>
-        <SecStat $secstatus={secStatus}>{secStatus}</SecStat>
+        <SecStat $secStatus={secStatus}>{secStatus}</SecStat>
         <Text>{locationName}</Text>
       </Cell>
       <Cell width={jumpsW}>{'-'}</Cell>

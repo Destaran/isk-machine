@@ -12,12 +12,19 @@ export const Table = styled.div`
   overflow-y: auto;
 `;
 
-export const Row = styled.div`
+interface RowProps {
+  $interactive?: boolean;
+}
+
+export const Row = styled.div<RowProps>`
   display: flex;
   height: 25px;
   width: 100%;
+  background-color: ${({ theme }) => theme.colors.emDarkGrey};
+
   &:hover {
-    background-color: ${({ theme }) => theme.colors.emDarkGrey};
+    background-color: ${({ theme, $interactive }) =>
+      $interactive ? theme.colors.emBlack : theme.colors.emDarkGrey};
   }
 `;
 
@@ -39,7 +46,6 @@ export const Cell = styled.div<CellProps>`
   line-height: 25px;
   width: ${(props) => props.width ?? '10%'};
   font-size: 12px;
-  background-color: ${({ theme }) => theme.colors.emDarkGrey};
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.emGrey};
 
