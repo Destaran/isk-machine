@@ -1,4 +1,4 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import { Order, System } from '../../api/market/MarketData';
 
@@ -27,6 +27,12 @@ interface FilterSwitchPayload {
 interface FilterTextPayload {
   type: TextFilterKey;
   filter: string;
+}
+
+export interface SetFilterPayload {
+  type: TextFilterKey;
+  filter: string;
+  active: boolean;
 }
 
 export interface Type {
@@ -102,13 +108,19 @@ export const marketSlice = createSlice({
     switchFilter: (state, action: PayloadAction<FilterSwitchPayload>) => {
       state[action.payload.type].active = action.payload.active;
     },
-    setFilter: (state, action: PayloadAction<FilterTextPayload>) => {
+    setFilterText: (state, action: PayloadAction<FilterTextPayload>) => {
+      state[action.payload.type].filter = action.payload.filter;
+    },
+    setFilter: (state, action: PayloadAction<SetFilterPayload>) => {
+      console.log(action.payload);
+
+      state[action.payload.type].active = action.payload.active;
       state[action.payload.type].filter = action.payload.filter;
     },
   },
 });
 
-export const { setData, resetData, filterMarketHubs, switchFilter, setFilter } =
+export const { setData, resetData, filterMarketHubs, switchFilter, setFilterText, setFilter } =
   marketSlice.actions;
 
 export const orders = (state: RootState) => state.market.orders;
@@ -117,9 +129,6 @@ export const type = (state: RootState) => state.market.type;
 export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
 export const stations = (state: RootState) => state.market.stations;
-
-export const filterByType = (state: RootState, type: FilterKey | TextFilterKey) =>
-  state.market[type];
 
 export const excludeNullSecFilter = (state: RootState) => state.market.excludeNullSecFilter;
 export const excludeLowSecFilter = (state: RootState) => state.market.excludeLowSecFilter;
@@ -132,37 +141,3 @@ export const regionFilter = (state: RootState) => state.market.regionFilter;
 export const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
 
 export default marketSlice.reducer;
-
-export const filterStates = createSelector(
-  [
-    excludeNullSecFilter,
-    excludeLowSecFilter,
-    excludeHighSecFilter,
-    excludeStationsFilter,
-    excludeStructuresFilter,
-    locationFilter,
-    regionFilter,
-    marketHubsFilter,
-  ],
-  (
-    excludeNullSecFilter,
-    excludeLowSecFilter,
-    excludeHighSecFilter,
-    excludeStationsFilter,
-    excludeStructuresFilter,
-    locationFilter,
-    regionFilter,
-    marketHubsFilter
-  ) => {
-    return {
-      excludeNullSecFilter: excludeNullSecFilter.active,
-      excludeLowSecFilter: excludeLowSecFilter.active,
-      excludeHighSecFilter: excludeHighSecFilter.active,
-      excludeStationsFilter: excludeStationsFilter.active,
-      excludeStructuresFilter: excludeStructuresFilter.active,
-      locationFilter: locationFilter,
-      regionFilter: regionFilter,
-      marketHubsFilter: marketHubsFilter.active,
-    };
-  }
-);
