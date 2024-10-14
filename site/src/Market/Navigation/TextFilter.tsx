@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useAppDispatch } from '../../redux/hooks';
-import { setFilter, TextFilterKey } from '../../redux/orders/ordersSlice';
+import { setFilterText, TextFilterKey } from '../../redux/orders/ordersSlice';
 import { Filter } from './Filter';
 
 const Container = styled.div`
@@ -29,7 +29,7 @@ export function TextFilter({ name, type, filterState, exclude }: Props) {
   const { active: state, filter } = filterState;
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
-    dispatch(setFilter({ filter: e.target.value, type }));
+    dispatch(setFilterText({ filter: e.target.value, type }));
   }
 
   return (
