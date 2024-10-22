@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useSearch } from '../../api/market/useSearch';
 import { SearchResult } from '../../api/market/SearchResult';
 import { SearchResults } from './SearchResults';
 import { RxCross1 } from 'react-icons/rx';
 import { SectionTitle } from './SectionTitle';
+import { useClickAway, useKey } from 'react-use';
 
 const Container = styled.div`
   overflow: visible;
@@ -52,6 +53,12 @@ export function Search() {
   const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [filterSkins, setFilterSkins] = useState<boolean>(true);
 
+  const ref = useRef(null);
+  useClickAway(ref, () => {
+    setEnabled(false);
+    setResults([]);
+  });
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchTerm(e.target.value);
     if (timer) {
@@ -90,34 +97,21 @@ export function Search() {
     resetSearch();
   }
 
-  useEffect(() => {
-    function handleTimeoutClear() {
-      if (timer) {
-        clearTimeout(timer);
-      }
-      setTimer(null);
+  function handleTimeoutClear() {
+    if (timer) {
+      clearTimeout(timer);
     }
+    setTimer(null);
+  }
 
-    function handleEnter(event: KeyboardEvent) {
-      if (event.key === 'Enter') {
-        setEnabled(true);
-        handleTimeoutClear();
-      }
+  function handleEscape(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      resetSearch();
+      handleTimeoutClear();
     }
+  }
 
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        resetSearch();
-        handleTimeoutClear();
-      }
-    }
-    document.addEventListener('keydown', handleEnter);
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.removeEventListener('keydown', handleEnter);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [timer]);
+  useKey('Escape', handleEscape);
 
   const { data, isFetched, isError } = useSearch(searchTerm, enabled);
 
@@ -141,7 +135,7 @@ export function Search() {
         <input checked={filterSkins} type="checkbox" onChange={(e) => handleFilterSkinsChange(e)} />
         <Text>Filter SKINs</Text>
       </Wrapper>
-      <Wrapper>
+      <Wrapper ref={ref}>
         <SearchInput
           onChange={(e) => handleChange(e)}
           placeholder="Search item..."
