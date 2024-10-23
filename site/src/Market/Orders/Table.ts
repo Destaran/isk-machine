@@ -28,7 +28,7 @@ export const Row = styled.div<RowProps>`
   }
 `;
 
-export const TableHead = styled(Row)`
+export const Head = styled(Row)`
   position: sticky;
   top: 0;
 `;

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Entries } from './Entries';
-import { Table, TableHead, Cell, MarketTableColumnWidths } from './Table';
+import { Table } from './Table';
 import { Order } from '../../api/market/MarketData';
+import { TableHead } from './TableHead';
 
 const Container = styled.div`
   width: 100%;
@@ -18,22 +19,11 @@ interface Props {
 }
 
 export function OrdersList({ orders, isBuy }: Props) {
-  const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
-    MarketTableColumnWidths;
-
   return (
     <Container>
       <Title>{isBuy ? 'Buy Orders' : 'Sell Orders'}</Title>
       <Table>
-        <TableHead>
-          <Cell width={regionW}>Region</Cell>
-          <Cell width={quantityW}>Quantity</Cell>
-          <Cell width={priceW}>Price</Cell>
-          <Cell width={locationW}>Location</Cell>
-          <Cell width={jumpsW}>Jumps</Cell>
-          <Cell width={expiresW}>Expires In</Cell>
-          <Cell width={lastModifiedW}>Last Modified</Cell>
-        </TableHead>
+        <TableHead isBuy={isBuy} />
         <Entries orders={orders} />
       </Table>
     </Container>
