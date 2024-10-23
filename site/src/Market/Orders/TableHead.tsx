@@ -36,8 +36,9 @@ export function TableHead({ isBuy }: Props) {
 
   return (
     <Head>
-      <HeaderCell $interactive width={regionW}>
-        Region
+      <HeaderCell $interactive onClick={() => handleClick('region')} width={regionW}>
+        <span>Region</span>
+        <span>{key === 'region' && indicator}</span>
       </HeaderCell>
       <HeaderCell $interactive onClick={() => handleClick('volume')} width={quantityW}>
         <span>Quantity</span>
@@ -48,16 +49,20 @@ export function TableHead({ isBuy }: Props) {
         <span>{key === 'price' && indicator}</span>
       </HeaderCell>
       <HeaderCell $interactive width={locationW}>
-        Location
+        <span>Location</span>
+        <span>{key === 'location' && indicator}</span>
       </HeaderCell>
       <HeaderCell $interactive width={jumpsW}>
         Jumps
+        <span>{key === 'range' && indicator}</span>
       </HeaderCell>
       <HeaderCell $interactive width={expiresW}>
         Expires In
+        <span>{key === 'expiresIn' && indicator}</span>
       </HeaderCell>
       <HeaderCell $interactive width={lastModifiedW}>
         Last Modified
+        <span>{key === 'lastModified' && indicator}</span>
       </HeaderCell>
     </Head>
   );
