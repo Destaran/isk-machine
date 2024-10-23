@@ -4,6 +4,7 @@ import { AddSystemTable1727703942743 } from './1727703942743-add-system-table';
 import { ExtendRegionTable1727968614661 } from './1727968614661-extend-region-table';
 import { AddTypesTable1727973757870 } from './1727973757870-add-types-table';
 import { AddMetadataTable1728745761107 } from './1728745761107-add-metadata-table';
+import { AddStationTable1729715298938 } from './1729715298938-add-station-table';
 
 export const migrations = [
   AddRegionTable1727627485156,
@@ -12,4 +13,5 @@ export const migrations = [
   ExtendRegionTable1727968614661,
   AddTypesTable1727973757870,
   AddMetadataTable1728745761107,
+  AddStationTable1729715298938,
 ];
