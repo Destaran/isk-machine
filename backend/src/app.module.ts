@@ -14,6 +14,8 @@ import { TypesModule } from './type/types.module';
 import { OrdersModule } from './orders/orders.module';
 import { ServerStatusModule } from './server-status/server-status.module';
 import { MetadataModule } from './metadata/metadata.module';
+import { StationModule } from './station/station.module';
+import { StructureModule } from './structure/structure.module';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { MetadataModule } from './metadata/metadata.module';
     OrdersModule,
     ServerStatusModule,
     MetadataModule,
+    StationModule,
+    StructureModule,
   ],
   controllers: [AppController],
   providers: [AppService],
