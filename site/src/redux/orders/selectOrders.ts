@@ -107,13 +107,9 @@ export const selectOrders = createSelector(
       moddedOrders = moddedOrders.filter((order) => marketHubs.includes(Number(order.location_id)));
     }
 
-    const buy = moddedOrders
-      .filter((order) => order.is_buy_order)
-      .sort((a, b) => b.price - a.price);
+    const buy = moddedOrders.filter((order) => order.is_buy_order);
 
-    const sell = moddedOrders
-      .filter((order) => !order.is_buy_order)
-      .sort((a, b) => a.price - b.price);
+    const sell = moddedOrders.filter((order) => !order.is_buy_order);
 
     return { buy, sell };
   }
