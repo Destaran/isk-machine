@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { selectOrders } from './selectOrders';
 import { sorting } from './ordersSlice';
+import { selectOrders } from './selectOrders';
 
 export const sortedSellOrders = createSelector([selectOrders, sorting], (selectOrders, sorting) => {
   const { sell } = selectOrders;
