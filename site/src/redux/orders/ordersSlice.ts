@@ -10,6 +10,15 @@ interface TextFilterState extends FilterState {
   filter: string;
 }
 
+export type SortingKey =
+  | 'price'
+  | 'volume'
+  | 'location'
+  | 'region'
+  | 'range'
+  | 'expiresIn'
+  | 'lastModified';
+
 export type FilterKey =
   | 'marketHubsFilter'
   | 'excludeNullSecFilter'
@@ -66,11 +75,11 @@ interface MarketState {
   marketHubsFilter: FilterState;
   sorting: {
     sell: {
-      key: 'price' | 'volume' | 'location' | 'station' | 'region' | 'range';
+      key: SortingKey;
       direction: 'asc' | 'desc';
     };
     buy: {
-      key: 'price' | 'volume' | 'location' | 'station' | 'region' | 'range';
+      key: SortingKey;
       direction: 'asc' | 'desc';
     };
   };
@@ -140,7 +149,7 @@ export const marketSlice = createSlice({
     },
     setSortingKey: (
       { sorting },
-      { payload }: PayloadAction<{ key: 'price' | 'volume'; type: 'buy' | 'sell' }>
+      { payload }: PayloadAction<{ key: SortingKey; type: 'buy' | 'sell' }>
     ) => {
       sorting[payload.type].key = payload.key;
     },

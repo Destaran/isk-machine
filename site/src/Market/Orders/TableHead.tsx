@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../hooks/redux';
 import { useAppDispatch } from '../../redux/hooks';
-import { setSortingKey, sorting, switchSorting } from '../../redux/orders/ordersSlice';
+import { setSortingKey, sorting, SortingKey, switchSorting } from '../../redux/orders/ordersSlice';
 import { Cell, MarketTableColumnWidths, Head } from './Table';
 
 const HeaderCell = styled(Cell)`
@@ -26,7 +26,7 @@ export function TableHead({ isBuy }: Props) {
   const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
     MarketTableColumnWidths;
 
-  function handleClick(clickedKey: 'price' | 'volume') {
+  function handleClick(clickedKey: SortingKey) {
     if (key === clickedKey) {
       dispatch(switchSorting(isBuy ? 'buy' : 'sell'));
     } else {
