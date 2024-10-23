@@ -64,6 +64,16 @@ interface MarketState {
   locationFilter: TextFilterState;
   regionFilter: TextFilterState;
   marketHubsFilter: FilterState;
+  sorting: {
+    sell: {
+      key: 'price' | 'volume' | 'location' | 'station' | 'region' | 'range';
+      direction: 'asc' | 'desc';
+    };
+    buy: {
+      key: 'price' | 'volume' | 'location' | 'station' | 'region' | 'range';
+      direction: 'asc' | 'desc';
+    };
+  };
 }
 
 const initialState: MarketState = {
@@ -81,6 +91,16 @@ const initialState: MarketState = {
   excludeHighSecFilter: { active: false },
   excludeStationsFilter: { active: false },
   excludeStructuresFilter: { active: false },
+  sorting: {
+    sell: {
+      key: 'price',
+      direction: 'asc',
+    },
+    buy: {
+      key: 'price',
+      direction: 'desc',
+    },
+  },
 };
 
 export const marketSlice = createSlice({
@@ -112,16 +132,31 @@ export const marketSlice = createSlice({
       state[action.payload.type].filter = action.payload.filter;
     },
     setFilter: (state, action: PayloadAction<SetFilterPayload>) => {
-      console.log(action.payload);
-
       state[action.payload.type].active = action.payload.active;
       state[action.payload.type].filter = action.payload.filter;
+    },
+    switchSorting: ({ sorting }, { payload }: PayloadAction<'sell' | 'buy'>) => {
+      sorting[payload].direction = sorting[payload].direction === 'asc' ? 'desc' : 'asc';
+    },
+    setSortingKey: (
+      { sorting },
+      { payload }: PayloadAction<{ key: 'price' | 'volume'; type: 'buy' | 'sell' }>
+    ) => {
+      sorting[payload.type].key = payload.key;
     },
   },
 });
 
-export const { setData, resetData, filterMarketHubs, switchFilter, setFilterText, setFilter } =
-  marketSlice.actions;
+export const {
+  setData,
+  resetData,
+  filterMarketHubs,
+  switchFilter,
+  setFilterText,
+  setFilter,
+  switchSorting,
+  setSortingKey,
+} = marketSlice.actions;
 
 export const orders = (state: RootState) => state.market.orders;
 export const scrapeDate = (state: RootState) => state.market.scrapeDate;
@@ -139,5 +174,6 @@ export const excludeStructuresFilter = (state: RootState) => state.market.exclud
 export const locationFilter = (state: RootState) => state.market.locationFilter;
 export const regionFilter = (state: RootState) => state.market.regionFilter;
 export const marketHubsFilter = (state: RootState) => state.market.marketHubsFilter;
+export const sorting = (state: RootState) => state.market.sorting;
 
 export default marketSlice.reducer;
