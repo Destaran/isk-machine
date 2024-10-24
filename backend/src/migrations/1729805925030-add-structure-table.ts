@@ -22,17 +22,17 @@ export class AddStructureTable1729805925030 implements MigrationInterface {
           {
             name: 'owner_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'system_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'type_id',
             type: 'int',
-            isNullable: false,
+            isNullable: true,
           },
         ],
       }),

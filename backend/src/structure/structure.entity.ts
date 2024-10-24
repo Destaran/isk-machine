@@ -8,12 +8,12 @@ export class Structure {
   @Column('varchar', { length: 255, nullable: false })
   name: string;
 
-  @Column('int', { nullable: false })
+  @Column('int')
   owner_id: number;
 
-  @Column('int', { nullable: false })
+  @Column('int')
   system_id: number;
 
-  @Column('int', { nullable: false })
+  @Column('int')
   type_id: number;
 }
