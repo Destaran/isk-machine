@@ -34,7 +34,13 @@ export class StructureService {
     const scrapedStructures: ScrapedStructure[] = Object.values(request.data);
     const structuresToSave = [];
 
+    const batchSize = 100;
+
     for (const scrapedStructure of scrapedStructures) {
+      if (!scrapedStructure.structure_id || !scrapedStructure.name) {
+        continue;
+      }
+
       const structure = new Structure();
       structure.id = scrapedStructure.structure_id;
       structure.name = scrapedStructure.name;
@@ -42,10 +48,15 @@ export class StructureService {
       structure.system_id = scrapedStructure.system_id;
       structure.type_id = scrapedStructure.type_id;
       structuresToSave.push(structure);
-    }
 
-    this.structureRepository.save(structuresToSave);
-    console.log(`Scraped ${structuresToSave.length} structures.`);
+      if (structuresToSave.length >= batchSize) {
+        await this.structureRepository.save(structuresToSave);
+        console.log(`Saved batch of ${structuresToSave.length} structures.`);
+        structuresToSave.length = 0;
+      }
+    }
+    const count = await this.structureRepository.count();
+    console.log(`Scraped ${count} structures.`);
   }
 
   async getByIds(ids: number[]) {
