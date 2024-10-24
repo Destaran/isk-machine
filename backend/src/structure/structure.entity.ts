@@ -1,19 +1,19 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('structure')
-export class System {
+export class Structure {
   @PrimaryColumn('int', { nullable: false })
   id: number;
 
-  @Column('varchar', { length: 255, nullable: false })
+  @Column('varchar', { length: 255 })
   name: string;
 
-  @Column('int', { nullable: false })
+  @Column('int')
   owner_id: number;
 
-  @Column('int', { nullable: false })
+  @Column('int')
   system_id: number;
 
-  @Column('int', { nullable: false })
+  @Column('int')
   type_id: number;
 }
