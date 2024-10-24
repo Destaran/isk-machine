@@ -2,7 +2,7 @@ import { Row, Cell, MarketTableColumnWidths } from './Table';
 import { format } from 'date-fns';
 import styled from 'styled-components';
 import { Order } from '../../api/market/MarketData';
-import { regions, setFilter, stations, systems } from '../../redux/orders/ordersSlice';
+import { regions, setFilter, stations, structures, systems } from '../../redux/orders/ordersSlice';
 import { useAppSelector } from '../../redux/hooks';
 import { useExpiresIn } from '../../hooks/useExpiresIn';
 import { useAppDispatch } from '../../hooks/redux';
@@ -32,17 +32,22 @@ export function Entry({ order }: Props) {
   const dispatch = useAppDispatch();
   const filterStates = useAppSelector(entryFilterStates);
   const systemsData = useAppSelector(systems);
+  const stationData = useAppSelector(stations);
+  const structureData = useAppSelector(structures);
 
   const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
     MarketTableColumnWidths;
 
-  const stationData = useAppSelector(stations);
   let locationName = 'Unknown';
   if (order.location_id.toString().length === 8) {
     locationName = stationData[order.location_id];
   }
   if (order.location_id.toString().length === 13) {
-    locationName = `${systemsData[order.system_id].name} - Unknown Player Structure`;
+    if (structureData[order.location_id]) {
+      locationName = `PLAYERSTRUC ${structureData[order.location_id]}`;
+    } else {
+      locationName = `${systemsData[order.system_id].name} - Unknown Player Structure`;
+    }
   }
   const price = new Intl.NumberFormat('en-US').format(order.price);
   const issued = format(new Date(order.issued), 'yyyy-MM-dd HH:mm:ss');

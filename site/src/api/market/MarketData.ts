@@ -26,6 +26,7 @@ export interface MarketData {
   regions: Record<number, string>;
   systems: Record<number, System>;
   stations: Record<number, string>;
+  structures: Record<number, string>;
   type: GetUniverseTypesTypeIdResponse;
   scrapeDate: number;
 }

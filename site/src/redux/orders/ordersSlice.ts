@@ -65,6 +65,7 @@ interface MarketState {
   regions: Record<number, string>;
   systems: Record<number, System>;
   stations: Record<number, string>;
+  structures: Record<number, string>;
   excludeNullSecFilter: FilterState;
   excludeLowSecFilter: FilterState;
   excludeHighSecFilter: FilterState;
@@ -92,6 +93,7 @@ const initialState: MarketState = {
   regions: {},
   systems: {},
   stations: {},
+  structures: {},
   locationFilter: { active: false, filter: 'Jita IV - Moon 4 - Caldari Navy' },
   regionFilter: { active: false, filter: 'The Forge' },
   marketHubsFilter: { active: false },
@@ -121,6 +123,7 @@ export const marketSlice = createSlice({
       state.scrapeDate = action.payload.scrapeDate;
       state.regions = action.payload.regions;
       state.systems = action.payload.systems;
+      state.structures = action.payload.structures;
       state.stations = action.payload.stations;
       state.type = action.payload.type;
     },
@@ -173,6 +176,7 @@ export const type = (state: RootState) => state.market.type;
 export const regions = (state: RootState) => state.market.regions;
 export const systems = (state: RootState) => state.market.systems;
 export const stations = (state: RootState) => state.market.stations;
+export const structures = (state: RootState) => state.market.structures;
 
 export const excludeNullSecFilter = (state: RootState) => state.market.excludeNullSecFilter;
 export const excludeLowSecFilter = (state: RootState) => state.market.excludeLowSecFilter;
