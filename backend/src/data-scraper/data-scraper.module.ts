@@ -7,6 +7,7 @@ import { SystemModule } from 'src/system/system.module';
 import { OrdersModule } from 'src/orders/orders.module';
 import { TypesModule } from 'src/type/types.module';
 import { MetadataModule } from 'src/metadata/metadata.module';
+import { StationModule } from 'src/station/station.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MetadataModule } from 'src/metadata/metadata.module';
     OrdersModule,
     TypesModule,
     MetadataModule,
+    StationModule,
   ],
   exports: [DataScraperService],
   providers: [DataScraperService],

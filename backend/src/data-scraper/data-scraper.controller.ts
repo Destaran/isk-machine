@@ -54,4 +54,9 @@ export class DataScraperController {
   async scrapeAllTypes() {
     await this.DataScraperService.scrapeAllTypes();
   }
+
+  @Post('stations')
+  async scrapeAllStations() {
+    await this.DataScraperService.scrapeAllStations();
+  }
 }
