@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { System } from 'src/system/system.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity('station')
 export class Station {
@@ -13,6 +14,13 @@ export class Station {
 
   @Column('int', { nullable: false })
   system_id: number;
+
+  @ManyToOne(() => System, (system) => system.stations, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'system_id' })
+  system: System;
 
   @Column('int', { nullable: false })
   type_id: number;

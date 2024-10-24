@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Station } from 'src/station/station.entity';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('system')
 export class System {
@@ -10,4 +11,7 @@ export class System {
 
   @Column('float', { nullable: false })
   security_status: number;
+
+  @OneToMany(() => Station, (station) => station.system)
+  stations: Station[];
 }
