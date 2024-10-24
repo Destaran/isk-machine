@@ -31,6 +31,7 @@ const Text = styled.p`
 export function Entry({ order }: Props) {
   const dispatch = useAppDispatch();
   const filterStates = useAppSelector(entryFilterStates);
+  const systemsData = useAppSelector(systems);
 
   const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
     MarketTableColumnWidths;
@@ -40,11 +41,14 @@ export function Entry({ order }: Props) {
   if (order.location_id.toString().length === 8) {
     locationName = stationData[order.location_id];
   }
+  if (order.location_id.toString().length === 13) {
+    locationName = `${systemsData[order.system_id].name} - Unknown Player Structure`;
+  }
   const price = new Intl.NumberFormat('en-US').format(order.price);
   const issued = format(new Date(order.issued), 'yyyy-MM-dd HH:mm:ss');
   const expiresIn = useExpiresIn(order.issued, order.duration);
   const regionName = useAppSelector(regions)[order.region_id];
-  const secStatus = useAppSelector(systems)[order.system_id].security_status;
+  const secStatus = systemsData[order.system_id].security_status;
 
   function handleRegionClick() {
     dispatch(
