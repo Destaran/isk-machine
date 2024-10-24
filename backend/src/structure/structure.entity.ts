@@ -5,15 +5,15 @@ export class Structure {
   @PrimaryColumn('int', { nullable: false })
   id: number;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: false })
   name: string;
 
-  @Column('int')
+  @Column('int', { nullable: false })
   owner_id: number;
 
-  @Column('int')
+  @Column('int', { nullable: false })
   system_id: number;
 
-  @Column('int')
+  @Column('int', { nullable: false })
   type_id: number;
 }
