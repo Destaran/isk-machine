@@ -3,7 +3,7 @@ import { SystemRepository } from './system.repository';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { System } from './system.entity';
-import { FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { In } from 'typeorm';
 
 @Injectable()
 export class SystemService {
@@ -53,11 +53,12 @@ export class SystemService {
     console.log(`Saved ${systemIds.length} systems.`);
   }
 
-  async getOneBy(options: FindOptionsWhere<System>) {
-    return await this.systemRepository.findOneBy(options);
+  async getByIds(ids: number[]) {
+    return await this.systemRepository.find({ where: { id: In(ids) } });
   }
 
-  async getManyBy(options: FindManyOptions<System>) {
-    return await this.systemRepository.find(options);
+  async getAllSystemIds() {
+    const stations = await this.systemRepository.find({ select: ['id'] });
+    return stations.map((region) => Number(region.id));
   }
 }

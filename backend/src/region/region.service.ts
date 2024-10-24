@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { Region } from 'src/region/region.entity';
 import { RegionRepository } from 'src/region/region.repository';
-import { FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, In } from 'typeorm';
 
 @Injectable()
 export class RegionService {
@@ -62,11 +62,7 @@ export class RegionService {
     return regions.map((region) => Number(region.id));
   }
 
-  async getOneBy(options: FindOptionsWhere<Region>) {
-    return await this.regionRepository.findOneBy(options);
-  }
-
-  async getManyBy(options: FindManyOptions<Region>) {
-    return await this.regionRepository.find(options);
+  async getByIds(ids: number[]) {
+    return await this.regionRepository.find({ where: { id: In(ids) } });
   }
 }

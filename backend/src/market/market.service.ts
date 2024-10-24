@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DataScraperService } from 'src/data-scraper/data-scraper.service';
 import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
 import { OrdersService } from 'src/orders/orders.service';
 import { TypesService } from 'src/type/types.service';
 import { MetadataService } from 'src/metadata/metadata.service';
+import { StationService } from 'src/station/station.service';
 
 @Injectable()
 export class MarketService {
@@ -13,8 +13,8 @@ export class MarketService {
     private readonly regionService: RegionService,
     private readonly systemService: SystemService,
     private readonly typeService: TypesService,
-    private readonly dataScraperService: DataScraperService,
     private readonly metadataService: MetadataService,
+    private readonly stationService: StationService,
   ) {}
 
   async searchTypes(search: string) {
@@ -22,21 +22,15 @@ export class MarketService {
   }
 
   async getOrdersByTypeId(typeId: number) {
-    console.log(`Getting market orders for type ${typeId}`);
-
     const orders = await this.ordersSerivce.getByTypeId(typeId);
 
     const uniquieRegionIds = [
       ...new Set(orders.map((order) => order.region_id)),
     ];
 
-    const uniqueRegions = uniquieRegionIds.map(async (regionId) => {
-      return await this.regionService.getOneBy({ id: regionId });
-    });
+    const uniqueRegions = await this.regionService.getByIds(uniquieRegionIds);
 
-    const resolvedRegions = await Promise.all(uniqueRegions);
-
-    const regions = resolvedRegions.reduce((acc, region) => {
+    const regions = uniqueRegions.reduce((acc, region) => {
       acc[region.id] = region.name;
       return acc;
     }, {});
@@ -45,13 +39,9 @@ export class MarketService {
       ...new Set(orders.map((order) => order.system_id)),
     ];
 
-    const uniqueSystems = uniqueSystemIds.map(async (systemId) => {
-      return await this.systemService.getOneBy({ id: systemId });
-    });
+    const uniqueSystems = await this.systemService.getByIds(uniqueSystemIds);
 
-    const resolvedSystems = await Promise.all(uniqueSystems);
-
-    const systems = resolvedSystems.reduce((acc, system) => {
+    const systems = uniqueSystems.reduce((acc, system) => {
       const secStatus =
         system.security_status <= 0
           ? '0.0'
@@ -65,27 +55,27 @@ export class MarketService {
       return acc;
     }, {});
 
-    const locationIds = [...new Set(orders.map((order) => order.location_id))];
+    const uniquelocationIds = [
+      ...new Set(orders.map((order) => order.location_id)),
+    ];
 
-    const stationIds = locationIds.filter(
+    const uniqueStationIds = uniquelocationIds.filter(
       (locationId) => locationId.toString().length === 8,
     );
 
-    const stationsWithNamesRequest =
-      await this.dataScraperService.postNames(stationIds);
+    const uniqueStations = await this.stationService.getByIds(uniqueStationIds);
 
-    const stations = stationsWithNamesRequest.reduce((acc, station) => {
+    const stations = uniqueStations.reduce((acc, station) => {
       acc[station.id] = station.name;
       return acc;
     }, {});
 
-    const type = await this.typeService.getById(typeId);
-
     // TODO: Implement structure scraping
-    // const structureIds = locationIds.filter(
+    // const uniqueStructureIds = uniquelocationIds.filter(
     //   (locationId) => locationId.toString().length === 13,
     // );
 
+    const type = await this.typeService.getById(typeId);
     const scrapeDate = (await this.metadataService.getScrapeDate()).getTime();
 
     return {
