@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { Region } from 'src/region/region.entity';
 import { RegionRepository } from 'src/region/region.repository';
-import { FindManyOptions, FindOptionsWhere, In } from 'typeorm';
+import { In } from 'typeorm';
 
 @Injectable()
 export class RegionService {
