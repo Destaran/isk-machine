@@ -5,6 +5,7 @@ import { OrdersService } from 'src/orders/orders.service';
 import { TypesService } from 'src/type/types.service';
 import { MetadataService } from 'src/metadata/metadata.service';
 import { StationService } from 'src/station/station.service';
+import { StructureService } from 'src/structure/structure.service';
 
 @Injectable()
 export class MarketService {
@@ -15,6 +16,7 @@ export class MarketService {
     private readonly typeService: TypesService,
     private readonly metadataService: MetadataService,
     private readonly stationService: StationService,
+    private readonly structureService: StructureService,
   ) {}
 
   async searchTypes(search: string) {
@@ -70,10 +72,17 @@ export class MarketService {
       return acc;
     }, {});
 
-    // TODO: Implement structure scraping
-    // const uniqueStructureIds = uniquelocationIds.filter(
-    //   (locationId) => locationId.toString().length === 13,
-    // );
+    const uniqueStructureIds = uniquelocationIds.filter(
+      (locationId) => locationId.toString().length === 13,
+    );
+
+    const uniqueStructures =
+      await this.structureService.getByIds(uniqueStructureIds);
+
+    const structures = uniqueStructures.reduce((acc, structure) => {
+      acc[structure.id] = structure.name;
+      return acc;
+    }, {});
 
     const type = await this.typeService.getById(typeId);
     const scrapeDate = (await this.metadataService.getScrapeDate()).getTime();
@@ -83,6 +92,7 @@ export class MarketService {
       regions,
       systems,
       stations,
+      structures,
       type,
       scrapeDate,
     };

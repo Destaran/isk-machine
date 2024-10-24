@@ -8,6 +8,7 @@ import { OrdersModule } from 'src/orders/orders.module';
 import { TypesModule } from 'src/type/types.module';
 import { MetadataModule } from 'src/metadata/metadata.module';
 import { StationModule } from 'src/station/station.module';
+import { StructureModule } from 'src/structure/structure.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { StationModule } from 'src/station/station.module';
     TypesModule,
     MetadataModule,
     StationModule,
+    StructureModule,
   ],
   providers: [MarketService],
   controllers: [MarketController],
