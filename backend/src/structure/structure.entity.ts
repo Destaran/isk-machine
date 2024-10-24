@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('structure')
 export class Structure {
-  @PrimaryColumn('int', { nullable: false })
+  @PrimaryColumn('bigint', { nullable: false })
   id: number;
 
   @Column('varchar', { length: 255, nullable: false })

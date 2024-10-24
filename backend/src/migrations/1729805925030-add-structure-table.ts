@@ -8,7 +8,7 @@ export class AddStructureTable1729805925030 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'bigint',
             isPrimary: true,
             isUnique: true,
             isNullable: false,
