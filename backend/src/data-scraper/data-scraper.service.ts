@@ -7,6 +7,7 @@ import { OrdersService } from 'src/orders/orders.service';
 import { TypesService } from 'src/type/types.service';
 import { MetadataService } from 'src/metadata/metadata.service';
 import { StationService } from 'src/station/station.service';
+import { StructureService } from 'src/structure/structure.service';
 
 @Injectable()
 export class DataScraperService {
@@ -20,6 +21,7 @@ export class DataScraperService {
     private readonly typeService: TypesService,
     private readonly metadataService: MetadataService,
     private readonly stationService: StationService,
+    private readonly structureService: StructureService,
   ) {}
 
   async postNames(ids: number[]) {
@@ -79,5 +81,13 @@ export class DataScraperService {
 
   async scrapeAllStations() {
     this.stationService.scrape();
+  }
+
+  async wipeAllStructures() {
+    this.structureService.wipe();
+  }
+
+  async scrapeAllStructures() {
+    this.structureService.scrape();
   }
 }
