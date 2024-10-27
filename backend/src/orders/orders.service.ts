@@ -36,34 +36,39 @@ export class OrdersService {
     console.log(`Scraping orders for region ${regionId}...`);
     await this.wipeRegion(regionId);
 
-    let reachedMaxPages = false;
     let pageNum = 1;
+    let maxPageNum = Infinity;
 
-    while (!reachedMaxPages) {
-      const regionOrdersRequest = await this.scrapeRegionByPage(
+    while (pageNum <= maxPageNum) {
+      const regionOrdersResponse = await this.scrapeRegionByPage(
         regionId,
         pageNum,
       );
 
-      if (regionOrdersRequest.status === 404) {
-        reachedMaxPages = true;
+      console.log(
+        `remaining errors: ${regionOrdersResponse.headers['x-esi-error-limit-remain']}`,
+      );
+
+      maxPageNum = regionOrdersResponse.headers['x-pages'];
+
+      if (regionOrdersResponse.status === 404) {
         console.log(`Saved all pages for region ${regionId}.`);
       }
 
       if (
-        regionOrdersRequest.status === 504 ||
-        regionOrdersRequest.status === 500
+        regionOrdersResponse.status === 504 ||
+        regionOrdersResponse.status === 500
       ) {
         console.log(
-          `Server error ${regionOrdersRequest.status}. Retrying in 2 seconds...`,
+          `Server error ${regionOrdersResponse.status}. Retrying in 2 seconds...`,
         );
         await new Promise((resolve) => setTimeout(resolve, 2000));
         continue;
       }
 
-      if (regionOrdersRequest.status === 200) {
+      if (regionOrdersResponse.status === 200) {
         const orders = await Promise.all(
-          regionOrdersRequest.data.map(async (scrapedOrder) => {
+          regionOrdersResponse.data.map(async (scrapedOrder) => {
             const order = new Order();
             order.order_id = scrapedOrder.order_id;
             order.duration = scrapedOrder.duration;
