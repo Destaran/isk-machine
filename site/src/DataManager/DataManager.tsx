@@ -2,7 +2,7 @@ import { PageBase } from '../components/PageBase';
 import { ControlPanel } from './ControlPanel';
 import { InfoPanel } from './InfoPanel';
 
-export function Admin() {
+export function DataManager() {
   return (
     <PageBase>
       <ControlPanel />

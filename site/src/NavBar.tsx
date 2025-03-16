@@ -15,7 +15,7 @@ export function NavBar() {
     <Container>
       <Button destination="/market" title="Market" />
       <Button destination="/jita-flipper" title="Jita Flipper" />
-      <Button destination="/admin" title="Admin" />
+      <Button destination="/data-manager" title="Data Manager" />
     </Container>
   );
 }
