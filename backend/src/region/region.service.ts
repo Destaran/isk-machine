@@ -51,18 +51,22 @@ export class RegionService {
   }
 
   async saveRegions(regions: any[]) {
+    const regionsEntities = [];
+
     for (const region of regions) {
       const regionEntity = new Region();
       regionEntity.id = region.region_id;
       regionEntity.name = region.name;
       regionEntity.description = region.description;
 
-      await this.regionRepository.save(regionEntity);
+      regionsEntities.push(regionEntity);
 
       if (this.failedRegionIds[region.region_id]) {
         delete this.failedRegionIds[region.region_id];
       }
     }
+
+    await this.regionRepository.save(regionsEntities);
   }
 
   async scrape() {
