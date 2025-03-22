@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { DataScraperService } from './data-scraper.service';
 
 @Controller('data-scraper')
@@ -10,19 +10,9 @@ export class DataScraperController {
     await this.DataScraperService.scrapeRegions();
   }
 
-  @Delete('regions')
-  async wipeRegions() {
-    await this.DataScraperService.wipeRegions();
-  }
-
   @Post('systems')
   async scrapeSystems() {
     await this.DataScraperService.scrapeSystems();
-  }
-
-  @Delete('systems')
-  async wipeSystems() {
-    await this.DataScraperService.wipeSystems();
   }
 
   @Post('orders')
@@ -38,16 +28,6 @@ export class DataScraperController {
   @Get('orders/total')
   async getOrdersTotal() {
     return this.DataScraperService.getOrdersTotal();
-  }
-
-  @Delete('orders')
-  async wipeAllOrders() {
-    await this.DataScraperService.wipeAllOrders();
-  }
-
-  @Delete('orders/:regionId')
-  async wipeRegionOrders(@Param('regionId') regionId: number) {
-    await this.DataScraperService.wipeRegionOrders(regionId);
   }
 
   @Post('types')

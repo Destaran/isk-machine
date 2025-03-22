@@ -38,16 +38,8 @@ export class DataScraperService {
     this.regionService.scrape();
   }
 
-  async wipeRegions() {
-    this.regionService.wipe();
-  }
-
   async scrapeSystems() {
     this.systemService.scrape();
-  }
-
-  async wipeSystems() {
-    this.systemService.wipe();
   }
 
   async scrapeAllRegionOrders(regionId: number) {
@@ -63,28 +55,12 @@ export class DataScraperService {
     return this.ordersService.getTotal();
   }
 
-  async wipeAllOrders() {
-    this.ordersService.wipeAll();
-  }
-
-  async wipeRegionOrders(regionId: number) {
-    this.ordersService.wipeRegion(regionId);
-  }
-
   async scrapeAllTypes() {
     this.typeService.scrapeAll();
   }
 
-  async wipeAllStations() {
-    this.stationService.wipe();
-  }
-
   async scrapeAllStations() {
     this.stationService.scrape();
-  }
-
-  async wipeAllStructures() {
-    this.structureService.wipe();
   }
 
   async scrapeAllStructures() {
