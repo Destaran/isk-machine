@@ -16,9 +16,17 @@ import { ServerStatusModule } from './server-status/server-status.module';
 import { MetadataModule } from './metadata/metadata.module';
 import { StationModule } from './station/station.module';
 import { StructureModule } from './structure/structure.module';
+import { AxiosRetryModule } from 'nestjs-axios-retry';
+import axiosRetry from 'axios-retry';
 
 @Module({
   imports: [
+    AxiosRetryModule.forRoot({
+      axiosRetryConfig: {
+        retries: 3,
+        retryDelay: axiosRetry.exponentialDelay,
+      },
+    }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       useFactory: (config: ConfigService) => {
