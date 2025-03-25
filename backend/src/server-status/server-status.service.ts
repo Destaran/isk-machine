@@ -11,11 +11,11 @@ export class ServerStatusService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  onModuleInit() {
-    this.fetchStatus();
+  async onModuleInit() {
+    await this.fetchStatus();
     this.fetchInterval = setInterval(
-      () => {
-        this.fetchStatus();
+      async () => {
+        await this.fetchStatus();
       },
       5 * 60 * 5000,
     );
@@ -27,11 +27,34 @@ export class ServerStatusService {
     }
   }
 
+  private sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   async fetchStatus() {
     const url = 'https://esi.evetech.net/latest/status/?datasource=tranquility';
-    const response = await firstValueFrom(this.httpService.get(url));
+    let retryCount = 0;
+    let request = await firstValueFrom(this.httpService.get(url));
 
-    const status = response.data;
+    while (request.status !== 200 && request.status !== 304 && retryCount < 5) {
+      if (request.headers['x-esi-error-limit-remain'] > 1) {
+        retryCount++;
+        request = await firstValueFrom(this.httpService.get(url));
+      } else {
+        const retryMs =
+          Number(request.headers['x-esi-error-limit-reset']) * 1000;
+        await this.sleep(retryMs);
+        retryCount++;
+        request = await firstValueFrom(this.httpService.get(url));
+      }
+    }
+
+    if (retryCount >= 5) {
+      console.log(`Failed to fetch server status after ${retryCount} retries.`);
+      return;
+    }
+
+    const status = request.data;
     this.players = status.players;
     this.serverVersion = status.server_version;
     this.startTime = status.start_time;
