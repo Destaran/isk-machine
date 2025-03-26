@@ -1,128 +1,70 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { OrdersRepository } from './orders.repository';
 import { RegionService } from 'src/region/region.service';
-import { firstValueFrom } from 'rxjs';
+import { SmartUrl } from 'src/data-scraper/smart-url';
+import { DataScraper } from 'src/data-scraper/data-scraper';
 import { Order } from './order.entity';
 
 @Injectable()
 export class OrdersService {
   constructor(
-    private httpService: HttpService,
-    private orderRepository: OrdersRepository,
-    private regionService: RegionService,
+    private readonly orderRepository: OrdersRepository,
+    private readonly regionService: RegionService,
+    private readonly dataScraper: DataScraper,
   ) {}
 
-  async scrapeRegionByPage(regionId: number, pageNum: number) {
-    let regionOrdersUrl = `https://esi.evetech.net/latest/markets/${regionId}/orders/?datasource=tranquility&order_type=all&page=${pageNum}`;
-
-    const regionOrdersRequest = await firstValueFrom(
-      this.httpService.get(regionOrdersUrl, {
-        validateStatus: (status) => {
-          return (
-            status === 200 || status === 404 || status === 504 || status === 500
-          );
-        },
-        timeout: 15000,
-      }),
-    );
-
-    regionOrdersUrl = null;
-
-    return regionOrdersRequest;
-  }
-
-  async scrapeRegion(regionId: number) {
-    console.log(`Scraping orders for region ${regionId}...`);
-    await this.wipeRegion(regionId);
-
-    let pageNum = 1;
-    let maxPageNum = Infinity;
-
-    while (pageNum <= maxPageNum) {
-      const regionOrdersResponse = await this.scrapeRegionByPage(
-        regionId,
-        pageNum,
+  async scrape() {
+    const regionIds = await this.regionService.getRegionIds();
+    const all = [];
+    for (const regionId of regionIds) {
+      await this.orderRepository.delete({ region_id: regionId });
+      const regionAll = [];
+      const smarUrlForRegion = new SmartUrl(
+        'markets',
+        `${regionId}/orders`,
+        '?datasource=tranquility&order_type=all',
       );
-
+      const firstRequest = await this.dataScraper.fetchFromPage(
+        smarUrlForRegion,
+        1,
+      );
+      const firstOrders = firstRequest.data.map((entity) =>
+        Order.fromEntity(entity, regionId),
+      );
+      const firstSaved = await this.orderRepository.upsert(firstOrders, [
+        'order_id',
+      ]);
+      regionAll.push(...firstSaved.identifiers);
+      all.push(...firstSaved.identifiers);
       console.log(
-        `remaining errors: ${regionOrdersResponse.headers['x-esi-error-limit-remain']}`,
+        `Scraped ${firstSaved.identifiers.length} orders for region ${regionId}`,
       );
 
-      maxPageNum = regionOrdersResponse.headers['x-pages'];
+      const pageCount = parseInt(firstRequest.headers['x-pages']);
+      const pageNums = Array.from({ length: pageCount - 1 }, (_, i) => i + 2);
 
-      if (regionOrdersResponse.status === 404) {
-        console.log(`Saved all pages for region ${regionId}.`);
-      }
+      for (const pageNum of pageNums) {
+        const request = await this.dataScraper.fetchFromPage(
+          smarUrlForRegion,
+          pageNum,
+        );
 
-      if (
-        regionOrdersResponse.status === 504 ||
-        regionOrdersResponse.status === 500
-      ) {
+        const orders = request.data.map((entity) =>
+          Order.fromEntity(entity, regionId),
+        );
+
+        const saved = await this.orderRepository.upsert(orders, ['order_id']);
+        all.push(...saved.identifiers);
+        regionAll.push(...saved.identifiers);
         console.log(
-          `Server error ${regionOrdersResponse.status}. Retrying in 2 seconds...`,
+          `Scraped ${saved.identifiers.length} orders for region ${regionId}`,
         );
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        continue;
       }
-
-      if (regionOrdersResponse.status === 200) {
-        const orders = await Promise.all(
-          regionOrdersResponse.data.map(async (scrapedOrder) => {
-            const order = new Order();
-            order.order_id = scrapedOrder.order_id;
-            order.duration = scrapedOrder.duration;
-            order.is_buy_order = scrapedOrder.is_buy_order;
-            order.issued = new Date(scrapedOrder.issued);
-            order.min_volume = scrapedOrder.min_volume;
-            order.volume_remain = scrapedOrder.volume_remain;
-            order.volume_total = scrapedOrder.volume_total;
-            order.region_id = regionId;
-            order.location_id = scrapedOrder.location_id;
-            order.system_id = scrapedOrder.system_id;
-            order.type_id = scrapedOrder.type_id;
-            order.price = scrapedOrder.price;
-            order.range = scrapedOrder.range;
-
-            return order;
-          }),
-        );
-
-        try {
-          await this.orderRepository.upsert(orders, ['order_id']);
-        } catch (error) {
-          throw new Error(error);
-        }
-
-        pageNum++;
-      }
+      console.log(
+        `Scraped ${regionAll.length} orders in total for region ${regionId}`,
+      );
     }
-    return;
-  }
-
-  async scrapeAll() {
-    console.log('Scraping all regions orders...');
-    const startTime = new Date();
-
-    const regionsIds = await this.regionService.getRegionIds();
-    const sortedRegionsIds = regionsIds.sort();
-
-    for (const regionId of sortedRegionsIds) {
-      await this.scrapeRegion(regionId);
-    }
-
-    const count = await this.orderRepository.count();
-
-    const endTime = new Date();
-    const elapsedTime = endTime.getTime() - startTime.getTime();
-    const durationMin = Math.floor(elapsedTime / 60000);
-    const durationSec = Math.floor((elapsedTime % 60000) / 1000);
-
-    console.log(
-      `Saved ${count} orders for all regions in ${durationMin} minutes ${durationSec} seconds.`,
-    );
-
-    return endTime;
+    console.log(`Scraped ${all.length} orders in total`);
   }
 
   async getTotal() {

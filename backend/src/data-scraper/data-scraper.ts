@@ -16,7 +16,7 @@ export class DataScraper {
     );
   }
 
-  async fetchIdsFromPage(
+  async fetchFromPage(
     smartUrl: SmartUrl,
     pageNum: number,
   ): Promise<AxiosResponse<any, any>> {
@@ -28,14 +28,14 @@ export class DataScraper {
   }
 
   async fetchIdsFromAllPages(smartUrl: SmartUrl): Promise<number[]> {
-    const firstPageRequest = await this.fetchIdsFromPage(smartUrl, 1);
+    const firstPageRequest = await this.fetchFromPage(smartUrl, 1);
     const pageCount = parseInt(firstPageRequest.headers['x-pages']);
 
     const requests = Array.from({ length: pageCount - 1 }, (_, i) => i + 2).map(
       (pageNum: number) => {
         console.log(`Fetching IDs on page ${pageNum}/${pageCount}`);
 
-        return this.fetchIdsFromPage(smartUrl, pageNum);
+        return this.fetchFromPage(smartUrl, pageNum);
       },
     );
     const fetchedIds = await Promise.all(requests);

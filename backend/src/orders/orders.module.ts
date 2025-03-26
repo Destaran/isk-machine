@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './order.entity';
 import { OrdersRepository } from './orders.repository';
 import { RegionModule } from 'src/region/region.module';
+import { DataScraper } from 'src/data-scraper/data-scraper';
 
 @Module({
   imports: [HttpModule, RegionModule, TypeOrmModule.forFeature([Order])],
   exports: [OrdersService],
-  providers: [OrdersService, OrdersRepository],
+  providers: [OrdersService, OrdersRepository, DataScraper],
 })
 export class OrdersModule {}

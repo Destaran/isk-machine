@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { DataScraperService } from './data-scraper.service';
 
 @Controller('data-scraper')
@@ -17,12 +17,7 @@ export class DataScraperController {
 
   @Post('orders')
   async scrapeAllRegionsAllOrders() {
-    await this.DataScraperService.scrapeAllRegionsAllOrders();
-  }
-
-  @Post('orders/:regionId')
-  async scrapeAllRegionOrders(@Param('regionId') regionId: number) {
-    await this.DataScraperService.scrapeAllRegionOrders(regionId);
+    await this.DataScraperService.scrapeAllOrders();
   }
 
   @Get('orders/total')

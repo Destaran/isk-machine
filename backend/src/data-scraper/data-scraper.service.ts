@@ -42,13 +42,8 @@ export class DataScraperService {
     this.systemService.scrape();
   }
 
-  async scrapeAllRegionOrders(regionId: number) {
-    this.ordersService.scrapeRegion(regionId);
-  }
-
-  async scrapeAllRegionsAllOrders() {
-    const endDate = await this.ordersService.scrapeAll();
-    this.metadataService.updateScrapeDate(endDate);
+  async scrapeAllOrders() {
+    this.ordersService.scrape();
   }
 
   async getOrdersTotal() {
