@@ -3,12 +3,15 @@ import { TypesRepository } from './types.repository';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { Type } from './type.entity';
+import { DataScraper } from 'src/data-scraper/data-scraper';
+import { SmartUrl } from 'src/data-scraper/smart-url';
 
 @Injectable()
 export class TypesService {
   constructor(
     private readonly typeRepository: TypesRepository,
     private readonly httpService: HttpService,
+    private readonly dataScraper: DataScraper,
   ) {}
 
   async wipe() {
@@ -42,59 +45,23 @@ export class TypesService {
     return typeRequest;
   }
 
-  async scrapeAll() {
-    let reachedMaxPages = false;
-    let pageNum = 1;
-
-    while (!reachedMaxPages) {
-      console.log(`Scraping type ids from page ${pageNum}...`);
-
-      const typeIdsRequest = await this.scrapeTypeIdsByPage(pageNum);
-
-      if (typeIdsRequest.status === 404) {
-        reachedMaxPages = true;
-        console.log('Saved all type ids.');
-      }
-
-      if (typeIdsRequest.status === 504 || typeIdsRequest.status === 500) {
-        console.log(
-          `Server error ${typeIdsRequest.status}. Retrying in 2 seconds...`,
-        );
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        continue;
-      }
-
-      const typeIds = typeIdsRequest.data;
-
-      for (const typeId of typeIds) {
-        const typeRequest = await this.scrapeType(typeId);
-
-        if (typeRequest.status === 200 && typeRequest.data.published) {
-          const scrapedType = typeRequest.data;
-          const type = new Type();
-          type.id = scrapedType.type_id;
-          type.name = scrapedType.name;
-          type.capacity = scrapedType.capacity;
-          type.description = scrapedType.description;
-          type.group_id = scrapedType.group_id;
-          type.market_group_id = scrapedType.market_group_id;
-          type.mass = scrapedType.mass;
-          type.packaged_volume = scrapedType.packaged_volume;
-          type.portion_size = scrapedType.portion_size;
-          type.published = scrapedType.published;
-          type.volume = scrapedType.volume;
-
-          try {
-            await this.typeRepository.save(type);
-          } catch (error) {
-            throw new Error(error);
-          }
-        }
-      }
-
-      pageNum++;
+  async scrape() {
+    const smartUrl = new SmartUrl(
+      'universe',
+      'types',
+      '?datasource=tranquility',
+    );
+    const ids = await this.dataScraper.fetchIdsFromAllPages(smartUrl);
+    const idChunks = this.dataScraper.chunk(ids, 500);
+    const all = [];
+    for (const chunk of idChunks) {
+      const types = await this.dataScraper.fetchEntities(smartUrl, chunk);
+      const typeEntities = types.map((type) => Type.fromEntity(type));
+      const saved = await this.typeRepository.upsert(typeEntities, ['id']);
+      all.push(...saved.identifiers);
+      console.log(`Scraped ${saved.identifiers.length} types`);
     }
-    console.log('Saved all types.');
+    console.log(`Scraped ${all.length} types`);
   }
 
   async searchByName(name: string) {

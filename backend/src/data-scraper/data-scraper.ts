@@ -10,11 +10,7 @@ export class DataScraper {
 
   constructor(private httpService: HttpService) {}
 
-  async sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  async chunk(array: any[], size: number): Promise<any[]> {
+  chunk<T>(array: T[], size: number): T[][] {
     return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
       array.slice(i * size, i * size + size),
     );
@@ -68,7 +64,6 @@ export class DataScraper {
 
   async fetchEntity(smartUrl: SmartUrl, id: number): Promise<any> | null {
     const url = smartUrl.getUrlForId(id);
-    console.log(`Fetch ${smartUrl.urlEntity} ${id}`);
     return (await firstValueFrom(this.httpService.get(url))).data;
   }
 

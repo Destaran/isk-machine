@@ -56,7 +56,7 @@ export class DataScraperService {
   }
 
   async scrapeAllTypes() {
-    this.typeService.scrapeAll();
+    this.typeService.scrape();
   }
 
   async scrapeAllStations() {
