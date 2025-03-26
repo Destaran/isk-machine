@@ -10,6 +10,16 @@ export class DataScraper {
 
   constructor(private httpService: HttpService) {}
 
+  async sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async chunk(array: any[], size: number): Promise<any[]> {
+    return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
+      array.slice(i * size, i * size + size),
+    );
+  }
+
   async fetchIdsFromPage(
     smartUrl: SmartUrl,
     pageNum: number,
@@ -46,6 +56,9 @@ export class DataScraper {
     try {
       const url = smartUrl.getUrlForAll();
       const request = await firstValueFrom(this.httpService.get(url));
+      console.log(
+        `Fetched ${request.data.length} IDs for ${smartUrl.urlEntity}`,
+      );
       return request.data;
     } catch (error) {
       console.error(`Failed to fetch IDs:`, error.message);
@@ -55,9 +68,44 @@ export class DataScraper {
 
   async fetchEntity(smartUrl: SmartUrl, id: number): Promise<any> | null {
     const url = smartUrl.getUrlForId(id);
-    console.log(`Fetching entity ${id}`);
-    const request = await firstValueFrom(this.httpService.get(url));
-    return request.data;
+    console.log(`Fetch ${smartUrl.urlEntity} ${id}`);
+    const delay = 5000;
+
+    while (true) {
+      try {
+        const request = await firstValueFrom(this.httpService.get(url));
+        return request.data;
+      } catch (error) {
+        console.log(`Failed to fetch ${id}:`, error.message);
+
+        if (
+          error.response &&
+          Number(error.response.headers['x-esi-error-limit-remain']) > 0
+        ) {
+          console.log(`Retrying after ${delay / 1000} seconds...`);
+          await this.sleep(delay);
+          return await this.fetchEntity(smartUrl, id);
+        } else if (
+          error.response &&
+          Number(error.response.headers['x-esi-error-limit-remain']) <= 0
+        ) {
+          console.error(`Rate limit exceeded for entity ${id}.`);
+          const apiDelay =
+            Number(error.response.headers['x-esi-error-limit-reset']) * 1000;
+          await this.sleep(apiDelay);
+          return await this.fetchEntity(smartUrl, id);
+        } else {
+          console.error(
+            `Non-retryable error for entity ${id}:`,
+            error.response?.status,
+          );
+          break;
+        }
+      }
+    }
+
+    console.error(`Failed to fetch entity ${id}.`);
+    return null; // Return null if all retries fail
   }
 
   async fetchEntities(smartUrl: SmartUrl, ids: number[]): Promise<any[]> {
