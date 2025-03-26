@@ -71,4 +71,8 @@ export class StationService {
   async getByIds(ids: number[]) {
     return await this.stationRepository.find({ where: { id: In(ids) } });
   }
+
+  async getById(id: number) {
+    return await this.stationRepository.findOne({ where: { id } });
+  }
 }

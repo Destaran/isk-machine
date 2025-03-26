@@ -41,6 +41,10 @@ export class SystemService {
     return await this.systemRepository.find({ where: { id: In(ids) } });
   }
 
+  async getById(id: number) {
+    return await this.systemRepository.findOne({ where: { id } });
+  }
+
   async getAllSystemIds() {
     const stations = await this.systemRepository.find({ select: ['id'] });
     return stations.map((region) => Number(region.id));
