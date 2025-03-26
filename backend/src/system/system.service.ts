@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { SystemRepository } from './system.repository';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import { System } from './system.entity';
 import { In } from 'typeorm';
+import { DataScraper } from 'src/data-scraper/data-scraper';
+import { SmartUrl } from 'src/data-scraper/smart-url';
 
 @Injectable()
 export class SystemService {
   constructor(
-    private readonly httpService: HttpService,
     private readonly systemRepository: SystemRepository,
+    private readonly dataScraper: DataScraper,
   ) {}
 
   async wipe() {
@@ -17,40 +17,16 @@ export class SystemService {
   }
 
   async scrape() {
-    this.wipe();
-    const systemIdsUrl =
-      'https://esi.evetech.net/latest/universe/systems/?datasource=tranquility';
-
-    const systemIdsRequest = await firstValueFrom(
-      this.httpService.get(systemIdsUrl),
+    const smartUrl = new SmartUrl(
+      'universe',
+      'systems',
+      '?datasource=tranquility',
     );
-
-    const systemIds = systemIdsRequest.data;
-
-    if (systemIdsRequest.status === 200) {
-      console.log(`Scraped ${systemIds.length} system IDs.`);
-    }
-
-    for (const systemId of systemIds) {
-      const systemUrl = `https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility`;
-
-      const systemRequest = await firstValueFrom(
-        this.httpService.get(systemUrl),
-      );
-
-      if (systemRequest.status === 200) {
-        console.log(`Scraped system ${systemId}.`);
-      }
-
-      const scrapedSystem = systemRequest.data;
-
-      const system = new System();
-      system.id = scrapedSystem.system_id;
-      system.name = scrapedSystem.name;
-      system.security_status = Number(scrapedSystem.security_status);
-      await this.systemRepository.save(system);
-    }
-    console.log(`Saved ${systemIds.length} systems.`);
+    const ids = await this.dataScraper.fetchIds(smartUrl);
+    const systems = await this.dataScraper.fetchEntities(smartUrl, ids);
+    const systemEntities = systems.map((system) => System.fromEntity(system));
+    const saved = await this.systemRepository.upsert(systemEntities, ['id']);
+    console.log(`Scraped ${saved.identifiers.length} systems`);
   }
 
   async getByIds(ids: number[]) {
