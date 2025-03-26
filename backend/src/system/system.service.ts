@@ -23,10 +23,18 @@ export class SystemService {
       '?datasource=tranquility',
     );
     const ids = await this.dataScraper.fetchIds(smartUrl);
-    const systems = await this.dataScraper.fetchEntities(smartUrl, ids);
-    const systemEntities = systems.map((system) => System.fromEntity(system));
-    const saved = await this.systemRepository.upsert(systemEntities, ['id']);
-    console.log(`Scraped ${saved.identifiers.length} systems`);
+    const chunkedIds = this.dataScraper.chunk(ids, 1000);
+    const all = [];
+    for (const ids of chunkedIds) {
+      const entities = await this.dataScraper.fetchEntities(smartUrl, ids);
+      const systemEntities = entities.map((entity) =>
+        System.fromEntity(entity),
+      );
+      const saved = await this.systemRepository.upsert(systemEntities, ['id']);
+      all.push(...saved.identifiers);
+      console.log(`Scraped ${saved.identifiers.length} systems`);
+    }
+    console.log(`Scraped ${all.length} systems in total`);
   }
 
   async getByIds(ids: number[]) {
