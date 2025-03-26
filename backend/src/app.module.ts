@@ -23,8 +23,15 @@ import axiosRetry from 'axios-retry';
   imports: [
     AxiosRetryModule.forRoot({
       axiosRetryConfig: {
-        retries: 3,
+        retries: 5,
         retryDelay: axiosRetry.exponentialDelay,
+        shouldResetTimeout: true,
+        retryCondition: (error) =>
+          error.response.status !== 200 && error.response.status !== 304,
+        onRetry: (retryCount, error) => {
+          console.log(error.message);
+          console.log(`Retrying request attempt ${retryCount}`);
+        },
       },
     }),
     ConfigModule.forRoot(),

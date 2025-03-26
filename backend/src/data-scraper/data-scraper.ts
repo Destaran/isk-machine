@@ -69,43 +69,7 @@ export class DataScraper {
   async fetchEntity(smartUrl: SmartUrl, id: number): Promise<any> | null {
     const url = smartUrl.getUrlForId(id);
     console.log(`Fetch ${smartUrl.urlEntity} ${id}`);
-    const delay = 5000;
-
-    while (true) {
-      try {
-        const request = await firstValueFrom(this.httpService.get(url));
-        return request.data;
-      } catch (error) {
-        console.log(`Failed to fetch ${id}:`, error.message);
-
-        if (
-          error.response &&
-          Number(error.response.headers['x-esi-error-limit-remain']) > 0
-        ) {
-          console.log(`Retrying after ${delay / 1000} seconds...`);
-          await this.sleep(delay);
-          return await this.fetchEntity(smartUrl, id);
-        } else if (
-          error.response &&
-          Number(error.response.headers['x-esi-error-limit-remain']) <= 0
-        ) {
-          console.error(`Rate limit exceeded for entity ${id}.`);
-          const apiDelay =
-            Number(error.response.headers['x-esi-error-limit-reset']) * 1000;
-          await this.sleep(apiDelay);
-          return await this.fetchEntity(smartUrl, id);
-        } else {
-          console.error(
-            `Non-retryable error for entity ${id}:`,
-            error.response?.status,
-          );
-          break;
-        }
-      }
-    }
-
-    console.error(`Failed to fetch entity ${id}.`);
-    return null; // Return null if all retries fail
+    return (await firstValueFrom(this.httpService.get(url))).data;
   }
 
   async fetchEntities(smartUrl: SmartUrl, ids: number[]): Promise<any[]> {
