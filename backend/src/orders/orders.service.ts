@@ -87,4 +87,19 @@ export class OrdersService {
       where: { type_id: typeId },
     });
   }
+
+  async getByTypeAndLocation(typeId: number, locationId: number) {
+    return await this.orderRepository.find({
+      where: { type_id: typeId, location_id: locationId },
+    });
+  }
+
+  async getTypesByLocationId(locationId: number) {
+    const allTypes = await this.orderRepository.find({
+      where: { location_id: locationId },
+      select: ['type_id'],
+    });
+    const uniqueTypeIds = [...new Set(allTypes.map((order) => order.type_id))];
+    return uniqueTypeIds;
+  }
 }

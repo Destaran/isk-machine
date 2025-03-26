@@ -19,6 +19,53 @@ export class MarketService {
     private readonly structureService: StructureService,
   ) {}
 
+  async getOpportunities(
+    from: number,
+    to: number,
+    margin: number,
+    volume: number,
+  ) {
+    const fromTypes = await this.ordersSerivce.getTypesByLocationId(from);
+    const toTypes = await this.ordersSerivce.getTypesByLocationId(to);
+    const types = fromTypes.filter((type) =>
+      toTypes.some((toType) => toType === type),
+    );
+
+    const opportunities = [];
+
+    for (const type of types) {
+      const orders = await this.ordersSerivce.getByTypeAndLocation(type, from);
+
+      const sellOrders =
+        orders
+          .filter((order) => order.is_buy_order === false)
+          .sort((a, b) => a.price - b.price) ?? [];
+      const buyOrders =
+        orders
+          .filter((order) => order.is_buy_order === true)
+          .sort((a, b) => b.price - a.price) ?? [];
+
+      if (buyOrders[0] === undefined || sellOrders[0] === undefined) {
+        continue;
+      }
+
+      if (sellOrders[0].price >= buyOrders[0].price * (1 + margin / 100)) {
+        const profit = sellOrders[0].price - buyOrders[0].price;
+        const profitPercent = ((profit / buyOrders[0].price) * 100).toFixed(2);
+        const obj = {
+          type,
+          profit,
+          profitPercent,
+          sellPrice: sellOrders[0].price,
+          buyPrice: buyOrders[0].price,
+        };
+        opportunities.push(obj);
+      }
+    }
+
+    return opportunities;
+  }
+
   async searchTypes(search: string) {
     return await this.typeService.searchByName(search);
   }

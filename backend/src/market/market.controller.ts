@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import { MarketService } from './market.service';
 
 @Controller('market')
@@ -13,5 +13,15 @@ export class MarketController {
   @Get('search')
   async searchTypes(@Query('s') search: string) {
     return await this.marketService.searchTypes(search);
+  }
+
+  @Get('opportunities')
+  async getOpportunities(
+    @Body('from') from: number,
+    @Body('to') to: number,
+    @Body('margin') margin: number,
+    @Body('volume') volume: number,
+  ) {
+    return await this.marketService.getOpportunities(from, to, margin, volume);
   }
 }
