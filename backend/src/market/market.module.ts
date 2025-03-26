@@ -9,6 +9,7 @@ import { TypesModule } from 'src/type/types.module';
 import { MetadataModule } from 'src/metadata/metadata.module';
 import { StationModule } from 'src/station/station.module';
 import { StructureModule } from 'src/structure/structure.module';
+import { DataScraper } from 'src/data-scraper/data-scraper';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { StructureModule } from 'src/structure/structure.module';
     StationModule,
     StructureModule,
   ],
-  providers: [MarketService],
+  providers: [MarketService, DataScraper],
   controllers: [MarketController],
 })
 export class MarketModule {}

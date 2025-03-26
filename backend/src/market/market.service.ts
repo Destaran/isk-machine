@@ -6,6 +6,7 @@ import { TypesService } from 'src/type/types.service';
 import { MetadataService } from 'src/metadata/metadata.service';
 import { StationService } from 'src/station/station.service';
 import { StructureService } from 'src/structure/structure.service';
+import { DataScraper } from 'src/data-scraper/data-scraper';
 
 @Injectable()
 export class MarketService {
@@ -17,6 +18,7 @@ export class MarketService {
     private readonly metadataService: MetadataService,
     private readonly stationService: StationService,
     private readonly structureService: StructureService,
+    private readonly dataScraper: DataScraper,
   ) {}
 
   async getOpportunities(
@@ -27,19 +29,23 @@ export class MarketService {
   ) {
     const fromTypes = await this.ordersSerivce.getTypesByLocationId(from);
     const toTypes = await this.ordersSerivce.getTypesByLocationId(to);
-    const types = fromTypes.filter((type) =>
+    const typeIds = fromTypes.filter((type) =>
       toTypes.some((toType) => toType === type),
     );
 
     const opportunities = [];
 
-    for (const type of types) {
-      const orders = await this.ordersSerivce.getByTypeAndLocation(type, from);
+    for (const typeId of typeIds) {
+      const orders = await this.ordersSerivce.getByTypeAndLocation(
+        typeId,
+        from,
+      );
 
       const sellOrders =
         orders
           .filter((order) => order.is_buy_order === false)
           .sort((a, b) => a.price - b.price) ?? [];
+
       const buyOrders =
         orders
           .filter((order) => order.is_buy_order === true)
@@ -53,7 +59,7 @@ export class MarketService {
         const profit = sellOrders[0].price - buyOrders[0].price;
         const profitPercent = ((profit / buyOrders[0].price) * 100).toFixed(2);
         const obj = {
-          type,
+          type: typeId,
           profit,
           profitPercent,
           sellPrice: sellOrders[0].price,
