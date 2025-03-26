@@ -1,3 +1,4 @@
+import { GetUniverseStationsStationIdResponse } from 'src/client';
 import { System } from 'src/system/system.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
@@ -42,4 +43,20 @@ export class Station {
 
   @Column('text', { array: true, nullable: false })
   services: string[];
+
+  static fromEntity(entity: GetUniverseStationsStationIdResponse): Station {
+    const station = new Station();
+    station.id = entity.station_id;
+    station.name = entity.name;
+    station.owner_id = entity.owner;
+    station.system_id = entity.system_id;
+    station.type_id = entity.type_id;
+    station.max_dockable_ship_volume = entity.max_dockable_ship_volume;
+    station.office_rental_cost = entity.office_rental_cost;
+    station.race_id = entity.race_id;
+    station.reprocessing_efficiency = entity.reprocessing_efficiency;
+    station.reprocessing_stations_take = entity.reprocessing_stations_take;
+    station.services = entity.services;
+    return station;
+  }
 }

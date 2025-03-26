@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { StationRepository } from './station.repository';
-import { HttpService } from '@nestjs/axios';
 import { SystemService } from 'src/system/system.service';
-import { firstValueFrom } from 'rxjs';
 import { Station } from './station.entity';
 import { In } from 'typeorm';
+import { DataScraper } from 'src/data-scraper/data-scraper';
+import { SmartUrl } from 'src/data-scraper/smart-url';
 
 @Injectable()
 export class StationService {
   constructor(
-    private readonly httpService: HttpService,
     private readonly stationRepository: StationRepository,
     private readonly systemService: SystemService,
+    private readonly dataScraper: DataScraper,
   ) {}
 
   async wipe() {
@@ -19,59 +19,53 @@ export class StationService {
   }
 
   async scrape() {
-    this.wipe();
+    const systemSmartUrl = new SmartUrl(
+      'universe',
+      'systems',
+      '?datasource=tranquility',
+    );
 
-    const allSystemIds = await this.systemService.getAllSystemIds();
+    const stationIds = [];
+    const systemids = await this.systemService.getAllSystemIds();
+    console.log(`Scraping stations for ${systemids.length} systems`);
+    const chunkedSystemIds = this.dataScraper.chunk(systemids, 1000);
 
-    for (const systemId of allSystemIds) {
-      const systemUrl = `https://esi.evetech.net/latest/universe/systems/${systemId}/?datasource=tranquility`;
-
-      const systemRequest = await firstValueFrom(
-        this.httpService.get(systemUrl),
+    for (const systemIdsChunk of chunkedSystemIds) {
+      const fetchedSystems = await this.dataScraper.fetchEntities(
+        systemSmartUrl,
+        systemIdsChunk,
       );
+      const chunkStationIds = fetchedSystems
+        .map((system) => system.stations)
+        .filter((stations) => stations !== undefined)
+        .flat();
 
-      const systemStationsIds = systemRequest.data.stations;
-      const systemStations = [];
-
-      if (!systemStationsIds) {
-        console.log(`No stations found for system ${systemRequest.data.name}.`);
-        continue;
-      }
-      for (const stationId of systemStationsIds) {
-        const stationUrl = `https://esi.evetech.net/latest/universe/stations/${stationId}/?datasource=tranquility`;
-
-        const stationRequest = await firstValueFrom(
-          this.httpService.get(stationUrl),
-        );
-
-        const scrapedStation = stationRequest.data;
-
-        const station = new Station();
-        station.id = scrapedStation.station_id;
-        station.name = scrapedStation.name;
-        station.owner_id = scrapedStation.owner;
-        station.system_id = Number(systemId);
-        station.type_id = scrapedStation.type_id;
-        station.max_dockable_ship_volume =
-          scrapedStation.max_dockable_ship_volume;
-        station.office_rental_cost = scrapedStation.office_rental_cost;
-        station.race_id = scrapedStation.race_id;
-        station.reprocessing_efficiency =
-          scrapedStation.reprocessing_efficiency;
-        station.reprocessing_stations_take =
-          scrapedStation.reprocessing_stations_take;
-        station.services = scrapedStation.services;
-
-        systemStations.push(station);
-      }
-
-      await this.stationRepository.save(systemStations);
-      console.log(
-        `Saved ${systemStations.length} stations for system ${systemRequest.data.name}.`,
-      );
+      stationIds.push(...chunkStationIds);
     }
-    const stationsCount = await this.stationRepository.count();
-    console.log(`Saved ${stationsCount} stations to database.`);
+
+    const stationSmartUrl = new SmartUrl(
+      'universe',
+      'stations',
+      '?datasource=tranquility',
+    );
+    const chunkedStationIds = this.dataScraper.chunk(stationIds, 1000);
+    const all = [];
+
+    for (const chunk of chunkedStationIds) {
+      const stations = await this.dataScraper.fetchEntities(
+        stationSmartUrl,
+        chunk,
+      );
+      const stationEntities = stations.map((station) =>
+        Station.fromEntity(station),
+      );
+      const saved = await this.stationRepository.upsert(stationEntities, [
+        'id',
+      ]);
+      all.push(...saved.identifiers);
+      console.log(`Scraped ${saved.identifiers.length} stations`);
+    }
+    console.log(`Scraped ${all.length} stations in total`);
   }
 
   async getByIds(ids: number[]) {
