@@ -6,8 +6,7 @@ import { SmartUrl } from './smart-url';
 
 @Injectable()
 export class DataScraper {
-  private baseUrl: string = 'https://esi.evetech.net/latest';
-
+  private readonly failedIds: number[] = [];
   constructor(private httpService: HttpService) {}
 
   chunk<T>(array: T[], size: number): T[][] {
@@ -21,19 +20,20 @@ export class DataScraper {
     pageNum: number,
   ): Promise<AxiosResponse<any, any>> {
     const urlWithPageNum = smartUrl.getUrlForPage(pageNum);
-    console.log(`Fetching IDs on page ${pageNum}`);
-    const request = await firstValueFrom(this.httpService.get(urlWithPageNum));
+    const request = await firstValueFrom(this.httpService.get(urlWithPageNum), {
+      defaultValue: null,
+    });
 
     return request;
   }
 
-  async fetchIdsFromAllPages(smartUrl: SmartUrl): Promise<number[]> {
+  async fetchAllPages(smartUrl: SmartUrl): Promise<any[]> {
     const firstPageRequest = await this.fetchFromPage(smartUrl, 1);
     const pageCount = parseInt(firstPageRequest.headers['x-pages']);
 
     const requests = Array.from({ length: pageCount - 1 }, (_, i) => i + 2).map(
       (pageNum: number) => {
-        console.log(`Fetching IDs on page ${pageNum}/${pageCount}`);
+        console.log(`Fetching page ${pageNum}/${pageCount}`);
 
         return this.fetchFromPage(smartUrl, pageNum);
       },
@@ -42,7 +42,7 @@ export class DataScraper {
     return [
       ...firstPageRequest.data,
       ...fetchedIds
-        .filter((request) => request !== null)
+        .filter((request) => request !== null && request.data !== null)
         .map((request) => request.data)
         .flat(),
     ];
@@ -64,12 +64,28 @@ export class DataScraper {
 
   async fetchEntity(smartUrl: SmartUrl, id: number): Promise<any> | null {
     const url = smartUrl.getUrlForId(id);
-    return (await firstValueFrom(this.httpService.get(url))).data;
+    const request = await firstValueFrom(this.httpService.get(url), {
+      defaultValue: null,
+    });
+    if (request.data === null) {
+      this.failedIds.push(id);
+    }
+    return request.data;
   }
 
   async fetchEntities(smartUrl: SmartUrl, ids: number[]): Promise<any[]> {
     const entities = ids.map((id) => this.fetchEntity(smartUrl, id));
     const fetchedEntities = await Promise.all(entities);
     return fetchedEntities.filter((entity) => entity !== null);
+  }
+
+  async logFailedIds() {
+    if (this.failedIds.length > 0) {
+      console.error(
+        `Failed to fetch entities for IDs: ${this.failedIds.join(', ')}`,
+      );
+    } else {
+      console.log('All entities fetched successfully.');
+    }
   }
 }

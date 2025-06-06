@@ -21,7 +21,7 @@ export class TypesService {
       'types',
       '?datasource=tranquility',
     );
-    const ids = await this.dataScraper.fetchIdsFromAllPages(smartUrl);
+    const ids = await this.dataScraper.fetchAllPages(smartUrl);
     const idChunks = this.dataScraper.chunk(ids, 500);
     const all = [];
     for (const chunk of idChunks) {
