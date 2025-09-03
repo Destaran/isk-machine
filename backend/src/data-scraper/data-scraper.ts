@@ -62,7 +62,13 @@ export class DataScraper {
     }
   }
 
-  async fetchEntity(smartUrl: SmartUrl, id: number): Promise<any> | null {
+  async fetchEntity(smartUrl: SmartUrl): Promise<any[]> {
+    const url = smartUrl.getUrlForAll();
+    const request = await firstValueFrom(this.httpService.get(url));
+    return request.data;
+  }
+
+  async fetchEntityById(smartUrl: SmartUrl, id: number): Promise<any> | null {
     const url = smartUrl.getUrlForId(id);
     const request = await firstValueFrom(this.httpService.get(url), {
       defaultValue: null,
@@ -74,7 +80,7 @@ export class DataScraper {
   }
 
   async fetchEntities(smartUrl: SmartUrl, ids: number[]): Promise<any[]> {
-    const entities = ids.map((id) => this.fetchEntity(smartUrl, id));
+    const entities = ids.map((id) => this.fetchEntityById(smartUrl, id));
     const fetchedEntities = await Promise.all(entities);
     return fetchedEntities.filter((entity) => entity !== null);
   }
