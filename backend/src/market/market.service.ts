@@ -37,7 +37,7 @@ export class MarketService {
       );
     }
 
-    console.log(`Found ${typeIds.length} common types`);
+    console.log(`Found ${typeIds.length} types`);
 
     // query historical market data
     // pull not found
