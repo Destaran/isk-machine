@@ -64,6 +64,7 @@ export class MarketHistoryService {
     }
 
     const scrapedEntities = await this.scrape(notFoundIds, regionId);
-    return foundEntities.concat(scrapedEntities);
+    const filterEntities = scrapedEntities.filter((entity) => entity.date >= dateRange.startDate && entity.date <= dateRange.endDate);
+    return foundEntities.concat(filterEntities);
   }
 }
