@@ -6,6 +6,7 @@ import { TypesService } from 'src/type/types.service';
 import { MetadataService } from 'src/metadata/metadata.service';
 import { StationService } from 'src/station/station.service';
 import { StructureService } from 'src/structure/structure.service';
+import { MarketHistoryService } from 'src/market-history/market-history.service';
 
 @Injectable()
 export class MarketService {
@@ -17,6 +18,7 @@ export class MarketService {
     private readonly metadataService: MetadataService,
     private readonly stationService: StationService,
     private readonly structureService: StructureService,
+    private readonly marketHistoryService: MarketHistoryService,
   ) {}
 
   async getOpportunities(

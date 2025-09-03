@@ -10,6 +10,7 @@ import { MetadataModule } from 'src/metadata/metadata.module';
 import { StationModule } from 'src/station/station.module';
 import { StructureModule } from 'src/structure/structure.module';
 import { DataScraper } from 'src/data-scraper/data-scraper';
+import { MarketHistoryModule } from 'src/market-history/market-history.module';
 
 @Module({
   imports: [
@@ -21,8 +22,9 @@ import { DataScraper } from 'src/data-scraper/data-scraper';
     MetadataModule,
     StationModule,
     StructureModule,
+    MarketHistoryModule,
   ],
-  providers: [MarketService, DataScraper],
+  providers: [MarketService, DataScraper ],
   controllers: [MarketController],
 })
 export class MarketModule {}

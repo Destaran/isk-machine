@@ -17,6 +17,7 @@ import { MetadataModule } from './metadata/metadata.module';
 import { StationModule } from './station/station.module';
 import { StructureModule } from './structure/structure.module';
 import { AxiosRetryModule } from 'nestjs-axios-retry';
+import { MarketHistoryModule } from './market-history/market-history.module';
 import axiosRetry from 'axios-retry';
 
 @Module({
@@ -61,6 +62,7 @@ import axiosRetry from 'axios-retry';
     MetadataModule,
     StationModule,
     StructureModule,
+    MarketHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
