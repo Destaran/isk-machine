@@ -62,7 +62,7 @@ export class DataScraper {
     }
   }
 
-  async fetchEntity(smartUrl: SmartUrl): Promise<any[]> {
+  async fetchEntity(smartUrl: SmartUrl): Promise<any> {
     const url = smartUrl.getUrlForAll();
     const request = await firstValueFrom(this.httpService.get(url));
     return request.data;
