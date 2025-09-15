@@ -1,5 +1,5 @@
 export class SmartUrl {
-  urlBase: string = 'https://esi.evetech.net/latest';
+  urlBase: string = 'https://esi.evetech.net';
   urlCategory: string;
   urlEntity: string;
   urlOptions: string;
