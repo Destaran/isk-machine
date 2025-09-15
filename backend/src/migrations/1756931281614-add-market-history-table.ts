@@ -7,9 +7,15 @@ export class AddMarketHistoryTable1756931281614 implements MigrationInterface {
         name: 'market_history',
         columns: [
           {
-            name: 'type_id',
+            name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'type_id',
+            type: 'int',
             isNullable: false,
           },
           {

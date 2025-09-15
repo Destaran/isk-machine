@@ -1,9 +1,13 @@
 import { GetMarketsRegionIdHistoryResponse } from 'src/client';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity('market_history')
+@Unique(['type_id', 'region_id', 'date'])
 export class MarketHistory {
-  @PrimaryColumn('int', { nullable: false })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column('int', { nullable: false })
   type_id: number;
 
   @Column('int', { nullable: false })
