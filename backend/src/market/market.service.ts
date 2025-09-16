@@ -24,8 +24,8 @@ export class MarketService {
   async getOpportunities(
     aLocationId: number,
     bLocationId: number,
-    margin: number,
-    volume: number,
+    marginPercent: number,
+    volumePercent: number,
   ) {
     let typeIds: number[];
 
@@ -41,9 +41,10 @@ export class MarketService {
 
     console.log(`Found ${typeIds.length} types`);
 
-    // query historical market data
-    // pull not found
-    // handle old data
+    const marketData = await this.marketHistoryService.getMarketHistories(
+      typeIds,
+      aLocationId,
+    );
 
     const opportunities = [];
 
@@ -51,6 +52,10 @@ export class MarketService {
       const orders = await this.ordersSerivce.getByTypeAndLocation(
         typeId,
         aLocationId,
+      );
+
+      const marketDataForType = marketData.filter(
+        (data) => data.type_id === typeId,
       );
 
       const sellOrders =
@@ -67,7 +72,7 @@ export class MarketService {
         continue;
       }
 
-      if (sellOrders[0].price >= buyOrders[0].price * (1 + margin / 100)) {
+      if (sellOrders[0].price >= buyOrders[0].price * (1 + marginPercent / 100)) {
         const profit = sellOrders[0].price - buyOrders[0].price;
         const profitPercent = ((profit / buyOrders[0].price) * 100).toFixed(2);
         const obj = {

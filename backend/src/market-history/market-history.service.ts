@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { MarketHistoryRepository } from './market-history.repository';
-import { DateRange } from 'src/common/date-range.type';
-import { In, Between } from 'typeorm';
 import { DataScraper } from 'src/data-scraper/data-scraper';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-import { DateTime } from 'luxon';
 import { SmartUrl } from 'src/data-scraper/smart-url';
 import { MarketHistory } from './market-history.entity';
+import { DateRange } from 'src/common/date-range.type';
+import { DateTime } from 'luxon';
+import { Between, In } from 'typeorm';
 
 @Injectable()
 export class MarketHistoryService {
@@ -15,28 +14,26 @@ export class MarketHistoryService {
     private readonly dataScraper: DataScraper,
   ) {}
 
-  async scrape(typeIds: number[], regionId: number): Promise<MarketHistory[]> {
-    const chunkedIds = this.dataScraper.chunk(typeIds, 200);
-    for (const chunk of chunkedIds) {
-      const fetchPromises = chunk.map((typeId) => {
-        const smartUrlforType = new SmartUrl(
-          'markets',
-          `${regionId}`,
-          `history?typeId=${typeId}`,
-        );
-        return this.dataScraper.fetchEntity(smartUrlforType);
-      });
-      const results = await Promise.all(fetchPromises);
-      const flatResults = results.flat();
-      const savedResult = await this.marketHistoryRepository.upsert(flatResults, ['type_id', 'region_id', 'date']);
-      console.log(`Saved ${savedResult.identifiers.length} market history records for region ${regionId}`);
-      return this.marketHistoryRepository.find({
-        where: {
-          type_id: In(typeIds),
-          region_id: regionId,
-        },
-      });
-    }
+  async scrape(typeId: number, regionId: number) {
+    const smartUrlforType = new SmartUrl(
+      'markets',
+      `${regionId}`,
+      `history?type_id=${typeId}`,
+    );
+    const result = await this.dataScraper.fetchEntity(smartUrlforType);
+
+    const entities = result.map((item) =>
+      MarketHistory.fromEntity(item, typeId, regionId),
+    );
+
+    const savedResult = await this.marketHistoryRepository.upsert(entities, {
+      conflictPaths: ['type_id', 'region_id', 'date'],
+      skipUpdateIfNoValuesChanged: true,
+    });
+    console.log(
+      `Saved ${savedResult.identifiers.length} market history records for region ${regionId}`,
+    );
+    return savedResult.generatedMaps as MarketHistory[];
   }
 
   async getMarketHistories(
@@ -61,10 +58,17 @@ export class MarketHistoryService {
 
     if (notFoundIds.length <= 0) {
       return foundEntities;
-    }
+    } 
 
-    const scrapedEntities = await this.scrape(notFoundIds, regionId);
-    const filterEntities = scrapedEntities.filter((entity) => entity.date >= dateRange.startDate && entity.date <= dateRange.endDate);
+    const scrapedEntities = notFoundIds.map((typeId) => {
+      return this.scrape(typeId, regionId);
+    });
+    const scrapedResults = await Promise.all(scrapedEntities);
+    const scrapedFlat = scrapedResults.flat();
+    const filterEntities = scrapedFlat.filter(
+      (entity) =>
+        entity.date >= dateRange.startDate && entity.date <= dateRange.endDate,
+    );
     return foundEntities.concat(filterEntities);
   }
 }
