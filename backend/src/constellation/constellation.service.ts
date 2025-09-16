@@ -11,6 +11,10 @@ export class ConstellationService {
     private readonly dataScraper: DataScraper,
   ) {}
 
+    async wipe() {
+        await this.constellationRepository.clear();
+    }
+
     async scrape() {
       const smartUrl = new SmartUrl(
         'universe',
