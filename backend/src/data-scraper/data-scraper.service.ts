@@ -8,6 +8,7 @@ import { TypesService } from 'src/type/types.service';
 import { MetadataService } from 'src/metadata/metadata.service';
 import { StationService } from 'src/station/station.service';
 import { StructureService } from 'src/structure/structure.service';
+import { ConstellationService } from 'src/constellation/constellation.service';
 
 @Injectable()
 export class DataScraperService {
@@ -22,6 +23,7 @@ export class DataScraperService {
     private readonly metadataService: MetadataService,
     private readonly stationService: StationService,
     private readonly structureService: StructureService,
+    private readonly constellationService: ConstellationService,
   ) {}
 
   async postNames(ids: number[]) {
@@ -32,6 +34,10 @@ export class DataScraperService {
       console.log(`Scraped ${response.data.length} names.`);
     }
     return response.data;
+  }
+
+  async scrapeConstellations() {
+    this.constellationService.scrape();
   }
 
   async scrapeRegions() {

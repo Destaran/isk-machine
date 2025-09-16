@@ -9,6 +9,7 @@ import { TypesModule } from 'src/type/types.module';
 import { MetadataModule } from 'src/metadata/metadata.module';
 import { StationModule } from 'src/station/station.module';
 import { StructureModule } from 'src/structure/structure.module';
+import { ConstellationModule } from 'src/constellation/constellation.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { StructureModule } from 'src/structure/structure.module';
     MetadataModule,
     StationModule,
     StructureModule,
+    ConstellationModule,
   ],
   exports: [DataScraperService],
   providers: [DataScraperService],

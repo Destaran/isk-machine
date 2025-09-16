@@ -39,4 +39,9 @@ export class DataScraperController {
   async scrapeAllStructures() {
     await this.DataScraperService.scrapeAllStructures();
   }
+
+  @Post('constellations')
+  async scrapeAllConstellations() {
+    await this.DataScraperService.scrapeConstellations();
+  }
 }
