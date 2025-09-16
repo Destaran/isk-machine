@@ -7,6 +7,7 @@ import { AddMetadataTable1728745761107 } from './1728745761107-add-metadata-tabl
 import { AddStationTable1729715298938 } from './1729715298938-add-station-table';
 import { AddStructureTable1729805925030 } from './1729805925030-add-structure-table';
 import { AddMarketHistoryTable1756931281614 } from './1756931281614-add-market-history-table';
+import { AddConstellationTable1758032320953 } from './1758032320953-add-constellation-table';
 
 export const migrations = [
   AddRegionTable1727627485156,
@@ -18,4 +19,5 @@ export const migrations = [
   AddStationTable1729715298938,
   AddStructureTable1729805925030,
   AddMarketHistoryTable1756931281614,
+  AddConstellationTable1758032320953,
 ];
