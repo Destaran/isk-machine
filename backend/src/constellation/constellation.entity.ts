@@ -14,7 +14,7 @@ export class Constellation {
   @Column('int', { nullable: false })
   region_id: number;
 
-  @Column('simple-array', { nullable: false })
+  @Column({ type: 'jsonb', nullable: false })
   systems: number[];
 
   static fromEntity(entity: GetUniverseConstellationsConstellationIdResponse) {

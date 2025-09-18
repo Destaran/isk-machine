@@ -27,7 +27,7 @@ export class AddConstellationTable1758032320953 implements MigrationInterface {
                   },
                   {
                     name: 'systems',
-                    type: 'simple-array',
+                    type: 'jsonb',
                     isNullable: false,
                   }
                 ],
