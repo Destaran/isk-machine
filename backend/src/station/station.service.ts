@@ -28,7 +28,7 @@ export class StationService {
     const stationIds = [];
     const systemids = await this.systemService.getAllSystemIds();
     console.log(`Scraping stations for ${systemids.length} systems`);
-    const chunkedSystemIds = this.dataScraper.chunk(systemids, 1000);
+    const chunkedSystemIds = this.dataScraper.chunk(systemids, 500);
 
     for (const systemIdsChunk of chunkedSystemIds) {
       const fetchedSystems = await this.dataScraper.fetchEntities(
@@ -48,7 +48,7 @@ export class StationService {
       'stations',
       '?datasource=tranquility',
     );
-    const chunkedStationIds = this.dataScraper.chunk(stationIds, 1000);
+    const chunkedStationIds = this.dataScraper.chunk(stationIds, 500);
     const all = [];
 
     for (const chunk of chunkedStationIds) {
