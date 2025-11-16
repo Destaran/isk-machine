@@ -24,6 +24,11 @@ export class AddSystemTable1727703942743 implements MigrationInterface {
             type: 'float',
             isNullable: false,
           },
+          {
+            name: 'constellation_id',
+            type: 'int',
+            isNullable: false,
+          },
         ],
       }),
       true,

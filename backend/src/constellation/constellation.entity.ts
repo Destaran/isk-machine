@@ -14,15 +14,11 @@ export class Constellation {
   @Column('int', { nullable: false })
   region_id: number;
 
-  @Column({ type: 'jsonb', nullable: false })
-  systems: number[];
-
   static fromEntity(entity: GetUniverseConstellationsConstellationIdResponse) {
     const constellation = new Constellation();
     constellation.id = entity.constellation_id;
     constellation.name = entity.name;
     constellation.region_id = entity.region_id;
-    constellation.systems = entity.systems;
 
     return constellation;
   }

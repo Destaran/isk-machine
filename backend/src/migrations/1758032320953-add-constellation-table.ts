@@ -24,11 +24,6 @@ export class AddConstellationTable1758032320953 implements MigrationInterface {
                     name: 'region_id',
                     type: 'int',
                     isNullable: false,
-                  },
-                  {
-                    name: 'systems',
-                    type: 'jsonb',
-                    isNullable: false,
                   }
                 ],
               }),
