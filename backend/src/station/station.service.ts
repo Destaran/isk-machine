@@ -5,12 +5,14 @@ import { Station } from './station.entity';
 import { In } from 'typeorm';
 import { DataScraper } from 'src/data-scraper/data-scraper';
 import { SmartUrl } from 'src/data-scraper/smart-url';
+import { ConstellationService } from 'src/constellation/constellation.service';
 
 @Injectable()
 export class StationService {
   constructor(
     private readonly stationRepository: StationRepository,
     private readonly systemService: SystemService,
+    private readonly constellationService: ConstellationService,
     private readonly dataScraper: DataScraper,
   ) {}
 
@@ -74,5 +76,33 @@ export class StationService {
 
   async getById(id: number) {
     return await this.stationRepository.findOne({ where: { id } });
+  }
+
+  async getRegionIdByStationId(stationId: number) {
+    const systemId = await this.getById(stationId).then((station) => station?.system_id);
+
+    if (!systemId) {
+      throw new Error(`Station with id ${stationId} not found`);
+    }
+
+    const constellationId = await this.systemService
+      .getById(systemId)
+      .then((system) => system?.constellation_id);
+
+    if (!constellationId) {
+      throw new Error(`System with id ${systemId} not found`);
+    }
+
+    const regionId = await this.constellationService
+      .getById(constellationId)
+      .then((constellation) => constellation?.region_id);
+
+    if (!regionId) {
+      throw new Error(
+        `Constellation with id ${constellationId} not found`,
+      );
+    }
+
+    return regionId;
   }
 }

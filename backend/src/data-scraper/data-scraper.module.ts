@@ -10,6 +10,7 @@ import { MetadataModule } from 'src/metadata/metadata.module';
 import { StationModule } from 'src/station/station.module';
 import { StructureModule } from 'src/structure/structure.module';
 import { ConstellationModule } from 'src/constellation/constellation.module';
+import { MarketHistoryModule } from 'src/market-history/market-history.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ConstellationModule } from 'src/constellation/constellation.module';
     StationModule,
     StructureModule,
     ConstellationModule,
+    MarketHistoryModule,
   ],
   exports: [DataScraperService],
   providers: [DataScraperService],

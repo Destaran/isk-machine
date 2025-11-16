@@ -23,13 +23,13 @@ export class MarketService {
 
   async getOpportunities(
     aLocationId: number,
-    bLocationId: number,
+    bLocationId: number | null,
     marginPercent: number,
     volumePercent: number,
   ) {
     let typeIds: number[];
 
-    if (aLocationId === bLocationId) {
+    if (bLocationId === null || aLocationId === bLocationId) {
       typeIds = await this.ordersSerivce.getTypesByLocationId(aLocationId);
     } else {
       const fromTypes = await this.ordersSerivce.getTypesByLocationId(aLocationId);
@@ -41,9 +41,12 @@ export class MarketService {
 
     console.log(`Found ${typeIds.length} types`);
 
+    // get regionId for type
+    const regionId = await this.stationService.getRegionIdByStationId(aLocationId);
+
     const marketData = await this.marketHistoryService.getMarketHistories(
       typeIds,
-      aLocationId,
+      regionId,
     );
 
     const opportunities = [];

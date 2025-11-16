@@ -35,4 +35,8 @@ export class ConstellationService {
       }
       console.log(`Scraped ${all.length} constellations in total`);
     }
+
+    async getById(id: number) {
+      return await this.constellationRepository.findOne({ where: { id } });
+    }
 }

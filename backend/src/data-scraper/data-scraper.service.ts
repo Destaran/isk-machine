@@ -9,6 +9,7 @@ import { MetadataService } from 'src/metadata/metadata.service';
 import { StationService } from 'src/station/station.service';
 import { StructureService } from 'src/structure/structure.service';
 import { ConstellationService } from 'src/constellation/constellation.service';
+import { MarketHistoryService } from 'src/market-history/market-history.service';
 
 @Injectable()
 export class DataScraperService {
@@ -24,6 +25,7 @@ export class DataScraperService {
     private readonly stationService: StationService,
     private readonly structureService: StructureService,
     private readonly constellationService: ConstellationService,
+    private readonly marketHistoryService: MarketHistoryService,
   ) {}
 
   async postNames(ids: number[]) {
@@ -66,5 +68,9 @@ export class DataScraperService {
 
   async scrapeAllStructures() {
     this.structureService.scrape();
+  }
+
+  async scrapeMarketHistoryById(typeId: number, regionId: number) {
+    this.marketHistoryService.scrape(typeId, regionId);
   }
 }
