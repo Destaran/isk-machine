@@ -31,7 +31,7 @@ export class MarketHistoryService {
       skipUpdateIfNoValuesChanged: true,
     });
     console.log(
-      `Saved ${savedResult.identifiers.length} market history records for region ${regionId}`,
+      `Saved ${savedResult.identifiers.length} market history records for type ${typeId} in region ${regionId}`,
     );
     return savedResult.generatedMaps as MarketHistory[];
   }
