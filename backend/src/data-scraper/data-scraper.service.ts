@@ -51,7 +51,8 @@ export class DataScraperService {
   }
 
   async scrapeAllOrders() {
-    this.ordersService.scrape();
+    await this.ordersService.scrape();
+    await this.metadataService.updateScrapeDate();
   }
 
   async getOrdersTotal() {

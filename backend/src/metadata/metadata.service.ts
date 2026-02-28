@@ -6,10 +6,10 @@ import { Metadata } from './metadata.entity';
 export class MetadataService {
   constructor(private readonly metadataRepository: MetadataRepository) {}
 
-  async updateScrapeDate(date: Date) {
+  async updateScrapeDate() {
     const metadata = new Metadata();
     metadata.id = 'scrapeDate';
-    metadata.date = date;
+    metadata.date = new Date();
     await this.metadataRepository.save(metadata);
   }
 
