@@ -6,9 +6,10 @@ import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MarketHistory } from './market-history.entity';
 import { MarketHistoryController } from './market-history.controller';
+import { OrdersModule } from 'src/orders/orders.module';
 
 @Module({
-    imports: [HttpModule, TypeOrmModule.forFeature([MarketHistory])],
+    imports: [HttpModule, TypeOrmModule.forFeature([MarketHistory]), OrdersModule],
     exports: [MarketHistoryService],
     providers: [MarketHistoryService, MarketHistoryRepository, DataScraper],
     controllers: [MarketHistoryController],

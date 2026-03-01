@@ -72,4 +72,14 @@ export class OrdersService {
     const uniqueTypeIds = [...new Set(allTypes.map((order) => order.type_id))];
     return uniqueTypeIds;
   }
+
+  async getTypesByRegionId(regionId: number): Promise<number[]> {
+  const result = await this.orderRepository
+    .createQueryBuilder('order')
+    .select('DISTINCT order.type_id', 'type_id')
+    .where('order.region_id = :regionId', { regionId })
+    .getRawMany();
+
+  return result.map(row => Number(row.type_id));
+}
 }

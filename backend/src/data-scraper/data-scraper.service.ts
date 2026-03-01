@@ -74,4 +74,8 @@ export class DataScraperService {
   async scrapeMarketHistoryById(typeId: number, regionId: number) {
     this.marketHistoryService.scrape(typeId, regionId);
   }
+
+  async scrapeMarketHistoryByRegionId(regionId: number) {
+    this.marketHistoryService.scrapeByRegionId(regionId);
+  }
 }

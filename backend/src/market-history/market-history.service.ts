@@ -6,21 +6,23 @@ import { MarketHistory } from './market-history.entity';
 import { DateRange } from 'src/common/date-range.type';
 import { DateTime } from 'luxon';
 import { Between, In } from 'typeorm';
+import { OrdersService } from 'src/orders/orders.service';
 
 @Injectable()
 export class MarketHistoryService {
   constructor(
     private readonly marketHistoryRepository: MarketHistoryRepository,
     private readonly dataScraper: DataScraper,
+    private readonly ordersService: OrdersService,
   ) {}
 
-  async scrape(typeId: number, regionId: number) {
+  async scrape(typeId: number, regionId: number): Promise<MarketHistory[]> {
     const smartUrlforType = new SmartUrl(
       'markets',
       `${regionId}`,
       `history?type_id=${typeId}`,
     );
-    const result = await this.dataScraper.fetchEntity(smartUrlforType);
+    const result = (await this.dataScraper.fetchEntity(smartUrlforType)) ?? [];
 
     const entities = result.map((item) =>
       MarketHistory.fromEntity(item, typeId, regionId),
@@ -33,7 +35,27 @@ export class MarketHistoryService {
     console.log(
       `Saved ${savedResult.identifiers.length} market history records for type ${typeId} in region ${regionId}`,
     );
-    return savedResult.generatedMaps as MarketHistory[];
+    return savedResult.identifiers as MarketHistory[];
+  }
+
+  async scrapeByRegionId(regionId: number) {
+    const typeIds = await this.ordersService.getTypesByRegionId(regionId);
+    const chunkedTypeIds = this.dataScraper.chunk(typeIds, 1000);
+    for (const chunk of chunkedTypeIds) {
+      const requests = chunk.map((typeId) =>
+        this.scrape(typeId, regionId),
+      );
+      const results = await Promise.allSettled(requests);
+      const successCount = results.filter(
+        (r) => r.status === 'fulfilled',
+      ).length;
+      console.log(
+        `Scraped market history for ${successCount}/${chunk.length} types in region ${regionId}`,
+      );
+    }
+    console.log(
+      `Completed scraping market history for all types in region ${regionId}`,
+    );
   }
 
   async getMarketHistories(
@@ -58,7 +80,7 @@ export class MarketHistoryService {
 
     if (notFoundIds.length <= 0) {
       return foundEntities;
-    } 
+    }
 
     const scrapedEntities = notFoundIds.map((typeId) => {
       return this.scrape(typeId, regionId);
