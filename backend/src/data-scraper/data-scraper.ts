@@ -64,7 +64,9 @@ export class DataScraper {
 
   async fetchEntity(smartUrl: SmartUrl): Promise<any> {
     const url = smartUrl.getUrlForAll();
-    const request = await firstValueFrom(this.httpService.get(url));
+    const request = await firstValueFrom(this.httpService.get(url, {
+      timeout: 15000,
+    }));
     return request.data;
   }
 
