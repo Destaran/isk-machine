@@ -50,7 +50,7 @@ export class MarketHistoryService {
         (r) => r.status === 'fulfilled',
       ).length;
       console.log(
-        `Scraped market history for ${successCount}/${chunk.length} types in region ${regionId}`,
+        `Scraped market history for ${successCount}/${results.length} types in region ${regionId}`,
       );
     }
     console.log(
