@@ -13,28 +13,31 @@ export class OrdersService {
     private readonly dataScraper: DataScraper,
   ) {}
 
+  async scrapeRegion(regionId: number) {
+    await this.orderRepository.delete({ region_id: regionId });
+    const smarUrlForRegion = new SmartUrl(
+      'markets',
+      `${regionId}/orders`,
+      '?datasource=tranquility&order_type=all',
+    );
+    const regionAll = await this.dataScraper.fetchAllPages(smarUrlForRegion);
+    const chunkedRegionAll = this.dataScraper.chunk(regionAll, 1000);
+    for (const chunk of chunkedRegionAll) {
+      const entities = chunk.map((order) => Order.fromEntity(order, regionId));
+      await this.orderRepository.upsert(entities, ['order_id']);
+    }
+    console.log(`Scraped ${regionAll.length} orders for region ${regionId}`);
+    return regionAll.length;
+  }
+
   async scrape() {
     const regionIds = await this.regionService.getRegionIds();
-    const all = [];
+    let total = 0;
     for (const regionId of regionIds) {
-      await this.orderRepository.delete({ region_id: regionId });
-      const smarUrlForRegion = new SmartUrl(
-        'markets',
-        `${regionId}/orders`,
-        '?datasource=tranquility&order_type=all',
-      );
-      const regionAll = await this.dataScraper.fetchAllPages(smarUrlForRegion);
-      const chunkedRegionAll = this.dataScraper.chunk(regionAll, 1000);
-      for (const chunk of chunkedRegionAll) {
-        const entities = chunk.map((order) =>
-          Order.fromEntity(order, regionId),
-        );
-        const saved = await this.orderRepository.upsert(entities, ['order_id']);
-        all.push(...saved.identifiers.map((id) => id.order_id));
-      }
-      console.log(`Scraped ${regionAll.length} orders for region ${regionId}`);
+      const count = await this.scrapeRegion(regionId);
+      total += count;
     }
-    console.log(`Scraped ${all.length} orders in total`);
+    console.log(`Scraped ${total} orders in total`);
   }
 
   async getTotal() {
@@ -74,12 +77,12 @@ export class OrdersService {
   }
 
   async getTypesByRegionId(regionId: number): Promise<number[]> {
-  const result = await this.orderRepository
-    .createQueryBuilder('order')
-    .select('DISTINCT order.type_id', 'type_id')
-    .where('order.region_id = :regionId', { regionId })
-    .getRawMany();
+    const result = await this.orderRepository
+      .createQueryBuilder('order')
+      .select('DISTINCT order.type_id', 'type_id')
+      .where('order.region_id = :regionId', { regionId })
+      .getRawMany();
 
-  return result.map(row => Number(row.type_id));
-}
+    return result.map((row) => Number(row.type_id));
+  }
 }
