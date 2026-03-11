@@ -21,9 +21,21 @@ import { MarketHistoryModule } from './market-history/market-history.module';
 import { ConstellationModule } from './constellation/constellation.module';
 import axiosRetry from 'axios-retry';
 import { ScheduleModule } from '@nestjs/schedule';
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 
 @Module({
   imports: [
+    WinstonModule.forRoot({
+      level: 'info',
+      format: winston.format.json(),
+      transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({
+          filename: 'logs/app.log',
+        }),
+      ],
+    }),
     ScheduleModule.forRoot(),
     AxiosRetryModule.forRoot({
       axiosRetryConfig: {
