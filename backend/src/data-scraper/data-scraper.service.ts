@@ -10,10 +10,14 @@ import { StationService } from 'src/station/station.service';
 import { StructureService } from 'src/structure/structure.service';
 import { ConstellationService } from 'src/constellation/constellation.service';
 import { MarketHistoryService } from 'src/market-history/market-history.service';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class DataScraperService {
-  private currentRegionId: number | null = null;
+  @Cron('0 1 * * * *')
+  handleCron() {
+    this.scrapeAllOrders();
+  }
 
   constructor(
     private readonly httpService: HttpService,
