@@ -20,9 +20,11 @@ import { AxiosRetryModule } from 'nestjs-axios-retry';
 import { MarketHistoryModule } from './market-history/market-history.module';
 import { ConstellationModule } from './constellation/constellation.module';
 import axiosRetry from 'axios-retry';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     AxiosRetryModule.forRoot({
       axiosRetryConfig: {
         retries: 5,
