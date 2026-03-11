@@ -22,75 +22,13 @@ export class MarketService {
   ) {}
 
   async getOpportunities(
-    aLocationId: number,
-    bLocationId: number | null,
-    marginPercent: number,
-    volumePercent: number,
+    buyLocationId: number,
+    sellLocationId: number | null,
+    marginPercent: number = 20,
+    volumePercent: number = 5,
+    dailyMinimumProfit: number = 5000000,
   ) {
-    let typeIds: number[];
-
-    if (bLocationId === null || aLocationId === bLocationId) {
-      typeIds = await this.ordersSerivce.getTypesByLocationId(aLocationId);
-    } else {
-      const fromTypes = await this.ordersSerivce.getTypesByLocationId(aLocationId);
-      const toTypes = await this.ordersSerivce.getTypesByLocationId(bLocationId);
-      typeIds = fromTypes.filter((aTypeId) =>
-        toTypes.some((bTypeId) => bTypeId === aTypeId),
-      );
-    }
-
-    console.log(`Found ${typeIds.length} types`);
-
-    // get regionId for type
-    const regionId = await this.stationService.getRegionIdByStationId(aLocationId);
-
-    const marketData = await this.marketHistoryService.getMarketHistories(
-      typeIds,
-      regionId,
-    );
-
-    const opportunities = [];
-
-    for (const typeId of typeIds) {
-      const orders = await this.ordersSerivce.getByTypeAndLocation(
-        typeId,
-        aLocationId,
-      );
-
-      const marketDataForType = marketData.filter(
-        (data) => data.type_id === typeId,
-      );
-
-      const sellOrders =
-        orders
-          .filter((order) => order.is_buy_order === false)
-          .sort((a, b) => a.price - b.price) ?? [];
-
-      const buyOrders =
-        orders
-          .filter((order) => order.is_buy_order === true)
-          .sort((a, b) => b.price - a.price) ?? [];
-
-      if (buyOrders[0] === undefined || sellOrders[0] === undefined) {
-        continue;
-      }
-
-      if (sellOrders[0].price >= buyOrders[0].price * (1 + marginPercent / 100)) {
-        const profit = sellOrders[0].price - buyOrders[0].price;
-        const profitPercent = ((profit / buyOrders[0].price) * 100).toFixed(2);
-        const obj = {
-          type: typeId,
-          profit,
-          profitPercent,
-          sellPrice: sellOrders[0].price,
-          buyPrice: buyOrders[0].price,
-        };
-        
-        opportunities.push(obj);
-      }
-    }
-
-    return opportunities;
+    console.log('getOpportunities');
   }
 
   async searchTypes(search: string) {
