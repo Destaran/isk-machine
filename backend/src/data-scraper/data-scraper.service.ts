@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { RegionService } from 'src/region/region.service';
 import { SystemService } from 'src/system/system.service';
@@ -11,15 +11,24 @@ import { StructureService } from 'src/structure/structure.service';
 import { ConstellationService } from 'src/constellation/constellation.service';
 import { MarketHistoryService } from 'src/market-history/market-history.service';
 import { Cron } from '@nestjs/schedule';
+import { Logger } from 'winston';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class DataScraperService {
-  @Cron('0 1 * * * *')
+
+  @Cron('0 0 * * *')
+  handleDailyCron() {
+    this.scrapeMarketHistoryByRegionId(10000002);
+  }
+
+  @Cron('0 0 * * * *')
   handleCron() {
     this.scrapeAllOrders();
   }
 
   constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
     private readonly regionService: RegionService,
     private readonly systemService: SystemService,
@@ -55,8 +64,10 @@ export class DataScraperService {
   }
 
   async scrapeAllOrders() {
+    this.logger.log({message: 'Started scraping all orders', level: 'info', timestamp: new Date().toISOString()});
     await this.ordersService.scrape();
     await this.metadataService.updateScrapeDate();
+    this.logger.log({message: `Finished scraping all orders`, level: 'info', timestamp: new Date().toISOString()});
   }
 
   async getOrdersTotal() {
@@ -80,6 +91,8 @@ export class DataScraperService {
   }
 
   async scrapeMarketHistoryByRegionId(regionId: number) {
+    this.logger.log({message: 'Started scraping market history by region', level: 'info', timestamp: new Date().toISOString()});
     this.marketHistoryService.scrapeByRegionId(regionId);
+    this.logger.log({message: `Finished scraping market history by region`, level: 'info', timestamp: new Date().toISOString()});
   }
 }
