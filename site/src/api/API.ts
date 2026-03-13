@@ -1,9 +1,9 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from "axios";
 
-const api = axios.create({ baseURL: 'http://localhost:3000' });
+const api = axios.create({ baseURL: "http://localhost:3000" });
 
-export async function get<T>(path: string) {
-  const { data } = await api.get<T>(path);
+export async function get<T, A = undefined>(path: string, params?: A) {
+  const { data } = await api.get<T>(path, { params });
   return data;
 }
 
@@ -15,7 +15,7 @@ export async function put<T>(path: string, inputData: unknown) {
 export async function post<T>(
   path: string,
   inputData: unknown,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ) {
   const { data } = await api.post<T>(path, inputData, config);
   return data;
