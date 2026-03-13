@@ -52,4 +52,11 @@ export class DataScraperController {
   ) {
     await this.dataScraperService.scrapeMarketHistoryById(typeId, regionId);
   }
+
+  @Post('market-history/region')
+  async scrapeMarketHistoryByRegionId(
+    @Body('regionId') regionId: number,
+  ) {
+    await this.dataScraperService.scrapeMarketHistoryByRegionId(regionId);
+  }
 }

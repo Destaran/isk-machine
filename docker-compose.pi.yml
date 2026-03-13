@@ -1,52 +1,49 @@
 services:
   site:
-    image: site
-    build:
-      context: site
-      target: dev
-    volumes:
-      - ./site/index.html:/app/index.html
-      - ./site/vite.config.ts:/app/vite.config.ts
-      - ./site/tsconfig.json:/app/tsconfig.json
-      - ./site/public:/app/public
-      - ./site/src:/app/src
+    image: isk-machine-site:latest
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: http://${PI_HOST:-192.168.0.50}:3000
     ports:
-      - 5173:5173
+      - "5173:5173"
     depends_on:
       - backend
     networks:
       - frontend
+
   backend:
-    image: backend
-    build:
-      context: backend
-      target: dev
-    volumes:
-      - ./backend/src:/backend/src
-    restart: always
-    ports:
-      - 3000:3000
+    image: isk-machine-backend:latest
+    restart: unless-stopped
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DATABASE: isk-machine-db
-      ENVIRONMENT: dev
+      ENVIRONMENT: prod
       PORT: 3000
+      FRONTEND_ORIGIN: http://${PI_HOST:-192.168.0.50}:5173
+    ports:
+      - "3000:3000"
     depends_on:
       - db
     networks:
       - backend
+
   db:
-    image: postgres
-    restart: always
+    image: postgres:16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: isk-machine-db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
     networks:
       - backend
+
+volumes:
+  pg_data:
 
 networks:
   frontend:

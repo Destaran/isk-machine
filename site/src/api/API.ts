@@ -1,6 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-const api = axios.create({ baseURL: "http://localhost:3000" });
+const apiBaseUrl =
+  import.meta.env.VITE_API_BASE_URL ??
+  `http://${window.location.hostname}:3000`;
+
+const api = axios.create({ baseURL: apiBaseUrl });
 
 export async function get<T, A = undefined>(path: string, params?: A) {
   const { data } = await api.get<T>(path, { params });
