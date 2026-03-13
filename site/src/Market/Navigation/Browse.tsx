@@ -1,7 +1,7 @@
 import groupsData from '../../utils/market_groups_details.json';
 import { GetMarketsGroupsMarketGroupIdResponse } from '../../hey-api';
 import { MainGroup } from './MainGroup';
-import { SectionTitle } from './SectionTitle';
+import { SectionTitle } from '../../components/pageElements';
 
 export function Browse() {
   const groups = groupsData as GetMarketsGroupsMarketGroupIdResponse[];

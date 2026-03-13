@@ -4,8 +4,8 @@ import { useSearch } from '../../api/market/useSearch';
 import { SearchResult } from '../../api/market/SearchResult';
 import { SearchResults } from './SearchResults';
 import { RxCross1 } from 'react-icons/rx';
-import { SectionTitle } from './SectionTitle';
 import { useClickAway, useKey } from 'react-use';
+import { SectionTitle } from '../../components/pageElements';
 
 const Container = styled.div`
   overflow: visible;
