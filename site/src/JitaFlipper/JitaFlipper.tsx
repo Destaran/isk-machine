@@ -1,9 +1,12 @@
 import { PageBase } from '../components/PageBase';
+import { Opportunities } from './Opportunities';
+import { Settings } from './Settings';
 
 export function JitaFlipper() {
   return (
     <PageBase>
-      <h1>Jita Flipper</h1>
+      <Settings />
+      <Opportunities />
     </PageBase>
   );
 }
