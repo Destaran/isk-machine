@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import marketReducer from './orders/ordersSlice';
+import opportunitiesReducer from './orders/opportunitiesSlice';
 
 export const store = configureStore({
   reducer: {
     market: marketReducer,
+    opportunities: opportunitiesReducer,
   },
 });
 
