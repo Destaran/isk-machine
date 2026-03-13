@@ -1,9 +1,9 @@
-import { SectionTitle } from './SectionTitle';
 import { useAppSelector } from '../../redux/hooks';
 import { Filter } from './Filter';
 import { TextFilter } from './TextFilter';
 import styled from 'styled-components';
 import { filterStates } from '../../redux/orders/filterStates';
+import { SectionTitle } from '../../components/pageElements';
 
 const Separator = styled.div`
   height: 1px;
