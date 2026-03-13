@@ -16,7 +16,6 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class DataScraperService {
-
   @Cron('0 0 * * *')
   handleDailyCron() {
     this.scrapeMarketHistoryByRegionId(10000002);
@@ -64,10 +63,18 @@ export class DataScraperService {
   }
 
   async scrapeAllOrders() {
-    this.logger.log({message: 'Started scraping all orders', level: 'info', timestamp: new Date().toISOString()});
+    this.logger.log({
+      message: 'Started scraping all orders',
+      level: 'info',
+      timestamp: new Date().toISOString(),
+    });
     await this.ordersService.scrape();
     await this.metadataService.updateScrapeDate();
-    this.logger.log({message: `Finished scraping all orders`, level: 'info', timestamp: new Date().toISOString()});
+    this.logger.log({
+      message: `Finished scraping all orders`,
+      level: 'info',
+      timestamp: new Date().toISOString(),
+    });
   }
 
   async getOrdersTotal() {
@@ -91,8 +98,16 @@ export class DataScraperService {
   }
 
   async scrapeMarketHistoryByRegionId(regionId: number) {
-    this.logger.log({message: 'Started scraping market history by region', level: 'info', timestamp: new Date().toISOString()});
-    this.marketHistoryService.scrapeByRegionId(regionId);
-    this.logger.log({message: `Finished scraping market history by region`, level: 'info', timestamp: new Date().toISOString()});
+    this.logger.log({
+      message: 'Started scraping market history by region',
+      level: 'info',
+      timestamp: new Date().toISOString(),
+    });
+    await this.marketHistoryService.scrapeByRegionId(regionId);
+    this.logger.log({
+      message: `Finished scraping market history by region`,
+      level: 'info',
+      timestamp: new Date().toISOString(),
+    });
   }
 }
