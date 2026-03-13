@@ -20,9 +20,7 @@ export class DataScraper {
     pageNum: number,
   ): Promise<AxiosResponse<any, any>> {
     const urlWithPageNum = smartUrl.getUrlForPage(pageNum);
-    const request = await firstValueFrom(this.httpService.get(urlWithPageNum, {timeout: 60000}), {
-      defaultValue: null,
-    });
+    const request = await firstValueFrom(this.httpService.get(urlWithPageNum, {timeout: 60000}));
 
     return request;
   }
