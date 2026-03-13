@@ -17,11 +17,20 @@ export class MarketController {
 
   @Get('opportunities')
   async getOpportunities(
-    // @Body('from') from: number,
-    // @Body('to') to: number,
-    // @Body('margin') margin: number,
-    // @Body('volume') volume: number,
+    @Body('buyLocation') buyLocation: number,
+    @Body('sellLocation') sellLocation: number,
+    @Body('volatility') volatility: number,
+    @Body('margin') margin: number,
+    @Body('dailyProfit') dailyProfit: number,
+    @Body('minVolume') minVolume: number,
   ) {
-    return await this.marketService.getOpportunities();
+    return await this.marketService.getOpportunities(
+      buyLocation,
+      sellLocation,
+      volatility,
+      margin,
+      dailyProfit,
+      minVolume,
+    );
   }
 }

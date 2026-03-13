@@ -24,11 +24,12 @@ export class MarketService {
   ) {}
 
   async getOpportunities(
-    // buyLocationId: number,
-    // sellLocationId: number | null,
-    // marginPercent: number = 20,
-    // volumePercent: number = 5,
-    // dailyMinimumProfit: number = 5000000,
+    buyLocation: number = 60003760,
+    sellLocation: number = 60003760,
+    volatility: number = 0.25,
+    margin: number = 0.20,
+    dailyProfit: number = 5000000,
+    minVolume: number = 100,
   ) {
     const result = await this.dataSource.query(`
       WITH best_prices AS (
@@ -87,13 +88,13 @@ export class MarketService {
       SELECT *
       FROM joined
       WHERE days_recorded >= 25
-        AND volatility < 0.25
-        AND net_margin >= 0.20
-        AND estimated_daily_profit >= 10000000
-        AND tradeable_volume >= 100
+        AND volatility < $2
+        AND net_margin >= $3
+        AND estimated_daily_profit >= $4
+        AND tradeable_volume >= $5
       ORDER BY estimated_daily_profit / (1 + volatility) DESC
       LIMIT 50;
-    `, [60003760]);
+    `, [buyLocation, volatility, margin, dailyProfit, minVolume]);
 
     return result;
   }
