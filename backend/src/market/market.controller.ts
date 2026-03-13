@@ -17,11 +17,11 @@ export class MarketController {
 
   @Get('opportunities')
   async getOpportunities(
-    @Body('from') from: number,
-    @Body('to') to: number,
-    @Body('margin') margin: number,
-    @Body('volume') volume: number,
+    // @Body('from') from: number,
+    // @Body('to') to: number,
+    // @Body('margin') margin: number,
+    // @Body('volume') volume: number,
   ) {
-    return await this.marketService.getOpportunities(from, to, margin, volume);
+    return await this.marketService.getOpportunities();
   }
 }
