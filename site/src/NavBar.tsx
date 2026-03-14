@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Button } from './components/Button';
+import styled from "styled-components";
+import { Button } from "./components/Button";
 
 const Container = styled.div`
   display: flex;
@@ -14,8 +14,7 @@ export function NavBar() {
   return (
     <Container>
       <Button destination="/market" title="Market" />
-      <Button destination="/jita-flipper" title="Jita Flipper" />
-      <Button destination="/data-manager" title="Data Manager" />
+      <Button destination="/jita-flipper" title="Opportunities" />
     </Container>
   );
 }
