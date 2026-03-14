@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { Cell, Row } from "../Market/Orders/Table";
 import { useMarketGroups } from "../hooks/useMarketGroups";
+import { useNavigate } from "react-router-dom";
 
 const OpportunitiesRow = styled(Row)`
   display: contents;
 
   & > * {
     background-color: ${({ theme }) => theme.colors.emDarkGrey};
+    cursor: pointer;
   }
 
   &:nth-child(even) > * {
@@ -15,6 +17,7 @@ const OpportunitiesRow = styled(Row)`
 
   &:hover > * {
     background-color: #3a2800;
+    cursor: pointer;
   }
 `;
 
@@ -117,14 +120,19 @@ export function OpportunityRow({
   priceFormatter,
   marginFormatter,
 }: OpportunityRowProps) {
+  const navigate = useNavigate();
   const groups = useMarketGroups(opp.type_id);
   const isBp = groups?.includes("Blueprints") ? "bp" : "icon";
   const imgSrc = `https://images.evetech.net/types/${opp.type_id}/${isBp}?size=64`;
   const bestBuy = priceFormatter.format(opp.best_buy);
   const bestSell = priceFormatter.format(opp.best_sell);
 
+  function handleClick() {
+    navigate(`/market/${opp.type_id}`);
+  }
+
   return (
-    <OpportunitiesRow>
+    <OpportunitiesRow onClick={handleClick}>
       <ItemCell title={opp.item_name}>
         <ItemIcon src={imgSrc} alt={opp.item_name} />
         {opp.item_name}
