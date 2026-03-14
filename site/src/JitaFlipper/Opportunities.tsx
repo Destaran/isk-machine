@@ -18,7 +18,7 @@ const Container = styled.div`
 
 const OpportunitiesTable = styled(Table)`
   display: grid;
-  grid-template-columns: repeat(5, max-content);
+  grid-template-columns: repeat(4, max-content);
   min-width: 100%;
   width: max-content;
   flex: 1;
@@ -80,8 +80,7 @@ export function Opportunities() {
       <OpportunitiesTable>
         <OpportunitiesHeader>
           <HeaderCell>Item name</HeaderCell>
-          <HeaderCell>Best buy</HeaderCell>
-          <HeaderCell>Best sell</HeaderCell>
+          <HeaderCell>Best buy / Best sell</HeaderCell>
           <HeaderCell>Margin</HeaderCell>
           <HeaderCell>Avg daily volume</HeaderCell>
         </OpportunitiesHeader>

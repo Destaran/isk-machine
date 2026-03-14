@@ -51,6 +51,23 @@ const NumericCell = styled(OpportunitiesCell)`
   font-variant-numeric: tabular-nums;
 `;
 
+const PriceStackCell = styled(OpportunitiesCell)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+`;
+
+const BuyPrice = styled.span`
+  color: #e74c3c;
+`;
+
+const SellPrice = styled.span`
+  color: #00c853;
+`;
+
 interface MarginCellProps {
   $value: number;
 }
@@ -93,12 +110,12 @@ export function OpportunityRow({
         <ItemIcon src={imgSrc} alt={opp.item_name} />
         {opp.item_name}
       </ItemCell>
-      <NumericCell title={priceFormatter.format(opp.best_buy)}>
-        {priceFormatter.format(opp.best_buy)}
-      </NumericCell>
-      <NumericCell title={priceFormatter.format(opp.best_sell)}>
-        {priceFormatter.format(opp.best_sell)}
-      </NumericCell>
+      <PriceStackCell
+        title={`Buy: ${priceFormatter.format(opp.best_buy)} / Sell: ${priceFormatter.format(opp.best_sell)}`}
+      >
+        <BuyPrice>{priceFormatter.format(opp.best_buy)}</BuyPrice>
+        <SellPrice>{priceFormatter.format(opp.best_sell)}</SellPrice>
+      </PriceStackCell>
       <MarginCell
         $value={opp.net_margin}
         title={`${marginFormatter.format(opp.net_margin * 100)}%`}
