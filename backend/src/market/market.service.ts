@@ -27,11 +27,12 @@ export class MarketService {
     buyLocation: number = 60003760,
     sellLocation: number = 60003760,
     volatility: number = 0.25,
-    margin: number = 0.20,
+    margin: number = 0.2,
     dailyProfit: number = 5000000,
     minVolume: number = 100,
   ) {
-    const result = await this.dataSource.query(`
+    const result = await this.dataSource.query(
+      `
       WITH best_prices AS (
           SELECT
               type_id,
@@ -92,9 +93,11 @@ export class MarketService {
         AND net_margin >= $3
         AND estimated_daily_profit >= $4
         AND tradeable_volume >= $5
-      ORDER BY estimated_daily_profit / (1 + volatility) DESC
+      ORDER BY net_margin DESC
       LIMIT 50;
-    `, [buyLocation, volatility, margin, dailyProfit, minVolume]);
+    `,
+      [buyLocation, volatility, margin, dailyProfit, minVolume],
+    );
 
     return result;
   }
