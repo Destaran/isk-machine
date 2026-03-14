@@ -26,9 +26,27 @@ const OpportunitiesTable = styled(Table)`
 const OpportunitiesRow = styled(Row)`
   min-height: 32px;
   height: auto;
+
+  &:nth-child(even) {
+    background-color: ${({ theme }) => theme.colors.emBlack};
+  }
+
+  &:hover {
+    background-color: #3a2800;
+  }
 `;
 
-const OpportunitiesCell = styled(Cell)`
+const OpportunitiesHeader = styled(Head)`
+  min-height: 32px;
+  height: auto;
+  background-color: ${({ theme }) => theme.colors.emBlack};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.emBlack};
+  }
+`;
+
+const baseCell = `
   min-width: 0;
   min-height: 32px;
   height: auto;
@@ -37,6 +55,34 @@ const OpportunitiesCell = styled(Cell)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+`;
+
+const OpportunitiesCell = styled(Cell)`
+  ${baseCell}
+`;
+
+const HeaderCell = styled(Cell)`
+  ${baseCell}
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: ${({ theme }) => theme.colors.emLightGrey};
+`;
+
+const NumericCell = styled(OpportunitiesCell)`
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
+`;
+
+interface MarginCellProps {
+  $value: number;
+}
+
+const MarginCell = styled(NumericCell)<MarginCellProps>`
+  color: ${({ $value }) =>
+    $value > 0.1 ? "#00c853" : $value > 0.05 ? "#ffa500" : "#e9e9e9"};
+  font-weight: ${({ $value }) => ($value > 0.1 ? "600" : "400")};
 `;
 
 export function Opportunities() {
@@ -57,44 +103,43 @@ export function Opportunities() {
   return (
     <Container>
       <OpportunitiesTable>
-        <Head as={OpportunitiesRow}>
-          <OpportunitiesCell width="35%">Item name</OpportunitiesCell>
-          <OpportunitiesCell width="15%">Best buy</OpportunitiesCell>
-          <OpportunitiesCell width="15%">Best sell</OpportunitiesCell>
-          <OpportunitiesCell width="10%">Margin</OpportunitiesCell>
-          <OpportunitiesCell width="25%">
-            Average daily trade volume
-          </OpportunitiesCell>
-        </Head>
+        <OpportunitiesHeader>
+          <HeaderCell width="35%">Item name</HeaderCell>
+          <HeaderCell width="15%">Best buy</HeaderCell>
+          <HeaderCell width="15%">Best sell</HeaderCell>
+          <HeaderCell width="10%">Margin</HeaderCell>
+          <HeaderCell width="25%">Avg daily volume</HeaderCell>
+        </OpportunitiesHeader>
         {opportunities.map((opp, index) => (
           <OpportunitiesRow key={index}>
             <OpportunitiesCell title={opp.item_name} width="35%">
               {opp.item_name}
             </OpportunitiesCell>
-            <OpportunitiesCell
+            <NumericCell
               title={priceFormatter.format(opp.best_buy)}
               width="15%"
             >
               {priceFormatter.format(opp.best_buy)}
-            </OpportunitiesCell>
-            <OpportunitiesCell
+            </NumericCell>
+            <NumericCell
               title={priceFormatter.format(opp.best_sell)}
               width="15%"
             >
               {priceFormatter.format(opp.best_sell)}
-            </OpportunitiesCell>
-            <OpportunitiesCell
+            </NumericCell>
+            <MarginCell
+              $value={opp.net_margin}
               title={`${marginFormatter.format(opp.net_margin * 100)}%`}
               width="10%"
             >
               {marginFormatter.format(opp.net_margin * 100)}%
-            </OpportunitiesCell>
-            <OpportunitiesCell
+            </MarginCell>
+            <NumericCell
               title={numberFormatter.format(opp.avg_daily_trade_value)}
               width="25%"
             >
               {numberFormatter.format(opp.avg_daily_trade_value)}
-            </OpportunitiesCell>
+            </NumericCell>
           </OpportunitiesRow>
         ))}
       </OpportunitiesTable>
