@@ -4,14 +4,23 @@ import { opportunities as selectOpportunities } from "../redux/orders/opportunit
 import { Cell, Head, Row, Table } from "../Market/Orders/Table";
 
 const Container = styled.div`
-  width: 100%;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
   padding: 10px;
   background-color: ${({ theme }) => theme.colors.emGrey};
   border-radius: 5px;
 `;
 
 const OpportunitiesTable = styled(Table)`
+  flex: 1;
+  min-height: 0;
+  height: auto;
   overflow-x: auto;
+  overflow-y: auto;
 `;
 
 const OpportunitiesRow = styled(Row)`

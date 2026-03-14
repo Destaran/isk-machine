@@ -1,16 +1,17 @@
-import { BrowserRouter } from 'react-router-dom';
-import { QueryClient } from '@tanstack/react-query';
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { Provider } from 'react-redux';
-import { store } from './redux/store';
-import { AppRoutes } from './AppRoutes';
-import styled, { ThemeProvider } from 'styled-components';
-import { theme } from './style/theme';
-import { GlobalStyle } from './style/GlobalStyle';
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient } from "@tanstack/react-query";
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { AppRoutes } from "./AppRoutes";
+import styled, { ThemeProvider } from "styled-components";
+import { theme } from "./style/theme";
+import { GlobalStyle } from "./style/GlobalStyle";
 
 const PageWrapper = styled.div`
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 `;
@@ -34,7 +35,10 @@ export function App() {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{ persister }}
+          >
             <Provider store={store}>
               <PageWrapper>
                 <AppRoutes />
