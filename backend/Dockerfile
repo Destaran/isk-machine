@@ -16,8 +16,8 @@ COPY tsconfig.json /backend
 COPY tsconfig.build.json /backend
 COPY .prettierrc /backend 
 COPY .eslintrc.js /backend
-COPY src /backend
-COPY test /backend
+COPY src /backend/src
+COPY test /backend/test
 
 FROM source as dev
 

@@ -16,8 +16,8 @@ COPY tsconfig.json /app
 COPY tsconfig.node.json /app
 COPY tsconfig.app.json /app
 COPY index.html /app
-COPY public /app
-COPY src /app
+COPY public /app/public
+COPY src /app/src
 
 FROM source as dev
 
