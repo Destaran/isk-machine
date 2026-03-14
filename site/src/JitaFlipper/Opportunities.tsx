@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { usePersistedScroll } from "../hooks/usePersistedScroll";
 import { useAppSelector } from "../redux/hooks";
 import { opportunities as selectOpportunities } from "../redux/orders/opportunitiesSlice";
 import { Cell, Head, Table } from "../Market/Orders/Table";
@@ -62,6 +63,7 @@ const HeaderCell = styled(Cell)`
 
 export function Opportunities() {
   const opportunities = useAppSelector(selectOpportunities);
+  const tableRef = usePersistedScroll("opportunities-scroll");
 
   const numberFormatter = new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 0,
@@ -77,7 +79,7 @@ export function Opportunities() {
 
   return (
     <Container>
-      <OpportunitiesTable>
+      <OpportunitiesTable ref={tableRef}>
         <OpportunitiesHeader>
           <HeaderCell>Item name</HeaderCell>
           <HeaderCell>Best buy / Best sell</HeaderCell>
