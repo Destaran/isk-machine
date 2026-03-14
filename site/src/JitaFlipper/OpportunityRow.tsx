@@ -86,11 +86,6 @@ const SellPrice = styled.span`
   font-weight: 600;
 `;
 
-const PriceCurrency = styled.span`
-  font-size: 10px;
-  color: ${({ theme }) => theme.colors.emLightGrey};
-`;
-
 interface MarginCellProps {
   $value: number;
 }
