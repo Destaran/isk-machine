@@ -55,17 +55,40 @@ const PriceStackCell = styled(OpportunitiesCell)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
-  gap: 2px;
+  align-items: flex-start;
+  gap: 4px;
   font-variant-numeric: tabular-nums;
+`;
+
+const PriceLine = styled.div`
+  display: grid;
+  grid-template-columns: 34px max-content max-content;
+  align-items: baseline;
+  column-gap: 6px;
+  width: max-content;
+`;
+
+const PriceLabel = styled.span`
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.emLightGrey};
 `;
 
 const BuyPrice = styled.span`
   color: #e74c3c;
+  font-weight: 600;
 `;
 
 const SellPrice = styled.span`
-  color: #00c853;
+  color: #00ff00;
+  font-weight: 600;
+`;
+
+const PriceCurrency = styled.span`
+  font-size: 10px;
+  color: ${({ theme }) => theme.colors.emLightGrey};
 `;
 
 interface MarginCellProps {
@@ -73,8 +96,7 @@ interface MarginCellProps {
 }
 
 const MarginCell = styled(NumericCell)<MarginCellProps>`
-  color: ${({ $value }) =>
-    $value > 0.1 ? "#00c853" : $value > 0.05 ? "#ffa500" : "#e9e9e9"};
+  color: ${({ theme }) => theme.colors.orange};
   font-weight: ${({ $value }) => ($value > 0.1 ? "600" : "400")};
 `;
 
@@ -103,6 +125,8 @@ export function OpportunityRow({
   const groups = useMarketGroups(opp.type_id);
   const isBp = groups?.includes("Blueprints") ? "bp" : "icon";
   const imgSrc = `https://images.evetech.net/types/${opp.type_id}/${isBp}?size=64`;
+  const bestBuy = priceFormatter.format(opp.best_buy);
+  const bestSell = priceFormatter.format(opp.best_sell);
 
   return (
     <OpportunitiesRow>
@@ -110,11 +134,15 @@ export function OpportunityRow({
         <ItemIcon src={imgSrc} alt={opp.item_name} />
         {opp.item_name}
       </ItemCell>
-      <PriceStackCell
-        title={`Buy: ${priceFormatter.format(opp.best_buy)} / Sell: ${priceFormatter.format(opp.best_sell)}`}
-      >
-        <BuyPrice>{priceFormatter.format(opp.best_buy)}</BuyPrice>
-        <SellPrice>{priceFormatter.format(opp.best_sell)}</SellPrice>
+      <PriceStackCell title={`Buy: ${bestBuy} ISK / Sell: ${bestSell} ISK`}>
+        <PriceLine>
+          <PriceLabel>Buy</PriceLabel>
+          <BuyPrice>{bestBuy}</BuyPrice>
+        </PriceLine>
+        <PriceLine>
+          <PriceLabel>Sell</PriceLabel>
+          <SellPrice>{bestSell}</SellPrice>
+        </PriceLine>
       </PriceStackCell>
       <MarginCell
         $value={opp.net_margin}
