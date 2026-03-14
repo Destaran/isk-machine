@@ -61,7 +61,7 @@ const OpportunitiesHeader = styled(Head)`
 const baseCell = `
   width: auto;
   min-width: 0;
-  min-height: 32px;
+  min-height: 64px;
   height: auto;
   line-height: 1.3;
   padding: 4px 8px;
@@ -72,6 +72,18 @@ const baseCell = `
 
 const OpportunitiesCell = styled(Cell)`
   ${baseCell}
+`;
+
+const ItemCell = styled(OpportunitiesCell)`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const ItemIcon = styled.img`
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
 `;
 
 const HeaderCell = styled(Cell)`
@@ -125,9 +137,13 @@ export function Opportunities() {
         </OpportunitiesHeader>
         {opportunities.map((opp, index) => (
           <OpportunitiesRow key={index}>
-            <OpportunitiesCell title={opp.item_name}>
+            <ItemCell title={opp.item_name}>
+              <ItemIcon
+                src={`https://images.evetech.net/types/${opp.type_id}/icon?size=32`}
+                alt={opp.item_name}
+              />
               {opp.item_name}
-            </OpportunitiesCell>
+            </ItemCell>
             <NumericCell title={priceFormatter.format(opp.best_buy)}>
               {priceFormatter.format(opp.best_buy)}
             </NumericCell>

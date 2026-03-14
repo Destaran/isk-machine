@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 interface Opportunity {
+  type_id: number;
   item_name: string;
   best_buy: number;
   best_sell: number;
