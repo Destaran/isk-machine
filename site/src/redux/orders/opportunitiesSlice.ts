@@ -20,8 +20,17 @@ interface OpportunitiesState {
   opportunities: Opportunity[];
 }
 
+function loadFromStorage(): Opportunity[] {
+  try {
+    const stored = localStorage.getItem("opportunities");
+    return stored ? (JSON.parse(stored) as Opportunity[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 const initialState: OpportunitiesState = {
-  opportunities: [],
+  opportunities: loadFromStorage(),
 };
 
 export const opportunitiesSlice = createSlice({

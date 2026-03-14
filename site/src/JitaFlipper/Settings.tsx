@@ -17,6 +17,7 @@ export function Settings() {
 
   const handleGetOpportunities = useCallback(async () => {
     const opportunities = await getOpportunities();
+    localStorage.setItem("opportunities", JSON.stringify(opportunities));
     dispatch(setOpportunities(opportunities));
   }, [dispatch]);
 
