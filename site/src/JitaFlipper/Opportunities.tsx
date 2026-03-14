@@ -16,6 +16,10 @@ const Container = styled.div`
 `;
 
 const OpportunitiesTable = styled(Table)`
+  display: grid;
+  grid-template-columns: repeat(5, max-content);
+  min-width: 100%;
+  width: max-content;
   flex: 1;
   min-height: 0;
   height: auto;
@@ -24,29 +28,38 @@ const OpportunitiesTable = styled(Table)`
 `;
 
 const OpportunitiesRow = styled(Row)`
-  min-height: 32px;
-  height: auto;
+  display: contents;
 
-  &:nth-child(even) {
+  & > * {
+    background-color: ${({ theme }) => theme.colors.emDarkGrey};
+  }
+
+  &:nth-child(even) > * {
     background-color: ${({ theme }) => theme.colors.emBlack};
   }
 
-  &:hover {
+  &:hover > * {
     background-color: #3a2800;
   }
 `;
 
 const OpportunitiesHeader = styled(Head)`
-  min-height: 32px;
-  height: auto;
-  background-color: ${({ theme }) => theme.colors.emBlack};
+  display: contents;
 
-  &:hover {
+  & > * {
+    background-color: ${({ theme }) => theme.colors.emBlack};
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  &:hover > * {
     background-color: ${({ theme }) => theme.colors.emBlack};
   }
 `;
 
 const baseCell = `
+  width: auto;
   min-width: 0;
   min-height: 32px;
   height: auto;
@@ -104,39 +117,31 @@ export function Opportunities() {
     <Container>
       <OpportunitiesTable>
         <OpportunitiesHeader>
-          <HeaderCell width="35%">Item name</HeaderCell>
-          <HeaderCell width="15%">Best buy</HeaderCell>
-          <HeaderCell width="15%">Best sell</HeaderCell>
-          <HeaderCell width="10%">Margin</HeaderCell>
-          <HeaderCell width="25%">Avg daily volume</HeaderCell>
+          <HeaderCell>Item name</HeaderCell>
+          <HeaderCell>Best buy</HeaderCell>
+          <HeaderCell>Best sell</HeaderCell>
+          <HeaderCell>Margin</HeaderCell>
+          <HeaderCell>Avg daily volume</HeaderCell>
         </OpportunitiesHeader>
         {opportunities.map((opp, index) => (
           <OpportunitiesRow key={index}>
-            <OpportunitiesCell title={opp.item_name} width="35%">
+            <OpportunitiesCell title={opp.item_name}>
               {opp.item_name}
             </OpportunitiesCell>
-            <NumericCell
-              title={priceFormatter.format(opp.best_buy)}
-              width="15%"
-            >
+            <NumericCell title={priceFormatter.format(opp.best_buy)}>
               {priceFormatter.format(opp.best_buy)}
             </NumericCell>
-            <NumericCell
-              title={priceFormatter.format(opp.best_sell)}
-              width="15%"
-            >
+            <NumericCell title={priceFormatter.format(opp.best_sell)}>
               {priceFormatter.format(opp.best_sell)}
             </NumericCell>
             <MarginCell
               $value={opp.net_margin}
               title={`${marginFormatter.format(opp.net_margin * 100)}%`}
-              width="10%"
             >
               {marginFormatter.format(opp.net_margin * 100)}%
             </MarginCell>
             <NumericCell
               title={numberFormatter.format(opp.avg_daily_trade_value)}
-              width="25%"
             >
               {numberFormatter.format(opp.avg_daily_trade_value)}
             </NumericCell>
