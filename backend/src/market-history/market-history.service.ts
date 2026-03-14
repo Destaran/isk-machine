@@ -42,9 +42,7 @@ export class MarketHistoryService {
     const typeIds = await this.ordersService.getTypesByRegionId(regionId);
     const chunkedTypeIds = this.dataScraper.chunk(typeIds, 1000);
     for (const chunk of chunkedTypeIds) {
-      const requests = chunk.map((typeId) =>
-        this.scrape(typeId, regionId),
-      );
+      const requests = chunk.map((typeId) => this.scrape(typeId, regionId));
       const results = await Promise.allSettled(requests);
       const successCount = results.filter(
         (r) => r.status === 'fulfilled',
