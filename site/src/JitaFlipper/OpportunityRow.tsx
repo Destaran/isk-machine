@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Cell, Row } from "../Market/Orders/Table";
 import { useMarketGroups } from "../hooks/useMarketGroups";
+import { useCopyToClipboard } from "../hooks/useCopyToClipboard";
 import { useNavigate } from "react-router-dom";
 
 const OpportunitiesRow = styled(Row)`
@@ -41,6 +42,38 @@ const ItemCell = styled(OpportunitiesCell)`
   display: flex;
   align-items: center;
   gap: 6px;
+`;
+
+const ItemContent = styled.div`
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const ItemName = styled.span`
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const CopyButton = styled.button`
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid ${({ theme }) => theme.colors.emGrey};
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.emBlack};
+  color: ${({ theme }) => theme.colors.emWhite};
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.orange};
+    color: ${({ theme }) => theme.colors.orange};
+  }
 `;
 
 const ItemIcon = styled.img`
@@ -121,6 +154,7 @@ export function OpportunityRow({
   marginFormatter,
 }: OpportunityRowProps) {
   const navigate = useNavigate();
+  const { copied, copyText } = useCopyToClipboard();
   const groups = useMarketGroups(opp.type_id);
   const isBp = groups?.includes("Blueprints") ? "bp" : "icon";
   const imgSrc = `https://images.evetech.net/types/${opp.type_id}/${isBp}?size=64`;
@@ -135,7 +169,21 @@ export function OpportunityRow({
     <OpportunitiesRow onClick={handleClick}>
       <ItemCell title={opp.item_name}>
         <ItemIcon src={imgSrc} alt={opp.item_name} />
-        {opp.item_name}
+        <ItemContent>
+          <ItemName>{opp.item_name}</ItemName>
+          <CopyButton
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              void copyText(opp.item_name);
+            }}
+            title={`Copy ${opp.item_name}`}
+            aria-label={`Copy ${opp.item_name}`}
+          >
+            {copied ? "Copied" : "Copy"}
+          </CopyButton>
+        </ItemContent>
       </ItemCell>
       <PriceStackCell title={`Buy: ${bestBuy} ISK / Sell: ${bestSell} ISK`}>
         <PriceLine>
