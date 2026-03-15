@@ -9,7 +9,6 @@ const OpportunitiesRow = styled(Row)`
 
   & > * {
     background-color: ${({ theme }) => theme.colors.emDarkGrey};
-    cursor: pointer;
   }
 
   &:nth-child(even) > * {
@@ -18,7 +17,6 @@ const OpportunitiesRow = styled(Row)`
 
   &:hover > * {
     background-color: #3a2800;
-    cursor: pointer;
   }
 `;
 
@@ -53,18 +51,27 @@ const ItemContent = styled.div`
 `;
 
 const ItemName = styled.span`
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-const CopyButton = styled.button`
+interface CopyButtonProps {
+  $copied?: boolean;
+}
+
+const CopyButton = styled.button<CopyButtonProps>`
   flex-shrink: 0;
   padding: 4px 8px;
-  border: 1px solid ${({ theme }) => theme.colors.emGrey};
+  border: 1px solid
+    ${({ theme, $copied }) =>
+      $copied ? theme.colors.orange : theme.colors.emGrey};
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.emBlack};
-  color: ${({ theme }) => theme.colors.emWhite};
+  background-color: ${({ theme, $copied }) =>
+    $copied ? "#3a2800" : theme.colors.emBlack};
+  color: ${({ theme, $copied }) =>
+    $copied ? theme.colors.orange : theme.colors.emWhite};
   font-size: 11px;
   font-weight: 600;
   line-height: 1;
@@ -73,6 +80,7 @@ const CopyButton = styled.button`
   &:hover {
     border-color: ${({ theme }) => theme.colors.orange};
     color: ${({ theme }) => theme.colors.orange};
+    cursor: pointer;
   }
 `;
 
@@ -161,12 +169,8 @@ export function OpportunityRow({
   const bestBuy = priceFormatter.format(opp.best_buy);
   const bestSell = priceFormatter.format(opp.best_sell);
 
-  function handleClick() {
-    navigate(`/market/${opp.type_id}`);
-  }
-
   return (
-    <OpportunitiesRow onClick={handleClick}>
+    <OpportunitiesRow>
       <ItemCell title={opp.item_name}>
         <ItemIcon src={imgSrc} alt={opp.item_name} />
         <ItemContent>
@@ -180,8 +184,21 @@ export function OpportunityRow({
             }}
             title={`Copy ${opp.item_name}`}
             aria-label={`Copy ${opp.item_name}`}
+            $copied={copied}
           >
-            {copied ? "Copied" : "Copy"}
+            Copy
+          </CopyButton>
+          <CopyButton
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              navigate(`/market/${opp.type_id}`);
+            }}
+            title={`View ${opp.item_name} in market`}
+            aria-label={`View ${opp.item_name} in market`}
+          >
+            Market
           </CopyButton>
         </ItemContent>
       </ItemCell>
