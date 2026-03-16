@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Container, SectionTitle } from "../components/pageElements";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import {
   getOpportunities,
   type OpportunitiesParams,
 } from "../api/market/useGetOpportunities";
 import { useDispatch } from "react-redux";
 import { setOpportunities } from "../redux/orders/opportunitiesSlice";
+import { useOpportunityFilters } from "../hooks/useOpportunityFilters";
 
 const Wrapper = styled.div`
   display: flex;
@@ -91,16 +92,6 @@ const FetchButton = styled.button`
   }
 `;
 
-const defaultOpportunityFilters: OpportunitiesParams = {
-  buyLocation: 60003760,
-  sellLocation: 60003760,
-  volatility: 0.25,
-  margin: 0.2,
-  maxMargin: 10,
-  dailyProfit: 5000000,
-  minVolume: 100,
-};
-
 const fieldConfigs: Array<{
   key: keyof OpportunitiesParams;
   label: string;
@@ -149,9 +140,7 @@ const fieldConfigs: Array<{
 
 export function Settings() {
   const dispatch = useDispatch();
-  const [filters, setFilters] = useState<OpportunitiesParams>(
-    defaultOpportunityFilters,
-  );
+  const { filters, setFilters } = useOpportunityFilters();
 
   const handleFilterChange =
     (key: keyof OpportunitiesParams) =>
