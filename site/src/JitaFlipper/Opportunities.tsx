@@ -18,15 +18,10 @@ const Container = styled.div`
 `;
 
 const OpportunitiesTable = styled(Table)`
-  display: grid;
   grid-template-columns: repeat(4, max-content);
-  min-width: 100%;
-  width: max-content;
   flex: 1;
   min-height: 0;
   height: auto;
-  overflow-x: auto;
-  overflow-y: auto;
 `;
 
 const OpportunitiesHeader = styled(Head)`

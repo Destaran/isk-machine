@@ -1,8 +1,13 @@
-import styled from 'styled-components';
-import { useAppSelector } from '../../hooks/redux';
-import { useAppDispatch } from '../../redux/hooks';
-import { setSortingKey, sorting, SortingKey, switchSorting } from '../../redux/orders/ordersSlice';
-import { Cell, MarketTableColumnWidths, Head } from './Table';
+import styled from "styled-components";
+import { useAppSelector } from "../../hooks/redux";
+import { useAppDispatch } from "../../redux/hooks";
+import {
+  setSortingKey,
+  sorting,
+  SortingKey,
+  switchSorting,
+} from "../../redux/orders/ordersSlice";
+import { Cell, Head } from "./Table";
 
 const HeaderCell = styled(Cell)`
   justify-content: space-between;
@@ -19,50 +24,49 @@ interface Props {
 
 export function TableHead({ isBuy }: Props) {
   const dispatch = useAppDispatch();
-  const sortingState = useAppSelector(sorting)[isBuy ? 'buy' : 'sell'];
+  const sortingState = useAppSelector(sorting)[isBuy ? "buy" : "sell"];
   const { key, direction } = sortingState;
-  const indicator = direction === 'asc' ? '▲' : '▼';
-
-  const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
-    MarketTableColumnWidths;
+  const indicator = direction === "asc" ? "▲" : "▼";
 
   function handleClick(clickedKey: SortingKey) {
     if (key === clickedKey) {
-      dispatch(switchSorting(isBuy ? 'buy' : 'sell'));
+      dispatch(switchSorting(isBuy ? "buy" : "sell"));
     } else {
-      dispatch(setSortingKey({ key: clickedKey, type: isBuy ? 'buy' : 'sell' }));
+      dispatch(
+        setSortingKey({ key: clickedKey, type: isBuy ? "buy" : "sell" }),
+      );
     }
   }
 
   return (
     <Head>
-      <HeaderCell $interactive onClick={() => handleClick('region')} width={regionW}>
+      <HeaderCell $interactive onClick={() => handleClick("region")}>
         <span>Region</span>
-        <span>{key === 'region' && indicator}</span>
+        <span>{key === "region" && indicator}</span>
       </HeaderCell>
-      <HeaderCell $interactive onClick={() => handleClick('volume')} width={quantityW}>
+      <HeaderCell $interactive onClick={() => handleClick("volume")}>
         <span>Quantity</span>
-        <span>{key === 'volume' && indicator}</span>
+        <span>{key === "volume" && indicator}</span>
       </HeaderCell>
-      <HeaderCell $interactive onClick={() => handleClick('price')} width={priceW}>
+      <HeaderCell $interactive onClick={() => handleClick("price")}>
         <span>Price</span>
-        <span>{key === 'price' && indicator}</span>
+        <span>{key === "price" && indicator}</span>
       </HeaderCell>
-      <HeaderCell $interactive width={locationW}>
+      <HeaderCell $interactive>
         <span>Location</span>
-        <span>{key === 'location' && indicator}</span>
+        <span>{key === "location" && indicator}</span>
       </HeaderCell>
-      <HeaderCell $interactive width={jumpsW}>
+      <HeaderCell $interactive>
         Jumps
-        <span>{key === 'range' && indicator}</span>
+        <span>{key === "range" && indicator}</span>
       </HeaderCell>
-      <HeaderCell $interactive width={expiresW}>
+      <HeaderCell $interactive>
         Expires In
-        <span>{key === 'expiresIn' && indicator}</span>
+        <span>{key === "expiresIn" && indicator}</span>
       </HeaderCell>
-      <HeaderCell $interactive width={lastModifiedW}>
+      <HeaderCell $interactive>
         Last Modified
-        <span>{key === 'lastModified' && indicator}</span>
+        <span>{key === "lastModified" && indicator}</span>
       </HeaderCell>
     </Head>
   );

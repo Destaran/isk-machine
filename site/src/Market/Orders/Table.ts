@@ -1,14 +1,21 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-export const Table = styled.div`
-  display: block;
-  width: 100%;
+interface TableProps {
+  $columnsTemplate?: string;
+}
+
+export const Table = styled.div<TableProps>`
+  display: grid;
+  grid-template-columns: ${({ $columnsTemplate }) =>
+    $columnsTemplate ?? "repeat(7, max-content)"};
+  align-content: start;
+  min-width: 100%;
+  width: max-content;
   height: 400px;
-  overflow: scroll;
+  overflow: auto;
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.emDarkGrey};
-  table-layout: fixed;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
 `;
 
@@ -17,24 +24,23 @@ interface RowProps {
 }
 
 export const Row = styled.div<RowProps>`
-  display: flex;
-  height: 25px;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.emDarkGrey};
+  display: contents;
 
-  &:hover {
+  &:hover > * {
     background-color: ${({ theme, $interactive }) =>
       $interactive ? theme.colors.emBlack : theme.colors.emDarkGrey};
   }
 `;
 
 export const Head = styled(Row)`
-  position: sticky;
-  top: 0;
+  & > * {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
 `;
 
 interface CellProps {
-  width?: string;
   $interactive?: boolean;
 }
 
@@ -44,24 +50,17 @@ export const Cell = styled.div<CellProps>`
   justify-content: start;
   height: 25px;
   line-height: 25px;
-  width: ${(props) => props.width ?? '10%'};
+  width: auto;
+  padding: 0 6px;
+  white-space: nowrap;
   font-size: 12px;
+  background-color: ${({ theme }) => theme.colors.emDarkGrey};
   border: 1px solid;
   border-color: ${({ theme }) => theme.colors.emGrey};
 
   &:hover {
-    cursor: ${({ $interactive }) => ($interactive ? 'pointer' : 'default')};
+    cursor: ${({ $interactive }) => ($interactive ? "pointer" : "default")};
     color: ${({ theme, $interactive }) =>
       $interactive ? theme.colors.orange : theme.colors.emWhite};
   }
 `;
-
-export const MarketTableColumnWidths = {
-  regionW: '5%',
-  quantityW: '5%',
-  priceW: '10%',
-  locationW: '55%',
-  jumpsW: '5%',
-  expiresW: '10%',
-  lastModifiedW: '10%',
-};

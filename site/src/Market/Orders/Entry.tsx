@@ -1,12 +1,18 @@
-import { Row, Cell, MarketTableColumnWidths } from './Table';
-import { format } from 'date-fns';
-import styled from 'styled-components';
-import { Order } from '../../api/market/MarketData';
-import { regions, setFilter, stations, structures, systems } from '../../redux/orders/ordersSlice';
-import { useAppSelector } from '../../redux/hooks';
-import { useExpiresIn } from '../../hooks/useExpiresIn';
-import { useAppDispatch } from '../../hooks/redux';
-import { entryFilterStates } from '../../redux/orders/entryFilterStates';
+import { Row, Cell } from "./Table";
+import { format } from "date-fns";
+import styled from "styled-components";
+import { Order } from "../../api/market/MarketData";
+import {
+  regions,
+  setFilter,
+  stations,
+  structures,
+  systems,
+} from "../../redux/orders/ordersSlice";
+import { useAppSelector } from "../../redux/hooks";
+import { useExpiresIn } from "../../hooks/useExpiresIn";
+import { useAppDispatch } from "../../hooks/redux";
+import { entryFilterStates } from "../../redux/orders/entryFilterStates";
 
 interface Props {
   order: Order;
@@ -35,10 +41,7 @@ export function Entry({ order }: Props) {
   const stationData = useAppSelector(stations);
   const structureData = useAppSelector(structures);
 
-  const { regionW, quantityW, priceW, locationW, jumpsW, expiresW, lastModifiedW } =
-    MarketTableColumnWidths;
-
-  let locationName = 'Unknown';
+  let locationName = "Unknown";
   if (order.location_id.toString().length === 8) {
     locationName = stationData[order.location_id];
   }
@@ -49,8 +52,8 @@ export function Entry({ order }: Props) {
       locationName = `${systemsData[order.system_id].name} - Unknown Player Structure`;
     }
   }
-  const price = new Intl.NumberFormat('en-US').format(order.price);
-  const issued = format(new Date(order.issued), 'yyyy-MM-dd HH:mm:ss');
+  const price = new Intl.NumberFormat("en-US").format(order.price);
+  const issued = format(new Date(order.issued), "yyyy-MM-dd HH:mm:ss");
   const expiresIn = useExpiresIn(order.issued, order.duration);
   const regionName = useAppSelector(regions)[order.region_id];
   const secStatus = systemsData[order.system_id].security_status;
@@ -58,37 +61,37 @@ export function Entry({ order }: Props) {
   function handleRegionClick() {
     dispatch(
       setFilter({
-        type: 'regionFilter',
+        type: "regionFilter",
         filter: regionName,
         active: !filterStates.regionFilter,
-      })
+      }),
     );
   }
 
   function handleLocationClick() {
     dispatch(
       setFilter({
-        type: 'locationFilter',
+        type: "locationFilter",
         filter: locationName,
         active: !filterStates.locationFilter,
-      })
+      }),
     );
   }
 
   return (
     <Row $interactive>
-      <Cell width={regionW} onClick={() => handleRegionClick()} $interactive>
+      <Cell onClick={() => handleRegionClick()} $interactive>
         {regionName}
       </Cell>
-      <Cell width={quantityW}>{order.volume_remain}</Cell>
-      <Cell width={priceW}>{price} ISK</Cell>
-      <Cell width={locationW} onClick={() => handleLocationClick()} $interactive>
+      <Cell>{order.volume_remain}</Cell>
+      <Cell>{price} ISK</Cell>
+      <Cell onClick={() => handleLocationClick()} $interactive>
         <SecStat $secStatus={secStatus}>{secStatus}</SecStat>
         <Text>{locationName}</Text>
       </Cell>
-      <Cell width={jumpsW}>{'-'}</Cell>
-      <Cell width={expiresW}>{expiresIn}</Cell>
-      <Cell width={lastModifiedW}>{issued}</Cell>
+      <Cell>-</Cell>
+      <Cell>{expiresIn}</Cell>
+      <Cell>{issued}</Cell>
     </Row>
   );
 }
