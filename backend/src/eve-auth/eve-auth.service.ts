@@ -72,6 +72,20 @@ export class EveAuthService {
 
     const expiresAt = new Date(Date.now() + expiresIn * 1000);
 
+    const existingToken = await this.characterTokenRepository.findOne({
+      where: { character_id: characterId },
+    });
+
+    if (existingToken) {
+      existingToken.character_name = payload.name;
+      existingToken.refresh_token = refreshToken;
+      existingToken.access_token = accessToken;
+      existingToken.access_token_expires_at = expiresAt;
+      existingToken.scopes = scopes;
+
+      return this.characterTokenRepository.save(existingToken);
+    }
+
     const tokenEntity = this.characterTokenRepository.create({
       character_id: characterId,
       character_name: payload.name,
