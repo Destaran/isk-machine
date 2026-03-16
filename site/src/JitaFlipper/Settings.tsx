@@ -6,8 +6,15 @@ import {
   type OpportunitiesParams,
 } from "../api/market/useGetOpportunities";
 import { useDispatch } from "react-redux";
-import { setOpportunities } from "../redux/orders/opportunitiesSlice";
+import {
+  persistOpportunities,
+  setOpportunities,
+} from "../redux/orders/opportunitiesSlice";
 import { useOpportunityFilters } from "../hooks/useOpportunityFilters";
+
+const SettingsContainer = styled(Container)`
+  align-self: flex-start;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -153,12 +160,18 @@ export function Settings() {
 
   const handleGetOpportunities = useCallback(async () => {
     const opportunities = await getOpportunities(filters);
-    localStorage.setItem("opportunities", JSON.stringify(opportunities));
-    dispatch(setOpportunities(opportunities));
+    const payload = {
+      opportunities,
+      params: { ...filters },
+      fetchedAt: new Date().toISOString(),
+    };
+
+    persistOpportunities(payload);
+    dispatch(setOpportunities(payload));
   }, [dispatch, filters]);
 
   return (
-    <Container>
+    <SettingsContainer>
       <SectionTitle>Settings</SectionTitle>
       <Wrapper>
         <Intro>
@@ -185,6 +198,6 @@ export function Settings() {
           Get opportunities
         </FetchButton>
       </Actions>
-    </Container>
+    </SettingsContainer>
   );
 }

@@ -5,7 +5,7 @@ import { Settings } from "./Settings";
 const Layout = styled.div`
   display: flex;
   justify-content: start;
-  align-items: flex-start;
+  align-items: stretch;
   box-sizing: border-box;
   margin: 10px;
   flex: 1;
