@@ -28,6 +28,7 @@ export class MarketService {
     sellLocation: number = 60003760,
     volatility: number = 0.25,
     margin: number = 0.2,
+    maxMargin: number = 10,
     dailyProfit: number = 5000000,
     minVolume: number = 100,
   ) {
@@ -91,12 +92,13 @@ export class MarketService {
       WHERE days_recorded >= 25
         AND volatility < $2
         AND net_margin >= $3
-        AND estimated_daily_profit >= $4
-        AND tradeable_volume >= $5
+        AND net_margin <= $4
+        AND estimated_daily_profit >= $5
+        AND tradeable_volume >= $6
       ORDER BY net_margin DESC
-      LIMIT 50;
+      LIMIT 150;
     `,
-      [buyLocation, volatility, margin, dailyProfit, minVolume],
+      [buyLocation, volatility, margin, maxMargin, dailyProfit, minVolume],
     );
 
     return result;
