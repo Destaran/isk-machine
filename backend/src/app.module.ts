@@ -18,6 +18,7 @@ import { StationModule } from './station/station.module';
 import { StructureModule } from './structure/structure.module';
 import { MarketHistoryModule } from './market-history/market-history.module';
 import { ConstellationModule } from './constellation/constellation.module';
+import { EveAuthModule } from './eve-auth/eve-auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
@@ -66,6 +67,7 @@ import { HttpRetryService } from './httpRetry.service';
     StructureModule,
     MarketHistoryModule,
     ConstellationModule,
+    EveAuthModule,
     HttpModule,
   ],
   controllers: [AppController],

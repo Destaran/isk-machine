@@ -188,7 +188,7 @@ export function Header() {
           </EveButton>
           {isConnected && (
             <>
-              <AuthLabel>Token ready</AuthLabel>
+              <AuthLabel>Saved to backend</AuthLabel>
               <SecondaryButton onClick={handleDisconnect}>
                 Disconnect
               </SecondaryButton>

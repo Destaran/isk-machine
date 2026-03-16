@@ -1,3 +1,5 @@
+import { post } from "../api/API";
+
 const EVE_AUTH_URL = "https://login.eveonline.com/v2/oauth/authorize";
 const EVE_TOKEN_URL = "https://login.eveonline.com/v2/oauth/token";
 
@@ -18,6 +20,11 @@ interface EveTokenResponse {
   refresh_token: string;
   expires_in: number;
   token_type: string;
+}
+
+interface SavedCharacterResponse {
+  characterId: number;
+  characterName: string;
 }
 
 function base64UrlEncode(bytes: Uint8Array): string {
@@ -100,6 +107,16 @@ function getRedirectUri(): string {
 
 function storeTokens(tokens: EveTokens): void {
   localStorage.setItem(TOKENS_KEY, JSON.stringify(tokens));
+}
+
+async function persistTokens(
+  tokens: EveTokens,
+): Promise<SavedCharacterResponse> {
+  return post<SavedCharacterResponse>("/eve-auth/tokens", {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    expiresIn: tokens.expiresIn,
+  });
 }
 
 export function getStoredEveTokens(): EveTokens | null {
@@ -222,6 +239,20 @@ export async function completeEveSsoLoginFromRedirect(): Promise<EveTokens | nul
     tokenType: data.token_type,
     receivedAt: Date.now(),
   };
+
+  try {
+    await persistTokens(tokens);
+  } catch (error) {
+    clearOauthParamsFromUrl();
+
+    if (error instanceof Error) {
+      throw new Error(
+        `Failed to save EVE login on the backend: ${error.message}`,
+      );
+    }
+
+    throw new Error("Failed to save EVE login on the backend");
+  }
 
   storeTokens(tokens);
   clearOauthParamsFromUrl();
