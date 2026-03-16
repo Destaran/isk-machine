@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { MarketService } from './market.service';
 
 @Controller('market')
@@ -15,20 +15,22 @@ export class MarketController {
     return await this.marketService.searchTypes(search);
   }
 
-  @Get('opportunities')
+  @Post('opportunities')
   async getOpportunities(
-    @Body('buyLocation') buyLocation: number,
-    @Body('sellLocation') sellLocation: number,
-    @Body('volatility') volatility: number,
-    @Body('margin') margin: number,
-    @Body('dailyProfit') dailyProfit: number,
-    @Body('minVolume') minVolume: number,
+    @Body('buyLocation') buyLocation?: number,
+    @Body('sellLocation') sellLocation?: number,
+    @Body('volatility') volatility?: number,
+    @Body('margin') margin?: number,
+    @Body('maxMargin') maxMargin?: number,
+    @Body('dailyProfit') dailyProfit?: number,
+    @Body('minVolume') minVolume?: number,
   ) {
     return await this.marketService.getOpportunities(
       buyLocation,
       sellLocation,
       volatility,
       margin,
+      maxMargin,
       dailyProfit,
       minVolume,
     );

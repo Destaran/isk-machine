@@ -34,23 +34,34 @@ export class MarketService {
   ) {
     const result = await this.dataSource.query(
       `
-      WITH best_prices AS (
+      WITH best_buy_prices AS (
           SELECT
               type_id,
-              MAX(CASE WHEN is_buy_order THEN price END) AS best_buy,
-              MIN(CASE WHEN NOT is_buy_order THEN price END) AS best_sell
+          MAX(price) AS best_buy
           FROM orders
-          WHERE location_id = $1
+        WHERE location_id = $1
+        AND is_buy_order
+        GROUP BY type_id
+      ),
+      best_sell_prices AS (
+        SELECT
+          type_id,
+          MIN(price) AS best_sell
+        FROM orders
+        WHERE location_id = $2
+        AND NOT is_buy_order
           GROUP BY type_id
       ),
       order_volumes AS (
           SELECT
               o.type_id,
-              SUM(CASE WHEN is_buy_order AND o.price = b.best_buy THEN o.volume_remain ELSE 0 END) AS best_buy_volume,
-              SUM(CASE WHEN NOT is_buy_order AND o.price = b.best_sell THEN o.volume_remain ELSE 0 END) AS best_sell_volume
+          SUM(CASE WHEN o.is_buy_order AND o.location_id = $1 AND o.price = bb.best_buy THEN o.volume_remain ELSE 0 END) AS best_buy_volume,
+          SUM(CASE WHEN NOT o.is_buy_order AND o.location_id = $2 AND o.price = bs.best_sell THEN o.volume_remain ELSE 0 END) AS best_sell_volume
           FROM orders o
-          JOIN best_prices b ON o.type_id = b.type_id
-          WHERE o.location_id = $1
+        JOIN best_buy_prices bb ON o.type_id = bb.type_id
+        JOIN best_sell_prices bs ON o.type_id = bs.type_id
+        WHERE (o.location_id = $1 AND o.is_buy_order)
+         OR (o.location_id = $2 AND NOT o.is_buy_order)
           GROUP BY o.type_id
       ),
       historical AS (
@@ -69,36 +80,45 @@ export class MarketService {
           SELECT
               h.type_id,
               t.name AS item_name,
-              b.best_buy,
-              b.best_sell,
+              bb.best_buy,
+              bs.best_sell,
               v.best_buy_volume,
               v.best_sell_volume,
               h.avg_daily_trade_value,
               h.volatility,
               h.days_recorded,
-              ((b.best_sell - b.best_buy) / NULLIF(b.best_buy,0)) - 0.056 AS net_margin,
-              h.avg_daily_trade_value * 0.05 * (((b.best_sell - b.best_buy) / NULLIF(b.best_buy,0)) - 0.056) AS estimated_daily_profit,
+              ((bs.best_sell - bb.best_buy) / NULLIF(bb.best_buy,0)) - 0.056 AS net_margin,
+              h.avg_daily_trade_value * 0.05 * (((bs.best_sell - bb.best_buy) / NULLIF(bb.best_buy,0)) - 0.056) AS estimated_daily_profit,
               LEAST(v.best_buy_volume, v.best_sell_volume) AS tradeable_volume
           FROM historical h
-          JOIN best_prices b ON b.type_id = h.type_id
+          JOIN best_buy_prices bb ON bb.type_id = h.type_id
+          JOIN best_sell_prices bs ON bs.type_id = h.type_id
           JOIN order_volumes v ON v.type_id = h.type_id
           JOIN types t ON t.id = h.type_id
-          WHERE b.best_buy IS NOT NULL
-            AND b.best_sell IS NOT NULL
-            AND b.best_sell > b.best_buy
+          WHERE bb.best_buy IS NOT NULL
+            AND bs.best_sell IS NOT NULL
+            AND bs.best_sell > bb.best_buy
       )
       SELECT *
       FROM joined
       WHERE days_recorded >= 25
-        AND volatility < $2
-        AND net_margin >= $3
-        AND net_margin <= $4
-        AND estimated_daily_profit >= $5
-        AND tradeable_volume >= $6
+        AND volatility < $3
+        AND net_margin >= $4
+        AND net_margin <= $5
+        AND estimated_daily_profit >= $6
+        AND tradeable_volume >= $7
       ORDER BY net_margin DESC
       LIMIT 150;
     `,
-      [buyLocation, volatility, margin, maxMargin, dailyProfit, minVolume],
+      [
+        buyLocation,
+        sellLocation,
+        volatility,
+        margin,
+        maxMargin,
+        dailyProfit,
+        minVolume,
+      ],
     );
 
     return result;
