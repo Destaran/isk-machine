@@ -20,6 +20,9 @@ const Container = styled.div`
 const OpportunitiesTable = styled(Table)`
   grid-template-columns: repeat(4, max-content);
   flex: 1;
+  align-self: flex-start;
+  min-width: 0;
+  max-width: 100%;
   min-height: 0;
   height: auto;
 `;
