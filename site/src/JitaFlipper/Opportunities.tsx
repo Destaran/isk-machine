@@ -33,14 +33,14 @@ const OpportunitiesHeader = styled(Head)`
   display: contents;
 
   & > * {
-    background-color: ${({ theme }) => theme.colors.emBlack};
+    background-color: ${({ theme }) => theme.colors.emDarkGrey};
     position: sticky;
     top: 0;
     z-index: 1;
   }
 
   &:hover > * {
-    background-color: ${({ theme }) => theme.colors.emBlack};
+    background-color: ${({ theme }) => theme.colors.emDarkGrey};
   }
 `;
 
@@ -58,7 +58,7 @@ const HeaderCell = styled(Cell)`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: ${({ theme }) => theme.colors.emLightGrey};
+  color: ${({ theme }) => theme.colors.emWhite};
 `;
 
 export function Opportunities() {

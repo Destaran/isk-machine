@@ -204,12 +204,12 @@ export function OpportunityRow({
       </ItemCell>
       <PriceStackCell title={`Buy: ${bestBuy} ISK / Sell: ${bestSell} ISK`}>
         <PriceLine>
-          <PriceLabel>Buy</PriceLabel>
-          <BuyPrice>{bestBuy}</BuyPrice>
-        </PriceLine>
-        <PriceLine>
           <PriceLabel>Sell</PriceLabel>
           <SellPrice>{bestSell}</SellPrice>
+        </PriceLine>
+        <PriceLine>
+          <PriceLabel>Buy</PriceLabel>
+          <BuyPrice>{bestBuy}</BuyPrice>
         </PriceLine>
       </PriceStackCell>
       <MarginCell
