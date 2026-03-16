@@ -8,6 +8,7 @@ services:
       - ./site/index.html:/app/index.html
       - ./site/vite.config.ts:/app/vite.config.ts
       - ./site/tsconfig.json:/app/tsconfig.json
+      - ./site/.env:/app/.env
       - ./site/public:/app/public
       - ./site/src:/app/src
     ports:
