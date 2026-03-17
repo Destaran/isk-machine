@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retryDelay: 3000,
-      retry: 3,
+      retry: 5,
     },
   },
 });
