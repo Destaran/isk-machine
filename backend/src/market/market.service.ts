@@ -8,6 +8,7 @@ import { StationService } from 'src/station/station.service';
 import { StructureService } from 'src/structure/structure.service';
 import { MarketHistoryService } from 'src/market-history/market-history.service';
 import { DataSource } from 'typeorm';
+import { LocationSearchResult } from './location-search-result.interface';
 
 @Injectable()
 export class MarketService {
@@ -126,6 +127,90 @@ export class MarketService {
 
   async searchTypes(search: string) {
     return await this.typeService.searchByName(search);
+  }
+
+  async searchLocations(search: string): Promise<LocationSearchResult[]> {
+    const trimmedSearch = search?.trim();
+
+    if (!trimmedSearch || trimmedSearch.length < 2) {
+      return [];
+    }
+
+    const wildcardSearch = `%${trimmedSearch.replace(/\s+/g, '%')}%`;
+    const rows = await this.dataSource.query(
+      `
+      SELECT id::text as id, name, kind
+      FROM (
+        SELECT s.id::bigint AS id, s.name, 'station'::text AS kind
+        FROM station s
+        WHERE s.name ILIKE $1
+
+        UNION ALL
+
+        SELECT st.id::bigint AS id, st.name, 'structure'::text AS kind
+        FROM structure st
+        WHERE st.name ILIKE $1
+      ) AS locations
+      ORDER BY
+        CASE
+          WHEN LOWER(name) = LOWER($2) THEN 0
+          WHEN LOWER(name) LIKE LOWER($2 || '%') THEN 1
+          WHEN POSITION(LOWER($2) IN LOWER(name)) > 0 THEN 2
+          ELSE 3
+        END,
+        LENGTH(name) ASC
+      LIMIT 20;
+    `,
+      [wildcardSearch, trimmedSearch],
+    );
+
+    return rows.map(
+      (row: { id: string; name: string; kind: 'station' | 'structure' }) => ({
+        id: Number(row.id),
+        name: row.name,
+        kind: row.kind,
+      }),
+    );
+  }
+
+  async getLocationById(id: number): Promise<LocationSearchResult | null> {
+    const [station] = await this.dataSource.query(
+      `
+      SELECT id::text as id, name, 'station'::text AS kind
+      FROM station
+      WHERE id = $1
+      LIMIT 1;
+    `,
+      [id],
+    );
+
+    if (station) {
+      return {
+        id: Number(station.id),
+        name: station.name,
+        kind: station.kind,
+      };
+    }
+
+    const [structure] = await this.dataSource.query(
+      `
+      SELECT id::text as id, name, 'structure'::text AS kind
+      FROM structure
+      WHERE id = $1
+      LIMIT 1;
+    `,
+      [id],
+    );
+
+    if (structure) {
+      return {
+        id: Number(structure.id),
+        name: structure.name,
+        kind: structure.kind,
+      };
+    }
+
+    return null;
   }
 
   async getOrdersByTypeId(typeId: number) {

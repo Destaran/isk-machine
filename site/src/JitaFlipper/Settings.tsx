@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Container, SectionTitle } from "../components/pageElements";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   getOpportunities,
   type OpportunitiesParams,
@@ -11,9 +11,15 @@ import {
   setOpportunities,
 } from "../redux/orders/opportunitiesSlice";
 import { useOpportunityFilters } from "../hooks/useOpportunityFilters";
+import {
+  getLocationById,
+  useSearchLocations,
+} from "../api/market/useSearchLocations";
+import type { LocationSearchResult } from "../api/market/LocationSearchResult";
 
 const SettingsContainer = styled(Container)`
   align-self: flex-start;
+  overflow: visible;
 `;
 
 const Wrapper = styled.div`
@@ -75,6 +81,61 @@ const StyledInput = styled.input`
   }
 `;
 
+const LocationInputContainer = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const LocationTextInput = styled(StyledInput)`
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+const SelectedLocationMeta = styled.span`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.colors.emLightGrey};
+`;
+
+const Suggestions = styled.div`
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  border: 1px solid ${({ theme }) => theme.colors.emGrey};
+  border-radius: 6px;
+  background: ${({ theme }) => theme.colors.emBlack};
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+`;
+
+const SuggestionState = styled.div`
+  padding: 10px;
+  color: ${({ theme }) => theme.colors.emLightGrey};
+  font-size: 0.85rem;
+`;
+
+const Suggestion = styled.button`
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.white};
+  padding: 8px 10px;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.emDarkGrey};
+  }
+`;
+
+const SuggestionKind = styled.span`
+  margin-left: 8px;
+  color: ${({ theme }) => theme.colors.emLightGrey};
+  font-size: 0.8rem;
+`;
+
 const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -99,22 +160,31 @@ const FetchButton = styled.button`
   }
 `;
 
-const fieldConfigs: Array<{
-  key: keyof OpportunitiesParams;
+type LocationFilterKey = "buyLocation" | "sellLocation";
+
+const locationFieldConfigs: Array<{
+  key: LocationFilterKey;
   label: string;
   hint: string;
-  step?: string;
 }> = [
   {
     key: "buyLocation",
     label: "Buy location",
-    hint: "Station or structure ID used to read the highest buy order.",
+    hint: "Type station or structure name and pick a match to set its ID.",
   },
   {
     key: "sellLocation",
     label: "Sell location",
-    hint: "Station or structure ID used to read the lowest sell order.",
+    hint: "Type station or structure name and pick a match to set its ID.",
   },
+];
+
+const numericFieldConfigs: Array<{
+  key: Exclude<keyof OpportunitiesParams, LocationFilterKey>;
+  label: string;
+  hint: string;
+  step?: string;
+}> = [
   {
     key: "margin",
     label: "Min margin",
@@ -148,15 +218,104 @@ const fieldConfigs: Array<{
 export function Settings() {
   const dispatch = useDispatch();
   const { filters, setFilters } = useOpportunityFilters();
+  const [activeLocationField, setActiveLocationField] =
+    useState<LocationFilterKey | null>(null);
+  const [locationNames, setLocationNames] = useState<
+    Record<LocationFilterKey, string>
+  >({
+    buyLocation: "",
+    sellLocation: "",
+  });
+  const [debouncedLocationSearch, setDebouncedLocationSearch] = useState("");
+
+  const activeLocationSearchTerm = activeLocationField
+    ? locationNames[activeLocationField]
+    : "";
+
+  useEffect(() => {
+    const trimmedSearch = activeLocationSearchTerm.trim();
+
+    if (!activeLocationField || trimmedSearch.length < 2) {
+      setDebouncedLocationSearch("");
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setDebouncedLocationSearch(trimmedSearch);
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [activeLocationField, activeLocationSearchTerm]);
+
+  const {
+    data: locationResults = [],
+    isFetching: isLoadingLocationResults,
+    isError: isLocationSearchError,
+  } = useSearchLocations(
+    debouncedLocationSearch,
+    debouncedLocationSearch.length > 1,
+  );
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function hydrateLocationNames() {
+      const buy = await getLocationById(filters.buyLocation);
+      const sell = await getLocationById(filters.sellLocation);
+
+      if (isCancelled) {
+        return;
+      }
+
+      setLocationNames({
+        buyLocation: buy?.name ?? String(filters.buyLocation),
+        sellLocation: sell?.name ?? String(filters.sellLocation),
+      });
+    }
+
+    hydrateLocationNames();
+
+    return () => {
+      isCancelled = true;
+    };
+    // Keep labels in sync with selected IDs.
+  }, [filters.buyLocation, filters.sellLocation]);
 
   const handleFilterChange =
-    (key: keyof OpportunitiesParams) =>
+    (key: Exclude<keyof OpportunitiesParams, LocationFilterKey>) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setFilters((current) => ({
         ...current,
         [key]: event.target.valueAsNumber,
       }));
     };
+
+  const handleLocationChange =
+    (key: LocationFilterKey) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+
+      setLocationNames((current) => ({
+        ...current,
+        [key]: value,
+      }));
+      setActiveLocationField(key);
+    };
+
+  const handleLocationSelect = (
+    key: LocationFilterKey,
+    location: LocationSearchResult,
+  ) => {
+    setFilters((current) => ({
+      ...current,
+      [key]: location.id,
+    }));
+    setLocationNames((current) => ({
+      ...current,
+      [key]: location.name,
+    }));
+    setActiveLocationField(null);
+  };
 
   const handleGetOpportunities = useCallback(async () => {
     const opportunities = await getOpportunities(filters);
@@ -176,10 +335,75 @@ export function Settings() {
       <Wrapper>
         <Intro>
           Tune the market filters below before fetching Jita flipper
-          opportunities. Each value maps directly to the backend query.
+          opportunities. Select buy/sell locations by name and the backend will
+          receive their IDs.
         </Intro>
         <FieldsGrid>
-          {fieldConfigs.map((field) => (
+          {locationFieldConfigs.map((field) => (
+            <FieldCard key={field.key}>
+              <FieldLabel>{field.label}</FieldLabel>
+              <FieldHint>{field.hint}</FieldHint>
+              <LocationInputContainer>
+                <LocationTextInput
+                  type="text"
+                  placeholder="Start typing location name..."
+                  value={locationNames[field.key]}
+                  onChange={handleLocationChange(field.key)}
+                  onFocus={() => setActiveLocationField(field.key)}
+                  onBlur={() => {
+                    setTimeout(() => {
+                      setActiveLocationField((current) =>
+                        current === field.key ? null : current,
+                      );
+                    }, 120);
+                  }}
+                />
+                {activeLocationField === field.key &&
+                  debouncedLocationSearch.length > 1 && (
+                    <Suggestions>
+                      {isLoadingLocationResults && (
+                        <SuggestionState>
+                          Searching locations...
+                        </SuggestionState>
+                      )}
+                      {!isLoadingLocationResults && isLocationSearchError && (
+                        <SuggestionState>
+                          Could not load locations. Check backend and try again.
+                        </SuggestionState>
+                      )}
+                      {!isLoadingLocationResults &&
+                        !isLocationSearchError &&
+                        locationResults.length === 0 && (
+                          <SuggestionState>
+                            No matching locations found.
+                          </SuggestionState>
+                        )}
+                      {!isLoadingLocationResults &&
+                        !isLocationSearchError &&
+                        locationResults.map((result) => (
+                          <Suggestion
+                            key={result.id}
+                            type="button"
+                            onMouseDown={(event) => event.preventDefault()}
+                            onClick={() =>
+                              handleLocationSelect(field.key, result)
+                            }
+                          >
+                            {result.name}
+                            <SuggestionKind>
+                              {result.kind} · #{result.id}
+                            </SuggestionKind>
+                          </Suggestion>
+                        ))}
+                    </Suggestions>
+                  )}
+              </LocationInputContainer>
+              <SelectedLocationMeta>
+                Selected ID: {filters[field.key]}
+              </SelectedLocationMeta>
+            </FieldCard>
+          ))}
+          {numericFieldConfigs.map((field) => (
             <FieldCard key={field.key}>
               <FieldLabel>{field.label}</FieldLabel>
               <FieldHint>{field.hint}</FieldHint>

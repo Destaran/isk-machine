@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { MarketService } from './market.service';
+import { LocationSearchResult } from './location-search-result.interface';
 
 @Controller('market')
 export class MarketController {
@@ -13,6 +14,20 @@ export class MarketController {
   @Get('search')
   async searchTypes(@Query('s') search: string) {
     return await this.marketService.searchTypes(search);
+  }
+
+  @Get('locations/search')
+  async searchLocations(
+    @Query('s') search: string,
+  ): Promise<LocationSearchResult[]> {
+    return await this.marketService.searchLocations(search);
+  }
+
+  @Get('locations/:id')
+  async getLocationById(
+    @Param('id') id: number,
+  ): Promise<LocationSearchResult | null> {
+    return await this.marketService.getLocationById(id);
   }
 
   @Post('opportunities')
