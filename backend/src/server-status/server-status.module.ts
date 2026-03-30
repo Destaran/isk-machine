@@ -6,6 +6,7 @@ import { HttpModule } from '@nestjs/axios';
 @Module({
   imports: [HttpModule],
   providers: [ServerStatusService],
+  exports: [ServerStatusService],
   controllers: [ServerStatusController],
 })
 export class ServerStatusModule {}

@@ -158,6 +158,14 @@ export function OpportunitiesInfo() {
       value: `${percentFormatter.format(query.margin * 100)}% to ${percentFormatter.format(query.maxMargin * 100)}%`,
     },
     {
+      label: "Broker fee",
+      value: `${percentFormatter.format(query.brokerFee * 100)}%`,
+    },
+    {
+      label: "Sales tax",
+      value: `${percentFormatter.format(query.salesTax * 100)}%`,
+    },
+    {
       label: "Max volatility",
       value: `${percentFormatter.format(query.volatility * 100)}%`,
     },

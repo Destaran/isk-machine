@@ -186,6 +186,18 @@ const numericFieldConfigs: Array<{
   step?: string;
 }> = [
   {
+    key: "brokerFee",
+    label: "Broker fee",
+    hint: "Broker fee in percent. Example: 1.38 means 1.38%.",
+    step: "0.01",
+  },
+  {
+    key: "salesTax",
+    label: "Sales tax",
+    hint: "Sales tax in percent. Example: 1.38 means 1.38%.",
+    step: "0.01",
+  },
+  {
     key: "margin",
     label: "Min margin",
     hint: "Minimum net margin after fees, expressed as a decimal.",
@@ -227,6 +239,10 @@ export function Settings() {
     sellLocation: "",
   });
   const [debouncedLocationSearch, setDebouncedLocationSearch] = useState("");
+
+  const isPercentField = (
+    key: Exclude<keyof OpportunitiesParams, LocationFilterKey>,
+  ) => key === "brokerFee" || key === "salesTax";
 
   const activeLocationSearchTerm = activeLocationField
     ? locationNames[activeLocationField]
@@ -284,11 +300,35 @@ export function Settings() {
   const handleFilterChange =
     (key: Exclude<keyof OpportunitiesParams, LocationFilterKey>) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      const inputValue = event.target.valueAsNumber;
+      const normalizedValue = Number.isFinite(inputValue)
+        ? isPercentField(key)
+          ? inputValue / 100
+          : inputValue
+        : inputValue;
+
       setFilters((current) => ({
         ...current,
-        [key]: event.target.valueAsNumber,
+        [key]: normalizedValue,
       }));
     };
+
+  const getNumericInputValue = (
+    key: Exclude<keyof OpportunitiesParams, LocationFilterKey>,
+  ): number | "" => {
+    const value = filters[key];
+
+    if (!Number.isFinite(value)) {
+      return "";
+    }
+
+    if (!isPercentField(key)) {
+      return value;
+    }
+
+    // Keep UI input stable and human-friendly by trimming floating-point noise.
+    return Number((value * 100).toFixed(4));
+  };
 
   const handleLocationChange =
     (key: LocationFilterKey) =>
@@ -336,7 +376,10 @@ export function Settings() {
         <Intro>
           Tune the market filters below before fetching Jita flipper
           opportunities. Select buy/sell locations by name and the backend will
-          receive their IDs.
+          receive their IDs. Broker fee and sales tax inputs are percentages
+          (for example 1.38 means 1.38%). Broker fee is applied on both sides,
+          while sales tax applies only to the sell side when calculating net
+          margin.
         </Intro>
         <FieldsGrid>
           {locationFieldConfigs.map((field) => (
@@ -410,7 +453,7 @@ export function Settings() {
               <StyledInput
                 type="number"
                 step={field.step}
-                value={filters[field.key]}
+                value={getNumericInputValue(field.key)}
                 onChange={handleFilterChange(field.key)}
               />
             </FieldCard>

@@ -11,6 +11,23 @@ export class ServerStatusService {
 
   constructor(private readonly httpService: HttpService) {}
 
+  async isServerOnline(): Promise<boolean> {
+    const url = 'https://esi.evetech.net/latest/status/?datasource=tranquility';
+
+    try {
+      const request = await firstValueFrom(this.httpService.get(url));
+
+      if (request.status !== 200 && request.status !== 304) {
+        return false;
+      }
+
+      const players = Number(request.data?.players);
+      return Number.isFinite(players) && players >= 0;
+    } catch {
+      return false;
+    }
+  }
+
   async onModuleInit() {
     await this.fetchStatus();
     this.fetchInterval = setInterval(

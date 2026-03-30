@@ -32,6 +32,8 @@ export class MarketService {
     maxMargin: number = 10,
     dailyProfit: number = 5000000,
     minVolume: number = 100,
+    brokerFee: number = 0,
+    salesTax: number = 0,
   ) {
     const result = await this.dataSource.query(
       `
@@ -77,7 +79,7 @@ export class MarketService {
           WHERE date >= CURRENT_DATE - INTERVAL '30 days'
           GROUP BY type_id
       ),
-      joined AS (
+        priced AS (
           SELECT
               h.type_id,
               t.name AS item_name,
@@ -88,8 +90,8 @@ export class MarketService {
               h.avg_daily_trade_value,
               h.volatility,
               h.days_recorded,
-              ((bs.best_sell - bb.best_buy) / NULLIF(bb.best_buy,0)) - 0.056 AS net_margin,
-              h.avg_daily_trade_value * 0.05 * (((bs.best_sell - bb.best_buy) / NULLIF(bb.best_buy,0)) - 0.056) AS estimated_daily_profit,
+            bb.best_buy * (1::numeric + $8::numeric) AS effective_buy_price,
+            bs.best_sell * (1::numeric - $8::numeric - $9::numeric) AS effective_sell_price,
               LEAST(v.best_buy_volume, v.best_sell_volume) AS tradeable_volume
           FROM historical h
           JOIN best_buy_prices bb ON bb.type_id = h.type_id
@@ -99,6 +101,23 @@ export class MarketService {
           WHERE bb.best_buy IS NOT NULL
             AND bs.best_sell IS NOT NULL
             AND bs.best_sell > bb.best_buy
+        ),
+        joined AS (
+          SELECT
+            p.type_id,
+            p.item_name,
+            p.best_buy,
+            p.best_sell,
+            p.best_buy_volume,
+            p.best_sell_volume,
+            p.avg_daily_trade_value,
+            p.volatility,
+            p.days_recorded,
+            ((p.effective_sell_price - p.effective_buy_price) / NULLIF(p.effective_buy_price, 0)) AS net_margin,
+            p.avg_daily_trade_value * 0.05 * ((p.effective_sell_price - p.effective_buy_price) / NULLIF(p.effective_buy_price, 0)) AS estimated_daily_profit,
+            p.tradeable_volume
+          FROM priced p
+          WHERE p.effective_sell_price > p.effective_buy_price
       )
       SELECT *
       FROM joined
@@ -119,6 +138,8 @@ export class MarketService {
         maxMargin,
         dailyProfit,
         minVolume,
+        brokerFee,
+        salesTax,
       ],
     );
 

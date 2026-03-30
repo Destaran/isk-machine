@@ -13,6 +13,7 @@ import { MarketHistoryService } from 'src/market-history/market-history.service'
 import { Cron } from '@nestjs/schedule';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { ServerStatusService } from 'src/server-status/server-status.service';
 
 @Injectable()
 export class DataScraperService {
@@ -22,8 +23,19 @@ export class DataScraperService {
   }
 
   @Cron('0 0 * * * *')
-  handleCron() {
-    this.scrapeAllOrders();
+  async handleCron() {
+    const isServerOnline = await this.serverStatusService.isServerOnline();
+
+    if (!isServerOnline) {
+      this.logger.log({
+        message: 'Skipping hourly order scrape because server is offline',
+        level: 'info',
+        timestamp: new Date().toISOString(),
+      });
+      return;
+    }
+
+    await this.scrapeAllOrders();
   }
 
   constructor(
@@ -38,6 +50,7 @@ export class DataScraperService {
     private readonly structureService: StructureService,
     private readonly constellationService: ConstellationService,
     private readonly marketHistoryService: MarketHistoryService,
+    private readonly serverStatusService: ServerStatusService,
   ) {}
 
   async postNames(ids: number[]) {

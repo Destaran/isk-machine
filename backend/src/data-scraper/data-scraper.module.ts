@@ -11,6 +11,7 @@ import { StationModule } from 'src/station/station.module';
 import { StructureModule } from 'src/structure/structure.module';
 import { ConstellationModule } from 'src/constellation/constellation.module';
 import { MarketHistoryModule } from 'src/market-history/market-history.module';
+import { ServerStatusModule } from 'src/server-status/server-status.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MarketHistoryModule } from 'src/market-history/market-history.module';
     StructureModule,
     ConstellationModule,
     MarketHistoryModule,
+    ServerStatusModule,
   ],
   exports: [DataScraperService],
   providers: [DataScraperService],

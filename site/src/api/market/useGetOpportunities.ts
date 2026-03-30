@@ -23,6 +23,8 @@ export interface OpportunitiesParams {
   maxMargin: number;
   dailyProfit: number;
   minVolume: number;
+  brokerFee: number;
+  salesTax: number;
 }
 
 export async function getOpportunities(params?: OpportunitiesParams) {

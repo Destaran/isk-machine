@@ -39,6 +39,8 @@ export class MarketController {
     @Body('maxMargin') maxMargin?: number,
     @Body('dailyProfit') dailyProfit?: number,
     @Body('minVolume') minVolume?: number,
+    @Body('brokerFee') brokerFee?: number,
+    @Body('salesTax') salesTax?: number,
   ) {
     return await this.marketService.getOpportunities(
       buyLocation,
@@ -48,6 +50,8 @@ export class MarketController {
       maxMargin,
       dailyProfit,
       minVolume,
+      brokerFee,
+      salesTax,
     );
   }
 }

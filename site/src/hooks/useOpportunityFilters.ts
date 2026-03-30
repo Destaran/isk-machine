@@ -11,6 +11,8 @@ const defaultOpportunityFilters: OpportunitiesParams = {
   maxMargin: 10,
   dailyProfit: 5000000,
   minVolume: 100,
+  brokerFee: 0,
+  salesTax: 0,
 };
 
 function loadOpportunityFilters(): OpportunitiesParams {
